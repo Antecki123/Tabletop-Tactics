@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
     [Header("Unit Properties")]
     [SerializeField] private PhaseManager.Player unitOwner;
     [SerializeField] private Vector3 startPosition;
-    [Space]
+
     [HideInInspector] public int unitMove;
     [HideInInspector] public int unitMeleeFight;
     [HideInInspector] public int unitRangeFight;
@@ -22,18 +22,17 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitAttacks;
     [HideInInspector] public int unitWounds;
     [HideInInspector] public int unitCourage;
-    [Space]
-    public int unitWill;
-    public int unitMight;
-    public int unitFate;
+    [HideInInspector] public int unitWill;
+    [HideInInspector] public int unitMight;
+    [HideInInspector] public int unitFate;
 
     [Space]
+    [HideInInspector] public float moveLeft;
     private bool shootAvailable;
     private bool duelAvailable;
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public Vector3 StartPosition { get => startPosition; private set { } }
-
 
     private void Start()
     {
@@ -60,5 +59,14 @@ public class Unit : MonoBehaviour
 
         shootAvailable = true;
         duelAvailable = true;
+    }
+
+    public void GetDamage()
+    {
+        unitWounds--;
+        if (unitWounds <= 0)
+        {
+            print("Unit DEAD!");
+        }
     }
 }
