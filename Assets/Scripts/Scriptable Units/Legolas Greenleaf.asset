@@ -9,24 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50c11c493691c8644a95bba903a63786, type: 3}
-  m_Name: Elrond Master of Rivendell
+  m_Script: {fileID: 11500000, guid: 13f510c8e155a014992c20cb27b30258, type: 3}
+  m_Name: Legolas Greenleaf
   m_EditorClassIdentifier: 
-  unitName: Elrond Master Of Rivendell
+  unitName: Legolas Greenleaf
   unitRace: 0
-  unitArmy: 9
+  unitArmy: 6
   unitType: 0
-  unitHeroicTier: 0
+  unitHeroicTier: 2
   unitMove: 6
   unitMeleeFight: 6
   unitRangeFight: 3
   unitStrength: 4
-  unitDefence: 5
-  unitAttacks: 3
-  unitWounds: 3
-  unitCourage: 7
+  unitDefence: 4
+  unitAttacks: 2
+  unitWounds: 2
+  unitCourage: 6
   unitWill: 3
-  unitMaight: 3
+  unitMight: 2
   unitFate: 3
   unitModel: {fileID: 0}
   unitImage: {fileID: 0}
