@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-//[RequireComponent(typeof(UnitAnimation))]
+[RequireComponent(typeof(UnitAnimations))]
 public class Unit : MonoBehaviour
 {
     [Header("Component References")]
@@ -39,6 +37,7 @@ public class Unit : MonoBehaviour
     {
         name = unitStats.name;
         startPosition = transform.position;
+        MoveLeft = unitStats.unitMove;
 
         unitMove = unitStats.unitMove;
         unitMeleeFight = unitStats.unitMeleeFight;
@@ -56,7 +55,7 @@ public class Unit : MonoBehaviour
 
     public void ResetStats()
     {
-        unitMove = unitStats.unitMove;
+        MoveLeft = unitStats.unitMove;
         startPosition = transform.position;
 
         shootAvailable = true;
