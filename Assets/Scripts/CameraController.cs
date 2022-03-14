@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
 
         position.x = Mathf.Clamp(position.x, -5f, 5f);
         position.y = Mathf.Clamp(position.y, 3f, 10f);
-        position.z = Mathf.Clamp(position.z, -8f, 8f);
+        position.z = Mathf.Clamp(position.z, -8f, 12f);
         transform.position = position;
     }
 }
