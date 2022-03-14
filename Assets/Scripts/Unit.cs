@@ -27,16 +27,18 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitFate;
 
     [Space]
-    [HideInInspector] public float moveLeft;
     private bool shootAvailable;
     private bool duelAvailable;
 
+    [field:SerializeField]
+    public float MoveLeft { get; set; }
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public Vector3 StartPosition { get => startPosition; private set { } }
 
     private void Start()
     {
         name = unitStats.name;
+        startPosition = transform.position;
 
         unitMove = unitStats.unitMove;
         unitMeleeFight = unitStats.unitMeleeFight;
