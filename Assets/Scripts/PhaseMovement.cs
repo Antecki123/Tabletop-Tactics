@@ -40,7 +40,7 @@ public class PhaseMovement : MonoBehaviour
             activeUnit = null;
 
         // ==============================================
-        if (activeUnit)
+        if (activeUnit && activeUnit.navMeshAgent.hasPath)
         {
             lineRenderer.positionCount = activeUnit.navMeshAgent.path.corners.Length;
             for (int i = 0; i < activeUnit.navMeshAgent.path.corners.Length; i++)
