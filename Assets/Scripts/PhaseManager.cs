@@ -90,6 +90,8 @@ public class PhaseManager : MonoBehaviour
             }
         }
         //UserInterface.instance.DicesPanel();
+        print($"Rolls: {player1Roll} = {player2Roll}");
+        playerPriority = Player.Player1;
 
         activePlayer = playerPriority;
         activePhase = Phase.Move;
