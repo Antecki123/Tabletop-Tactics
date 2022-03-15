@@ -9,6 +9,7 @@ public class PhaseMovement : MonoBehaviour
 
     [Header("Movement Script")]
     [SerializeField] private Unit activeUnit;
+    [SerializeField] private Unit lastUnit;
 
     private void Update()
     {
@@ -51,10 +52,15 @@ public class PhaseMovement : MonoBehaviour
             lineRenderer.enabled = false;
     }
 
-    private Vector3 MousePosition()
+    // Return button
+    public void ReturnMoveButton()
     {
-        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
-        return hit.point;
+        // TODO: unit is teleporting, sometimes back with navmeshagent
+        lastUnit.transform.position = lastUnit.StartPosition;
+        lastUnit.navMeshAgent.destination = lastUnit.StartPosition;
+
+        lastUnit.MoveLeft = lastUnit.unitMove;
+        //lastUnit.transform.rotation = lastUnit.StartPosition.rotation;
     }
 
     private IEnumerator MoveUnitToPosition()
@@ -68,6 +74,8 @@ public class PhaseMovement : MonoBehaviour
 
         if (distance <= activeUnit.MoveLeft)
         {
+            lastUnit = activeUnit;
+
             activeUnit.navMeshAgent.speed = 1.5f;
             activeUnit.MoveLeft -= distance;
             activeUnit = null;
@@ -75,6 +83,7 @@ public class PhaseMovement : MonoBehaviour
         else activeUnit.navMeshAgent.ResetPath();
     }
 
+    // DEBUG ========================
     private void OnDrawGizmos()
     {
         if (activeUnit)
@@ -86,5 +95,11 @@ public class PhaseMovement : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(activeUnit.transform.position, 1f);
         }
+    }
+
+    private Vector3 MousePosition()
+    {
+        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
+        return hit.point;
     }
 }
