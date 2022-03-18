@@ -22,12 +22,8 @@ public class PhaseManager : MonoBehaviour
     [SerializeField] private List<Unit> player1Units = new List<Unit>();
     [SerializeField] private List<Unit> player2Units = new List<Unit>();
 
-    [SerializeField] private bool player1MovingDone;
-    [SerializeField] private bool player2MovingDone;
-    [SerializeField] private bool player1ShootingDone;
-    [SerializeField] private bool player2ShootingDone;
-    [SerializeField] private bool player1AttackingDone;
-    [SerializeField] private bool player2AttackingDone;
+    [SerializeField] private bool player1TurnDone;
+    [SerializeField] private bool player2TurnDone;
 
     private void Awake()
     {
@@ -89,9 +85,11 @@ public class PhaseManager : MonoBehaviour
                     playerPriority = Player.Player1;
             }
         }
-        //UserInterface.instance.DicesPanel();
-        print($"Rolls: {player1Roll} = {player2Roll}");
-        playerPriority = Player.Player1;
+
+        RollResultsPanel.instance.ShowResult(player1Roll, "Player 1");
+        RollResultsPanel.instance.ShowResult(player2Roll, "Player 2");
+
+        print($"Rolls: {player1Roll} | {player2Roll}");
 
         activePlayer = playerPriority;
         activePhase = Phase.Move;
@@ -133,17 +131,34 @@ public class PhaseManager : MonoBehaviour
 
     }
 
-    public void NextPhase()
+    public void NextPhase_Btn()
     {
-        if (activePhase == Phase.Priority)
-            activePhase = Phase.Move;
-        if (activePhase == Phase.Move)
-            activePhase = Phase.Shoot;
-        if (activePhase == Phase.Shoot)
-            activePhase = Phase.Fight;
-        if (activePhase == Phase.Fight)
-            activePhase = Phase.End;
-        if (activePhase == Phase.End)
-            activePhase = Phase.Priority;
+        if (activePlayer == Player.Player1)
+        {
+            activePlayer = Player.Player2;
+            player1TurnDone = true;
+        }
+        else if (activePlayer == Player.Player2)
+        {
+            activePlayer = Player.Player1;
+            player2TurnDone = true;
+        }
+
+        if (player1TurnDone && player2TurnDone)
+        {
+            player1TurnDone = false;
+            player2TurnDone = false;
+
+            if (activePhase == Phase.Priority)
+                activePhase = Phase.Move;
+            else if (activePhase == Phase.Move)
+                activePhase = Phase.Shoot;
+            else if (activePhase == Phase.Shoot)
+                activePhase = Phase.Fight;
+            else if (activePhase == Phase.Fight)
+                activePhase = Phase.End;
+            else if (activePhase == Phase.End)
+                activePhase = Phase.Priority;
+        }
     }
 }
