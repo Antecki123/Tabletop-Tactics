@@ -25,7 +25,7 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitFate;
 
     [Space]
-    public float moveLeft;
+    [HideInInspector] public float moveLeft;
     [HideInInspector] public bool shootAvailable;
     [HideInInspector] public bool duelAvailable;
 
