@@ -17,8 +17,8 @@ public class PhaseShooting : MonoBehaviour
     {
         public string obstacleName;
         public float obstacleDistance;
-        public float requiredToPass;
-        public float rollResult;
+        public int requiredToPass;
+        public int rollResult;
     }
 
     private void Update()
@@ -53,7 +53,7 @@ public class PhaseShooting : MonoBehaviour
                     var obst = new Obstacle();
                     obst.obstacleName = item.collider.name;
                     obst.obstacleDistance = item.distance;
-                    obst.requiredToPass = 3f;                       // TEMPORARY
+                    obst.requiredToPass = 3;                       // TEMPORARY
                     obst.rollResult = RollTest.RollDiceD6();
 
                     // Add obstacles to list
@@ -63,6 +63,12 @@ public class PhaseShooting : MonoBehaviour
 
                 // Sort obstacles by distance from shooter
                 obstacles.Sort((a, b) => a.obstacleDistance.CompareTo(b.obstacleDistance));
+
+                ShootEffect();
+                activeUnit = null;
+                target = null;
+
+                obstacles.Clear();
             }
         }
 
@@ -74,6 +80,23 @@ public class PhaseShooting : MonoBehaviour
 
             obstacles.Clear();
         }
+    }
+
+    private void ShootEffect()
+    {
+        var rollsPassed = 0;
+
+        foreach (var obst in obstacles)
+        {
+            RollResultsPanel.instance.ShowResult(obst.rollResult, obst.obstacleName);
+            if (obst.rollResult >= obst.requiredToPass)
+                rollsPassed++;
+        }
+
+        if (rollsPassed == obstacles.Count)
+            print($"{target.name} has been hit!");
+        else
+            print($"{activeUnit.name} missed!");
     }
 
     // DEBUG ========================
