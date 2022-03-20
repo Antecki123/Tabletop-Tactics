@@ -128,7 +128,18 @@ public class PhaseManager : MonoBehaviour
         phaseShooting.enabled = false;
         phaseFight.enabled = false;
 
-
+        foreach (var unit in player1Units)
+        {
+            unit.moveLeft = unit.unitMove;
+            unit.shootAvailable = true;
+            unit.duelAvailable = true;
+        }
+        foreach (var unit in player2Units)
+        {
+            unit.moveLeft = unit.unitMove;
+            unit.shootAvailable = true;
+            unit.duelAvailable = true;
+        }
     }
 
     public void NextPhase_Btn()

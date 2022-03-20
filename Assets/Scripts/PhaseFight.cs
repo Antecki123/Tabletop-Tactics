@@ -10,6 +10,7 @@ public class PhaseFight : MonoBehaviour
     [Header("Fight Script")]
     [SerializeField] private Unit activeUnit;
     [SerializeField] private Unit target;
+    [SerializeField] private List<Unit> targets = new List<Unit>();
     [Space]
     [SerializeField] private List<Unit> possibleTargets = new List<Unit>();
     [SerializeField] private List<Unit> possibleSupport = new List<Unit>();

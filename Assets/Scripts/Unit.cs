@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(UnitAnimations))]
 public class Unit : MonoBehaviour
 {
     [Header("Component References")]
     public NavMeshAgent navMeshAgent;
+    [SerializeField] private Animator animator;
     [SerializeField] private UnitStats unitStats;
 
     [Header("Unit Properties")]
     [SerializeField] private PhaseManager.Player unitOwner;
-    [SerializeField] private Vector3 startPosition;
+    private Vector3 startPosition;
 
     [HideInInspector] public int unitMove;
     [HideInInspector] public int unitMeleeFight;
@@ -25,11 +25,14 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitFate;
 
     [Space]
-    private bool shootAvailable;
-    private bool duelAvailable;
+    public float moveLeft;
+    [HideInInspector] public bool shootAvailable;
+    [HideInInspector] public bool duelAvailable;
 
-    [field:SerializeField]
-    public float MoveLeft { get; set; }
+    [Header("Animations")]
+    private bool move = false;
+    private bool shoot = false;
+
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public Vector3 StartPosition { get => startPosition; private set { } }
 
@@ -37,7 +40,7 @@ public class Unit : MonoBehaviour
     {
         name = unitStats.name;
         startPosition = transform.position;
-        MoveLeft = unitStats.unitMove;
+        moveLeft = unitStats.unitMove;
 
         unitMove = unitStats.unitMove;
         unitMeleeFight = unitStats.unitMeleeFight;
@@ -53,9 +56,18 @@ public class Unit : MonoBehaviour
         unitFate = unitStats.unitFate;
     }
 
+    private void LateUpdate()
+    {
+        if (navMeshAgent.hasPath)
+            move = true;
+        else move = false;
+
+        animator.SetBool("move", move);
+    }
+
     public void ResetStats()
     {
-        MoveLeft = unitStats.unitMove;
+        moveLeft = unitStats.unitMove;
         startPosition = transform.position;
 
         shootAvailable = true;

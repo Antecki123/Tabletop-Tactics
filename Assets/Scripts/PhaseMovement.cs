@@ -5,7 +5,6 @@ public class PhaseMovement : MonoBehaviour
 {
     [Header("Component References")]
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private LineRenderer lineRenderer;
 
     [Header("Movement Script")]
     [SerializeField] private Unit activeUnit;
@@ -40,7 +39,7 @@ public class PhaseMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && activeUnit)
             activeUnit = null;
 
-        // ==============================================
+        /*
         if (activeUnit && activeUnit.navMeshAgent.hasPath)
         {
             lineRenderer.positionCount = activeUnit.navMeshAgent.path.corners.Length;
@@ -50,16 +49,17 @@ public class PhaseMovement : MonoBehaviour
         }
         else
             lineRenderer.enabled = false;
+        */
     }
 
-    // Return button
+    // Return to start position
     public void ReturnMoveButton()
     {
         // TODO: unit is teleporting, sometimes back with navmeshagent
         lastUnit.transform.position = lastUnit.StartPosition;
         lastUnit.navMeshAgent.destination = lastUnit.StartPosition;
 
-        lastUnit.MoveLeft = lastUnit.unitMove;
+        lastUnit.moveLeft = lastUnit.unitMove;
         //lastUnit.transform.rotation = lastUnit.StartPosition.rotation;
     }
 
@@ -72,12 +72,12 @@ public class PhaseMovement : MonoBehaviour
         for (int i = 0; i < activeUnit.navMeshAgent.path.corners.Length - 1; i++)
             distance += Vector3.Distance(activeUnit.navMeshAgent.path.corners[i], activeUnit.navMeshAgent.path.corners[i + 1]);
 
-        if (distance <= activeUnit.MoveLeft)
+        if (distance <= activeUnit.moveLeft)
         {
             lastUnit = activeUnit;
 
             activeUnit.navMeshAgent.speed = 1.5f;
-            activeUnit.MoveLeft -= distance;
+            activeUnit.moveLeft -= distance;
             activeUnit = null;
         }
         else activeUnit.navMeshAgent.ResetPath();
@@ -89,7 +89,7 @@ public class PhaseMovement : MonoBehaviour
         if (activeUnit)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(activeUnit.transform.position, activeUnit.MoveLeft);
+            Gizmos.DrawWireSphere(activeUnit.transform.position, activeUnit.moveLeft);
             Gizmos.DrawLine(activeUnit.transform.position, MousePosition());
 
             Gizmos.color = Color.red;

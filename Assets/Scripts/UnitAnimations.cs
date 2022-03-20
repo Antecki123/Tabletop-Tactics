@@ -8,16 +8,17 @@ public class UnitAnimations : MonoBehaviour
     [SerializeField] private Animator animator;
 
     [Header("Animations")]
-    private bool walk = false;
+    private bool move = false;
     private bool shoot = false;
 
     private void LateUpdate()
     {
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-            walk = true;
-        else walk = false;
+        if (navMeshAgent.hasPath)
+            move = true;
+        else move = false;
 
-        animator.SetBool("walk", walk);
+
+        animator.SetBool("move", move);
     }
 
 }
