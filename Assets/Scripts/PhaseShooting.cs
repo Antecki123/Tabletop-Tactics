@@ -94,7 +94,10 @@ public class PhaseShooting : MonoBehaviour
         }
 
         if (rollsPassed == obstacles.Count)
+        {
             print($"{target.name} has been hit!");
+            RollToWound.GetWoundTest(activeUnit.unitDefence, 2);
+        }
         else
             print($"{activeUnit.name} missed!");
     }
