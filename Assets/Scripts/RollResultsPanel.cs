@@ -31,7 +31,8 @@ public class RollResultsPanel : MonoBehaviour
         dice.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = name;
         Destroy(dice, 5f);
 
-        await Task.Delay(5000);
-        resultPanel.SetActive(false);
+        await Task.Yield();
+        //await Task.Delay(5000);
+        //resultPanel.SetActive(false);
     }
 }
