@@ -38,18 +38,6 @@ public class PhaseMovement : MonoBehaviour
         // Clear active unit
         if (Input.GetMouseButtonDown(1) && activeUnit)
             activeUnit = null;
-
-        /*
-        if (activeUnit && activeUnit.navMeshAgent.hasPath)
-        {
-            lineRenderer.positionCount = activeUnit.navMeshAgent.path.corners.Length;
-            for (int i = 0; i < activeUnit.navMeshAgent.path.corners.Length; i++)
-                lineRenderer.SetPosition(i, activeUnit.navMeshAgent.path.corners[i]);
-            lineRenderer.enabled = true;
-        }
-        else
-            lineRenderer.enabled = false;
-        */
     }
 
     // Return to start position
