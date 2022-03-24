@@ -44,8 +44,10 @@ public class PhaseShooting : MonoBehaviour
             target = hit.transform.GetComponent<Unit>();
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                if (RollToWound.IsPossibleToAttack(target.unitDefence, bowStrength))
+                if (activeUnit.shootAvailable && RollToWound.IsPossibleToAttack(target.unitDefence, bowStrength))
                 {
+                    activeUnit.shootAvailable = false;
+
                     RaycastObstacles();
                     ShootEffect();
 
@@ -105,7 +107,10 @@ public class PhaseShooting : MonoBehaviour
         if (rollsPassed == obstacles.Count)
         {
             if (RollToWound.GetWoundTest(activeUnit.unitDefence, bowStrength))
+            {
                 print($"{target.name} has been wounded!");
+                target.GetDamage();
+            }
             else
                 print($"{target.name} reflected!");
         }
