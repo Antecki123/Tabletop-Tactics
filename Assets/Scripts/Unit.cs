@@ -25,9 +25,9 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitFate;
 
     [Space]
-    [HideInInspector] public float moveLeft;
-    [HideInInspector] public bool shootAvailable;
-    [HideInInspector] public bool duelAvailable;
+    public float moveLeft;
+    public bool shootAvailable;
+    public bool duelAvailable;
 
     [Header("Animations")]
     private bool move = false;
@@ -54,6 +54,8 @@ public class Unit : MonoBehaviour
         unitWill = unitStats.unitWill;
         unitMight = unitStats.unitMight;
         unitFate = unitStats.unitFate;
+
+        ResetStats();
     }
 
     private void LateUpdate()
@@ -79,6 +81,7 @@ public class Unit : MonoBehaviour
         unitWounds--;
         if (unitWounds <= 0)
         {
+            animator.SetTrigger("death");
             print("Unit DEAD!");
         }
     }
