@@ -9,6 +9,7 @@ public class PhaseShooting : MonoBehaviour
     [Header("Shooting Script")]
     [SerializeField] private Unit activeUnit;
     [SerializeField] private Unit target;
+    private int bowStrength = 2;        //temporary
 
     [SerializeField] private List<Obstacle> obstacles = new List<Obstacle>();
 
@@ -40,36 +41,22 @@ public class PhaseShooting : MonoBehaviour
         // Set target
         else if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && activeUnit)
         {
-            var hitTarget = hit.transform.GetComponent<Unit>();
-            if (hit.transform.CompareTag("Unit") && hitTarget.UnitOwner != activeUnit.UnitOwner)
+            target = hit.transform.GetComponent<Unit>();
+            if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                target = hitTarget;
-                activeUnit.transform.LookAt(target.transform.position);
-
-                RaycastHit[] obstaclesHit = Physics.RaycastAll(activeUnit.transform.position + Vector3.up, activeUnit.transform.forward);
-
-                foreach (var item in obstaclesHit)
+                if (RollToWound.IsPossibleToAttack(target.unitDefence, bowStrength))
                 {
-                    var obst = new Obstacle();
-                    obst.obstacleName = item.collider.name;
-                    obst.obstacleDistance = item.distance;
-                    obst.requiredToPass = 3;                       // TEMPORARY
-                    obst.rollResult = RollTest.RollDiceD6();
+                    RaycastObstacles();
+                    ShootEffect();
 
-                    // Add obstacles to list
-                    if (obst.obstacleDistance <= Vector3.Distance(activeUnit.transform.position, target.transform.position))
-                        obstacles.Add(obst);
+                    activeUnit = null;
+                    target = null;
+
+                    obstacles.Clear();
                 }
-
-                // Sort obstacles by distance from shooter
-                obstacles.Sort((a, b) => a.obstacleDistance.CompareTo(b.obstacleDistance));
-
-                ShootEffect();
-                activeUnit = null;
-                target = null;
-
-                obstacles.Clear();
+                else print("You can't attack this enemy!");
             }
+            else target = null;
         }
 
         // Clear active unit
@@ -80,6 +67,28 @@ public class PhaseShooting : MonoBehaviour
 
             obstacles.Clear();
         }
+    }
+
+    private void RaycastObstacles()
+    {
+        activeUnit.transform.LookAt(target.transform.position);
+        RaycastHit[] obstaclesHit = Physics.RaycastAll(activeUnit.transform.position + Vector3.up, activeUnit.transform.forward);
+
+        foreach (var item in obstaclesHit)
+        {
+            var obst = new Obstacle();
+            obst.obstacleName = item.collider.name;
+            obst.obstacleDistance = item.distance;
+            obst.requiredToPass = 3;                       // TEMPORARY
+            obst.rollResult = RollTest.RollDiceD6();
+
+            // Add obstacles to list
+            if (obst.obstacleDistance <= Vector3.Distance(activeUnit.transform.position, target.transform.position))
+                obstacles.Add(obst);
+        }
+
+        // Sort obstacles by distance from shooter
+        obstacles.Sort((a, b) => a.obstacleDistance.CompareTo(b.obstacleDistance));
     }
 
     private void ShootEffect()
@@ -95,8 +104,10 @@ public class PhaseShooting : MonoBehaviour
 
         if (rollsPassed == obstacles.Count)
         {
-            print($"{target.name} has been hit!");
-            RollToWound.GetWoundTest(activeUnit.unitDefence, 2);
+            if (RollToWound.GetWoundTest(activeUnit.unitDefence, bowStrength))
+                print($"{target.name} has been wounded!");
+            else
+                print($"{target.name} reflected!");
         }
         else
             print($"{activeUnit.name} missed!");
