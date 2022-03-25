@@ -11,13 +11,13 @@ public class CameraController : MonoBehaviour
     {
         Vector3 position = transform.position;
 
-        if (Input.GetKey("w"))
+        if (Input.GetKey("w") || Input.GetKey("up"))
             position.z -= panSpeed * Time.deltaTime;
-        if (Input.GetKey("s"))
+        if (Input.GetKey("s") || Input.GetKey("down"))
             position.z += panSpeed * Time.deltaTime;
-        if (Input.GetKey("a"))
+        if (Input.GetKey("a") || Input.GetKey("left"))
             position.x += panSpeed * Time.deltaTime;
-        if (Input.GetKey("d"))
+        if (Input.GetKey("d") || Input.GetKey("right"))
             position.x -= panSpeed * Time.deltaTime;
 
         position.y -= Input.GetAxis("Mouse ScrollWheel") * scrollSpeed * 100f * Time.deltaTime;
