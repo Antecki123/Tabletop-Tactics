@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
 
     [Header("Unit Properties")]
     [SerializeField] private PhaseManager.Player unitOwner;
+    [SerializeField] private Wargear wargear;
     private Vector3 startPosition;
 
     [HideInInspector] public int unitMove;
@@ -72,8 +73,8 @@ public class Unit : MonoBehaviour
         moveLeft = unitStats.unitMove;
         startPosition = transform.position;
 
-        shootAvailable = true;
         duelAvailable = true;
+        shootAvailable = (wargear.missileWeapon != Wargear.RangeWeapons.None);
     }
 
     public void GetDamage()
