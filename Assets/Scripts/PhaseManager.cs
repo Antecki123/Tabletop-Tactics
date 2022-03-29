@@ -5,20 +5,18 @@ using UnityEngine;
 public class PhaseManager : MonoBehaviour
 {
     public static PhaseManager instance;
-    public enum Player { None, Player1, Player2 }
-    public enum Phase { Priority, Move, Shoot, Fight, End }
+    public enum Player { Player1, Player2 }
+    public enum Phase { Priority, Move, Actions, End }
 
     [Header("Component References")]
     [SerializeField] private Phase activePhase = Phase.Priority;
 
     [SerializeField] private PhaseMovement phaseMovement;
     [SerializeField] private PhaseShooting phaseShooting;
-    [SerializeField] private PhaseFight phaseFight;
 
     [Header("Gameplay References")]
-    public Player activePlayer = Player.None;
+    public Player activePlayer;
     [Space]
-    [SerializeField] private Player playerPriority = Player.None;
     [SerializeField] private List<Unit> player1Units = new List<Unit>();
     [SerializeField] private List<Unit> player2Units = new List<Unit>();
 
@@ -43,11 +41,8 @@ public class PhaseManager : MonoBehaviour
             case Phase.Move:
                 MovePhase();
                 break;
-            case Phase.Shoot:
-                ShootPhase();
-                break;
-            case Phase.Fight:
-                FightPhase();
+            case Phase.Actions:
+                ActionsPhase();
                 break;
             case Phase.End:
                 EndPhase();
@@ -59,39 +54,15 @@ public class PhaseManager : MonoBehaviour
 
     private void PriorityPhase()
     {
-        var player1Roll = RollTest.RollDiceD6();
-        var player2Roll = RollTest.RollDiceD6();
+        var playerPriorityRoll = Random.Range(0, 2);
 
-        if (playerPriority == Player.None)
-        {
-            if (player1Roll > player2Roll)
-                playerPriority = Player.Player1;
-            else if (player1Roll < player2Roll)
-                playerPriority = Player.Player2;
-            else
-                return;
-        }
-        else
-        {
-            if (player1Roll > player2Roll)
-                playerPriority = Player.Player1;
-            else if (player1Roll < player2Roll)
-                playerPriority = Player.Player2;
-            else
-            {
-                if (playerPriority == Player.Player1)
-                    playerPriority = Player.Player2;
-                if (playerPriority == Player.Player2)
-                    playerPriority = Player.Player1;
-            }
-        }
+        if (playerPriorityRoll == 0)
+            activePlayer = Player.Player1;
+        else if (playerPriorityRoll == 1)
+            activePlayer = Player.Player2;
 
-        RollResultsPanel.instance.ShowResult(player1Roll, "Player 1");
-        RollResultsPanel.instance.ShowResult(player2Roll, "Player 2");
+        print($"Roll: {playerPriorityRoll}");
 
-        print($"Rolls: {player1Roll} | {player2Roll}");
-
-        activePlayer = playerPriority;
         activePhase = Phase.Move;
     }
 
@@ -99,25 +70,14 @@ public class PhaseManager : MonoBehaviour
     {
         phaseMovement.enabled = true;
         phaseShooting.enabled = false;
-        phaseFight.enabled = false;
 
 
     }
 
-    private void ShootPhase()
+    private void ActionsPhase()
     {
         phaseMovement.enabled = false;
         phaseShooting.enabled = true;
-        phaseFight.enabled = false;
-
-
-    }
-
-    private void FightPhase()
-    {
-        phaseMovement.enabled = false;
-        phaseShooting.enabled = false;
-        phaseFight.enabled = true;
 
 
     }
@@ -126,7 +86,6 @@ public class PhaseManager : MonoBehaviour
     {
         phaseMovement.enabled = false;
         phaseShooting.enabled = false;
-        phaseFight.enabled = false;
 
         foreach (var unit in player1Units)
         {
@@ -163,10 +122,8 @@ public class PhaseManager : MonoBehaviour
             if (activePhase == Phase.Priority)
                 activePhase = Phase.Move;
             else if (activePhase == Phase.Move)
-                activePhase = Phase.Shoot;
-            else if (activePhase == Phase.Shoot)
-                activePhase = Phase.Fight;
-            else if (activePhase == Phase.Fight)
+                activePhase = Phase.Actions;
+            else if (activePhase == Phase.Actions)
                 activePhase = Phase.End;
             else if (activePhase == Phase.End)
                 activePhase = Phase.Priority;
