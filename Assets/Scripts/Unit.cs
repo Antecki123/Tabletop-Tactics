@@ -36,6 +36,7 @@ public class Unit : MonoBehaviour
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public Vector3 StartPosition { get => startPosition; private set { } }
+    public Wargear Wargear { get => wargear; private set { } }
 
     private void Start()
     {

@@ -15,15 +15,15 @@ MonoBehaviour:
   missileWeapon: 0
   closeCombatWeapon: 1
   warSpear: 0
-  pike: 0
+  pike: 1
   elvenMadeWeapon: 0
   masterForgedWeapon: 0
   stuffOfPower: 0
   whip: 0
   armour: 0
-  heavyArmour: 0
+  heavyArmour: 1
   heavyDwarfArmour: 0
-  shield: 0
+  shield: 1
   banner: 0
   elvenCloak: 0
   warDrum: 0

@@ -3,7 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Unit", menuName = "Scriptable Objects/New Unit")]
 public class UnitStats : ScriptableObject
 {
-    public enum UnitRace { Elf, Man, Dwarf, Orc, Hobbit, Human, Wizard }    //TODO: complete the list, alphabetically
+    public enum UnitRace
+    {
+        Hobbit, Wazard, Man, Elf, Dwarf, Pony, SiegeEngine, Spirit, Ent, Eagle,Spider, 
+        Orc, Troll, Warg, UrukHai, GreatBeast, Goblin, Dragon, Drake, Kraken, Bat, Mumak
+    }
+
     public enum UnitArmy
     {
         ArmyOfThror, TheDeadOfDunharrow, TheFellowship, GarrisonOfDale, HallsOfThranduil,
@@ -11,6 +16,7 @@ public class UnitStats : ScriptableObject
         ThorinsCompany, Angmar, AzogsLegion, DeselatorOfTheNorth, GoblinTown, Isengard, Mordor,
         Moria, TheSerpentHorde, TheTrolls
     }
+
     public enum UnitType { Infantry, Cavalry, Monster }
     public enum UnitHeroicTier { Warrior, HeroOfLegend, HeroOfValour, HeroOfFortitude, MinorHero, IndependentHero }
 

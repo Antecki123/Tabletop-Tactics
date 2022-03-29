@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bb8d487799a6147847e5d79cdf20bf, type: 3}
   m_Name: Wargear 3
   m_EditorClassIdentifier: 
-  missileWeapon: 0
+  missileWeapon: 10
   closeCombatWeapon: 1
   warSpear: 0
   pike: 0
@@ -20,7 +20,7 @@ MonoBehaviour:
   masterForgedWeapon: 0
   stuffOfPower: 0
   whip: 0
-  armour: 0
+  armour: 1
   heavyArmour: 0
   heavyDwarfArmour: 0
   shield: 0
