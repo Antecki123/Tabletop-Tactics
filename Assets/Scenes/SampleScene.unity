@@ -401,7 +401,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 202896484}
   animator: {fileID: 1409620504}
   unitStats: {fileID: 11400000, guid: a950b4eb72e19f04d91b1102da123753, type: 2}
-  unitOwner: 2
+  unitOwner: 1
   wargear: {fileID: 11400000, guid: 349419fb2e7cc614a846ada1d85a20ac, type: 2}
   unitMove: 0
   unitMeleeFight: 0
@@ -779,7 +779,6 @@ GameObject:
   - component: {fileID: 595824331}
   - component: {fileID: 595824330}
   - component: {fileID: 595824329}
-  - component: {fileID: 595824328}
   m_Layer: 0
   m_Name: Phase Manager
   m_TagString: Untagged
@@ -802,24 +801,6 @@ Transform:
   m_Father: {fileID: 277142595}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &595824328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 595824326}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72c1d95b02bd42144962da050f703492, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 1687258584}
-  activeUnit: {fileID: 0}
-  target: {fileID: 0}
-  targets: []
-  possibleTargets: []
-  possibleSupport: []
 --- !u!114 &595824329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,12 +844,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e11c0ce3a6e5f4097d4a9558b1910d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activePhase: 2
+  activePhase: 0
   phaseMovement: {fileID: 595824330}
   phaseShooting: {fileID: 595824329}
-  phaseFight: {fileID: 595824328}
-  activePlayer: 2
-  playerPriority: 2
+  activePlayer: 0
   player1Units:
   - {fileID: 785821392}
   player2Units:
@@ -1105,7 +1084,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 785821394}
   animator: {fileID: 1406082913}
   unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-  unitOwner: 1
+  unitOwner: 0
   wargear: {fileID: 11400000, guid: 9792f163904ee78418bb4f00c84da3ff, type: 2}
   unitMove: 0
   unitMeleeFight: 0
@@ -2351,7 +2330,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 1903133489}
   animator: {fileID: 217068185}
   unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
-  unitOwner: 2
+  unitOwner: 1
   wargear: {fileID: 11400000, guid: 887afce80cd8abb43bea2ba43c5ed675, type: 2}
   unitMove: 0
   unitMeleeFight: 0
