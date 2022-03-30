@@ -8,7 +8,6 @@ public class PhaseMovement : MonoBehaviour
 
     [Header("Movement Script")]
     [SerializeField] private Unit activeUnit;
-    [SerializeField] private Unit lastUnit;
 
     private void Update()
     {
@@ -38,17 +37,15 @@ public class PhaseMovement : MonoBehaviour
         // Clear active unit
         if (Input.GetMouseButtonDown(1) && activeUnit)
             activeUnit = null;
-    }
 
-    // Return to start position
-    public void ReturnMoveButton()
-    {
-        // TODO: unit is teleporting, sometimes back with navmeshagent
-        lastUnit.transform.position = lastUnit.StartPosition;
-        lastUnit.navMeshAgent.destination = lastUnit.StartPosition;
-
-        lastUnit.moveLeft = lastUnit.unitMove;
-        //lastUnit.transform.rotation = lastUnit.StartPosition.rotation;
+        if (activeUnit)
+        {
+            Physics.Raycast(ray, out hit);
+            var point = new Vector2(hit.point.x, hit.point.z);
+            point.x = Mathf.Round(point.x);
+            point.y = Mathf.Round(point.y);
+            print(point);
+        }
     }
 
     private IEnumerator MoveUnitToPosition()
@@ -62,8 +59,6 @@ public class PhaseMovement : MonoBehaviour
 
         if (distance <= activeUnit.moveLeft)
         {
-            lastUnit = activeUnit;
-
             activeUnit.navMeshAgent.speed = 1.5f;
             activeUnit.moveLeft -= distance;
             activeUnit = null;
