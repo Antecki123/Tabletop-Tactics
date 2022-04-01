@@ -21,7 +21,7 @@ public static class RollToWound
         var rollResult = RollTest.RollDiceD6();
         var secondRollResult = RollTest.RollDiceD6();
 
-        RollResultsPanel.instance.ShowResult(rollResult, "Roll to wound");
+        //RollResultsPanel.instance.ShowResult(rollResult, "Roll to wound");
 
         if (requiredResult <= 6)
         {
@@ -31,7 +31,7 @@ public static class RollToWound
 
         else
         {
-            RollResultsPanel.instance.ShowResult(secondRollResult, "Roll to wound");
+            //RollResultsPanel.instance.ShowResult(secondRollResult, "Roll to wound");
 
             if (requiredResult == 7 && rollResult == 6 && secondRollResult >= 4)
                 return true;
