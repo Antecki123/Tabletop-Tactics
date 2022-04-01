@@ -12,7 +12,7 @@ public class PhaseManager : MonoBehaviour
     [SerializeField] private Phase activePhase = Phase.Priority;
 
     [SerializeField] private PhaseMovement phaseMovement;
-    [SerializeField] private PhaseShooting phaseShooting;
+    [SerializeField] private PhaseAction phaseAction;
 
     [Header("Gameplay References")]
     public Player activePlayer;
@@ -69,7 +69,7 @@ public class PhaseManager : MonoBehaviour
     private void MovePhase()
     {
         phaseMovement.enabled = true;
-        phaseShooting.enabled = false;
+        phaseAction.enabled = false;
 
 
     }
@@ -77,7 +77,7 @@ public class PhaseManager : MonoBehaviour
     private void ActionsPhase()
     {
         phaseMovement.enabled = false;
-        phaseShooting.enabled = true;
+        phaseAction.enabled = true;
 
 
     }
@@ -85,7 +85,7 @@ public class PhaseManager : MonoBehaviour
     private void EndPhase()
     {
         phaseMovement.enabled = false;
-        phaseShooting.enabled = false;
+        phaseAction.enabled = false;
 
         foreach (var unit in player1Units)
         {
