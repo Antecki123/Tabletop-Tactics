@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class Unit : MonoBehaviour
 {
+    private enum ActiveAction { MeleeAttack, RangeAttack, Support, ThrowWeapon, Reload }
+
     [Header("Component References")]
     public NavMeshAgent navMeshAgent;
     [SerializeField] private Animator animator;
@@ -46,7 +48,7 @@ public class Unit : MonoBehaviour
 
         unitMove = unitStats.unitMove;
         unitMeleeFight = unitStats.unitMeleeFight;
-        unitRangeFight = unitStats.unitRangeFight;
+        unitRangeFight = unitStats.unitArcherySkill;
         unitStrength = unitStats.unitStrength;
         unitDefence = unitStats.unitDefence;
         unitAttacks = unitStats.unitAttacks;
