@@ -12,10 +12,9 @@ public class PhaseMovement : MonoBehaviour
     private void Update()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
 
         // Set active unit
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && !activeUnit)
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && !activeUnit)
         {
             if (hit.transform.CompareTag("Unit"))
             {
