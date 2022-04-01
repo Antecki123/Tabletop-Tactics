@@ -30,7 +30,7 @@ public class UnitStats : ScriptableObject
     [Header("Unit Statistics")]
     public int unitMove;
     public int unitMeleeFight;
-    public int unitRangeFight;
+    public int unitArcherySkill;
     public int unitStrength;
     public int unitDefence;
     public int unitAttacks;
