@@ -1,5 +1,8 @@
 public static class WoundTest
 {
+    /// <summary>
+    /// TODO: explain wound matrix
+    /// </summary>
     // X - DEFENCE, Y - STRENGTH
     private static int[,] result =
     {
@@ -19,31 +22,10 @@ public static class WoundTest
     public static bool GetWoundTest(int defence, int strength)
     {
         var requiredResult = result[strength - 1, defence - 1];
-        var rollResult = RollTest.RollDiceD6();
-        var secondRollResult = RollTest.RollDiceD6();
+        var rollResult = UnityEngine.Random.Range(1, 101);
 
-        //RollResultsPanel.instance.ShowResult(rollResult, "Roll to wound");
-
-        if (requiredResult <= 6)
-        {
-            if (requiredResult <= rollResult)
-                return true;
-        }
-
-        else
-        {
-            //RollResultsPanel.instance.ShowResult(secondRollResult, "Roll to wound");
-
-            if (requiredResult == 7 && rollResult == 6 && secondRollResult >= 4)
-                return true;
-
-            else if (requiredResult == 8 && rollResult == 6 && secondRollResult >= 5)
-                return true;
-
-            else if (requiredResult == 9 && rollResult == 6 && secondRollResult >= 6)
-                return true;
-        }
-        return false;
+        UnityEngine.Debug.Log($"Wound chance: {requiredResult}% wound result: {rollResult}%");
+        return (rollResult >= requiredResult);
     }
 
     public static bool IsPossibleToAttack(int defence, int strength)
