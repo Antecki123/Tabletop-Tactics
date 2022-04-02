@@ -4,77 +4,71 @@ using UnityEngine;
 public class RangeAttack
 {
     [Header("Component References")]
-    private Camera mainCamera;
+    [SerializeField] private PhaseAction phaseAction;
+    [SerializeField] private Camera mainCamera;
 
     [Header("Shooting Script")]
-    private Unit activeUnit;
-    private Unit target;
-    private int bowStrength = 2;        //temporary
-
-    [SerializeField] private List<Obstacle> obstacles = new List<Obstacle>();
+    [SerializeField] private Unit activeUnit;
+    [SerializeField] private Unit target;
+    [SerializeField] private List<Obstacle> obstacles = new();
 
     [System.Serializable]
     private struct Obstacle
     {
         public string obstacleName;
         public float obstacleDistance;
-        public int requiredToPass;
-        public int rollResult;
     }
 
-    public RangeAttack() => mainCamera = Camera.main;
-
-    public void UpdateAction(Unit activeUnit)
+    public RangeAttack(PhaseAction phaseAction)
     {
-        this.activeUnit = activeUnit;
-        Debug.Log("Range Attack");
+        this.phaseAction = phaseAction;
+        mainCamera = Camera.main;
+    }
 
-        /*Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+    public void UpdateAction()
+    {
+        //Debug.Log("Range Attack");
 
-        // Set active unit
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && !activeUnit)
-        {
-            if (hit.transform.CompareTag("Unit"))
-            {
-                activeUnit = hit.transform.GetComponent<Unit>();
-                if (activeUnit.UnitOwner != PhaseManager.instance.activePlayer)
-                    activeUnit = null;
-            }
-        }
+        if (!phaseAction.activeUnit)
+            return;
+        else if (!activeUnit)
+            this.activeUnit = phaseAction.activeUnit;
+
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Set target
-        else if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && activeUnit)
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && activeUnit)
         {
             target = hit.transform.GetComponent<Unit>();
+
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                if (activeUnit.shootAvailable && RollToWound.IsPossibleToAttack(target.unitDefence, bowStrength))
+                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, 2)) //tempo
                 {
-                    activeUnit.shootAvailable = false;
-
+                    //activeUnit.shootAvailable = false;
                     RaycastObstacles();
                     ShootEffect();
 
-                    activeUnit = null;
-                    target = null;
-
-                    obstacles.Clear();
+                    ClearAction();
                 }
-                else Debug.Log("You can't attack this enemy!");
+                else Debug.Log("You can't hurt this enemy!");
             }
             else target = null;
         }
 
         // Clear active unit
         if (Input.GetMouseButtonDown(1) && activeUnit)
-        {
-            activeUnit = null;
-            target = null;
+            ClearAction();
+    }
 
-            obstacles.Clear();
-        }
-        */
+    private void ClearAction()
+    {
+        activeUnit = null;
+        target = null;
+        obstacles.Clear();
+
+        phaseAction.activeUnit = null;
+        phaseAction.activeAction = PhaseAction.UnitAction.None;
     }
 
     private void RaycastObstacles()
@@ -82,17 +76,15 @@ public class RangeAttack
         activeUnit.transform.LookAt(target.transform.position);
         RaycastHit[] obstaclesHit = Physics.RaycastAll(activeUnit.transform.position + Vector3.up, activeUnit.transform.forward);
 
-        foreach (var item in obstaclesHit)
+        foreach (var hit in obstaclesHit)
         {
-            var obst = new Obstacle();
-            obst.obstacleName = item.collider.name;
-            obst.obstacleDistance = item.distance;
-            obst.requiredToPass = 3;                       // TEMPORARY
-            obst.rollResult = RollTest.RollDiceD6();
+            var obstacle = new Obstacle();
+            obstacle.obstacleName = hit.collider.name;
+            obstacle.obstacleDistance = hit.distance;
 
-            // Add obstacles to list
-            if (obst.obstacleDistance <= Vector3.Distance(activeUnit.transform.position, target.transform.position))
-                obstacles.Add(obst);
+            // Add every obstacle between active unit and target to list
+            if (obstacle.obstacleDistance <= Vector3.Distance(activeUnit.transform.position, target.transform.position))
+                obstacles.Add(obstacle);
         }
 
         // Sort obstacles by distance from shooter
@@ -101,24 +93,23 @@ public class RangeAttack
 
     private void ShootEffect()
     {
-        var rollsPassed = 0;
+        var woundTarget = false;
 
-        foreach (var obst in obstacles)
-        {
-            //RollResultsPanel.instance.ShowResult(obst.rollResult, obst.obstacleName);
-            if (obst.rollResult >= obst.requiredToPass)
-                rollsPassed++;
-        }
+        var hitChance = 100 - 15 * obstacles.Count;         //var hitChance = 50 / obstacles.Count;
+        var hitResult = Random.Range(1, 101);
+        var hitTarget = (hitResult >= hitChance);
 
-        if (rollsPassed == obstacles.Count)
+        Debug.Log($"Hit chance: {hitChance}% Hit result: {hitResult}%");
+
+        if (hitTarget)
         {
-            if (RollToWound.GetWoundTest(activeUnit.unitDefence, bowStrength))
+            woundTarget = WoundTest.GetWoundTest(activeUnit.unitDefence, 2);    // tempo
+            if (woundTarget)
             {
-                //print($"{target.name} has been wounded!");
-                target.GetDamage();
+                // do something when target has been wounded
             }
-            else Debug.Log($"{target.name} reflected!");
         }
-        else Debug.Log($"{activeUnit.name} missed!");
+
+        Debug.Log($"Target hit: {hitTarget}, target wounded: {woundTarget}");
     }
 }
