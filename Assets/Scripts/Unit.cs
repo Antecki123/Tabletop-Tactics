@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour
 
     [Header("Animations")]
     private bool move = false;
-    private bool shoot = false;
+    //private bool shoot = false;
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public Vector3 StartPosition { get => startPosition; private set { } }
