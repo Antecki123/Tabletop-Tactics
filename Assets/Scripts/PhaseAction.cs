@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class PhaseAction : MonoBehaviour
 {
-    private enum UnitAction { None, MeleeAttack, RangeAttack, Support, BlowHorn, Defence }
+    public enum UnitAction { None, MeleeAttack, RangeAttack, Support, BlowHorn, Defence }
 
     [Header("Component References")]
-    [SerializeField] private UnitAction activeAction;
+    public Unit activeUnit;
+    public UnitAction activeAction;
 
     private Camera mainCamera;
-    [SerializeField] private Unit activeUnit;
 
-    private RangeAttack rangeAttack;
+    [SerializeField] private RangeAttack rangeAttack;
     private MeleeAttack meleeAtack;
     private Support support;
 
@@ -18,7 +18,7 @@ public class PhaseAction : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        rangeAttack = new RangeAttack();
+        rangeAttack = new RangeAttack(this);
         meleeAtack = new MeleeAttack();
         support = new Support();
     }
@@ -26,10 +26,9 @@ public class PhaseAction : MonoBehaviour
     private void Update()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
 
         // Set active unit
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && activeAction == UnitAction.None)
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && activeAction == UnitAction.None)
         {
             if (hit.transform.GetComponent<Unit>())
             {
@@ -47,13 +46,13 @@ public class PhaseAction : MonoBehaviour
         }
 
         // Go to active action script
-        if (activeAction == UnitAction.RangeAttack)
-            rangeAttack.UpdateAction(activeUnit);
+        if (activeAction == UnitAction.RangeAttack && activeUnit)
+            rangeAttack.UpdateAction();
 
-        else if (activeAction == UnitAction.MeleeAttack)
+        else if (activeAction == UnitAction.MeleeAttack && activeUnit)
             meleeAtack.UpdateAction();
 
-        else if (activeAction == UnitAction.Support)
+        else if (activeAction == UnitAction.Support && activeUnit)
             support.UpdateAction();
     }
 
