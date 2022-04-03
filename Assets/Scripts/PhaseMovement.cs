@@ -9,6 +9,8 @@ public class PhaseMovement : MonoBehaviour
     [Header("Movement Script")]
     [SerializeField] private Unit activeUnit;
 
+    public Unit ActiveUnit { get => activeUnit; private set { } }      // for debugger
+
     private void Update()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -57,25 +59,5 @@ public class PhaseMovement : MonoBehaviour
             activeUnit = null;
         }
         else activeUnit.navMeshAgent.ResetPath();
-    }
-
-    // DEBUG ========================
-    private void OnDrawGizmos()
-    {
-        if (activeUnit)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(activeUnit.transform.position, activeUnit.moveLeft);
-            Gizmos.DrawLine(activeUnit.transform.position, MousePosition());
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(activeUnit.transform.position, 1f);
-        }
-    }
-
-    private Vector3 MousePosition()
-    {
-        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
-        return hit.point;
     }
 }
