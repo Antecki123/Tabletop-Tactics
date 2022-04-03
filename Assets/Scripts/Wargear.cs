@@ -1,39 +1,19 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Wargear", menuName = "Scriptable Objects/New Wargear")]
-public class Wargear : ScriptableObject
+public class Wargear : MonoBehaviour
 {
-    public enum RangeWeapons
-    {
-        None, Blowpipe, Bow, Crossbow, DwarfBow, DwarfLongbow, ElfBow, EsgarothBow, GreatBow,
-        Longbow, OrcBow, ShortBow, Slingshot, ThrowingSpear, ThrowingWeapon, UrukhaiBow
-    }
-
-    public enum CloseCombatWeapon { None, SingleHandedWeapon, HandAndHalfHandedWeapon, TwoHandedWeapon }
-
-    [System.Serializable]
-    public struct MissileWeapon
-    {
-        public RangeWeapons type;
-        public float range;
-        public int strength;
-    }
+    public enum WeaponAttribute { None, SingleHandedWeapon, HandAndHalfHandedWeapon, TwoHandedWeapon }
 
     [Header("Weapons")]
-    public RangeWeapons missileWeapon;
-    public CloseCombatWeapon closeCombatWeapon;
+    public RangeWeapon rangeWeapon;
+    public CombatWeapon combatWeapon;
     [Space]
-    public bool warSpear;
-    public bool pike;
+    public WeaponAttribute weaponAttribute;
     public bool elvenMadeWeapon;
     public bool masterForgedWeapon;
-    public bool stuffOfPower;
-    public bool whip;
 
     [Header("Armor")]
-    public bool armour;
-    public bool heavyArmour;
-    public bool heavyDwarfArmour;
+    public Armour armour;
     public bool shield;
 
     [Header("Equipment")]
