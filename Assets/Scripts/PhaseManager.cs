@@ -54,11 +54,11 @@ public class PhaseManager : MonoBehaviour
 
     private void PriorityPhase()
     {
-        var playerPriorityRoll = Random.Range(0, 2);
+        var playerPriorityRoll = Random.Range(1, 3);
 
-        if (playerPriorityRoll == 0)
+        if (playerPriorityRoll == 1)
             activePlayer = Player.Player1;
-        else if (playerPriorityRoll == 1)
+        else if (playerPriorityRoll == 2)
             activePlayer = Player.Player2;
 
         print($"Roll: {playerPriorityRoll}");
