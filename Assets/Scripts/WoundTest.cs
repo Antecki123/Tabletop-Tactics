@@ -26,7 +26,7 @@ public static class WoundTest
         var woundResult = UnityEngine.Random.Range(1, 101);
 
         UnityEngine.Debug.Log($"Wound chance: {requiredResult}% wound result: {woundResult <= requiredResult}");
-        return (woundResult <= requiredResult);
+        return (woundResult < requiredResult);
     }
 
     public static bool IsPossibleToAttack(int defence, int strength)
