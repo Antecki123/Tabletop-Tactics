@@ -73,7 +73,6 @@ public class Unit : MonoBehaviour
 
         duelAvailable = true;
         shootAvailable = (wargear.rangeWeapon.type != RangeWeapon.WeaponType.None);
-        //shootAvailable = (wargear.missileWeapon != Wargear.RangeWeapon.None);
     }
 
     public void GetDamage()
