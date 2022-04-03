@@ -9,12 +9,11 @@ public class PhaseManager : MonoBehaviour
     public enum Phase { Priority, Move, Actions, End }
 
     [Header("Component References")]
-    [SerializeField] private Phase activePhase = Phase.Priority;
-
     [SerializeField] private PhaseMovement phaseMovement;
     [SerializeField] private PhaseAction phaseAction;
 
     [Header("Gameplay References")]
+    public Phase activePhase = Phase.Priority;
     public Player activePlayer;
     [Space]
     [SerializeField] private List<Unit> player1Units = new List<Unit>();
