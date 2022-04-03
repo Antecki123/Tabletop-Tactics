@@ -99,9 +99,9 @@ public class RangeAttack
 
         var hitChance = 100 - 15 * obstacles.Count;         //var hitChance = 50 / obstacles.Count;
         var hitResult = Random.Range(1, 101);
-        var hitTarget = (hitResult >= hitChance);
+        var hitTarget = (hitResult <= hitChance);
 
-        Debug.Log($"Hit chance: {hitChance}% Hit result: {hitResult}%");
+        Debug.Log($"Hit chance: {hitChance}% Hit result: {hitTarget}");
 
         if (hitTarget)
         {
@@ -111,7 +111,5 @@ public class RangeAttack
                 // do something when target has been wounded
             }
         }
-
-        Debug.Log($"Target hit: {hitTarget}, target wounded: {woundTarget}");
     }
 }

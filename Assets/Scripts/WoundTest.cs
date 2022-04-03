@@ -17,15 +17,16 @@ public static class WoundTest
         { 90, 80, 80, 70, 70, 60, 60, 50, 50, 40, 40, 30 },
         { 90, 90, 80, 80, 70, 70, 60, 60, 50, 50, 40, 40 },
         { 90, 90, 90, 80, 80, 70, 70, 60, 60, 50, 50, 40 },
+        { 90, 90, 90, 90, 80, 80, 70, 70, 60, 60, 50, 50 }
     };
 
     public static bool GetWoundTest(int defence, int strength)
     {
         var requiredResult = result[strength - 1, defence - 1];
-        var rollResult = UnityEngine.Random.Range(1, 101);
+        var woundResult = UnityEngine.Random.Range(1, 101);
 
-        UnityEngine.Debug.Log($"Wound chance: {requiredResult}% wound result: {rollResult}%");
-        return (rollResult >= requiredResult);
+        UnityEngine.Debug.Log($"Wound chance: {requiredResult}% wound result: {woundResult <= requiredResult}");
+        return (woundResult <= requiredResult);
     }
 
     public static bool IsPossibleToAttack(int defence, int strength)
