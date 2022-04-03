@@ -13,7 +13,6 @@ public class Unit : MonoBehaviour
     [Header("Unit Properties")]
     [SerializeField] private PhaseManager.Player unitOwner;
     [SerializeField] private Wargear wargear;
-    private Vector3 startPosition;
 
     [HideInInspector] public int unitMove;
     [HideInInspector] public int unitMeleeFight;
@@ -26,7 +25,6 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitWill;
     [HideInInspector] public int unitMight;
     [HideInInspector] public int unitFate;
-
     [Space]
     public float moveLeft;
     public bool shootAvailable;
@@ -37,13 +35,11 @@ public class Unit : MonoBehaviour
     //private bool shoot = false;
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
-    public Vector3 StartPosition { get => startPosition; private set { } }
     public Wargear Wargear { get => wargear; private set { } }
 
     private void Start()
     {
         name = unitStats.name;
-        startPosition = transform.position;
         moveLeft = unitStats.unitMove;
 
         unitMove = unitStats.unitMove;
@@ -74,10 +70,10 @@ public class Unit : MonoBehaviour
     public void ResetStats()
     {
         moveLeft = unitStats.unitMove;
-        startPosition = transform.position;
 
         duelAvailable = true;
-        shootAvailable = (wargear.missileWeapon != Wargear.RangeWeapons.None);
+        shootAvailable = (wargear.rangeWeapon.type != RangeWeapon.WeaponType.None);
+        //shootAvailable = (wargear.missileWeapon != Wargear.RangeWeapon.None);
     }
 
     public void GetDamage()
