@@ -75,6 +75,7 @@ public class Unit : MonoBehaviour
         shootAvailable = (wargear.rangeWeapon.type != RangeWeapon.WeaponType.None);
     }
 
+    /*
     public void GetDamage()
     {
         unitWounds--;
@@ -83,5 +84,26 @@ public class Unit : MonoBehaviour
             animator.SetTrigger("death");
             print("Unit DEAD!");
         }
+    }*/
+
+    /// <summary>
+    /// Returns defence value for unit
+    /// </summary>
+    /// <returns></returns>
+    public int GetDefence()
+    {
+        var defence = unitDefence + wargear.armour.defence;
+        return defence;
+    }
+
+    /// <summary>
+    /// Returns strength value. Set true parametr for melee combat weapon or false for range weapon
+    /// </summary>
+    /// <param name="combatWeapon"></param>
+    /// <returns></returns>
+    public int GetStrenght(bool combatWeapon)
+    {
+        var strenght = (combatWeapon) ? unitStrength + wargear.combatWeapon.strength : wargear.rangeWeapon.strength;
+        return strenght;
     }
 }
