@@ -12,7 +12,6 @@ public class RangeAttack
     [SerializeField] private Unit target;
     [SerializeField] private List<Obstacle> obstacles = new();
 
-    [System.Serializable]
     private struct Obstacle
     {
         public string obstacleName;
@@ -43,10 +42,10 @@ public class RangeAttack
 
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                //Debug.Log("Weapon strength: " + activeUnit.Wargear.rangeWeapon.strength);
-                //Debug.Log("Defence: " + target.unitDefence);
-                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength) &&
-                    activeUnit.Wargear.rangeWeapon.range >= Vector3.Distance(activeUnit.transform.position, target.transform.position))
+                // TODO: TU COŒ CZA NAPRAWIÆ
+                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.GetDefence(), activeUnit.GetStrenght(false)) &&
+                    activeUnit.Wargear.rangeWeapon.range >= Vector3.Distance(activeUnit.transform.position, target.transform.position) &&
+                    activeUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None)
                 {
                     //activeUnit.shootAvailable = false;
                     RaycastObstacles();
@@ -81,9 +80,11 @@ public class RangeAttack
 
         foreach (var hit in obstaclesHit)
         {
-            var obstacle = new Obstacle();
-            obstacle.obstacleName = hit.collider.name;
-            obstacle.obstacleDistance = hit.distance;
+            var obstacle = new Obstacle
+            {
+                obstacleName = hit.collider.name,
+                obstacleDistance = hit.distance
+            };
 
             // Add every obstacle between active unit and target to list
             if (obstacle.obstacleDistance <= Vector3.Distance(activeUnit.transform.position, target.transform.position))
@@ -96,8 +97,6 @@ public class RangeAttack
 
     private void ShootEffect()
     {
-        var woundTarget = false;
-
         var hitChance = 100 - 15 * obstacles.Count;         //var hitChance = 50 / obstacles.Count;
         var hitResult = Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
@@ -106,7 +105,7 @@ public class RangeAttack
 
         if (hitTarget)
         {
-            woundTarget = WoundTest.GetWoundTest(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength);
+            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), activeUnit.GetStrenght(false));
             if (woundTarget)
             {
                 // do something when target has been wounded
