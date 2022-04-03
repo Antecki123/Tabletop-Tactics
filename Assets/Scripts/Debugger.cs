@@ -26,6 +26,7 @@ public class Debugger : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        // MOVEMENT
         if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Move && phaseMovement.ActiveUnit)
         {
             print(phaseMovement.ActiveUnit);
@@ -42,12 +43,18 @@ public class Debugger : MonoBehaviour
             Gizmos.DrawLine(phaseMovement.ActiveUnit.transform.position, MousePosition());
         }
 
+        // ACTIONS
         if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Actions && 
             phaseAction.activeAction == PhaseAction.UnitAction.RangeAttack && phaseAction.activeUnit)
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, phaseAction.activeUnit.Wargear.rangeWeapon.range);
             Gizmos.DrawLine(phaseAction.activeUnit.transform.position, MousePosition());
+        }
+        if (Application.isPlaying && phaseAction.activeUnit)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, 1f);
         }
     }
 
