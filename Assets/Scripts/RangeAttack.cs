@@ -45,7 +45,8 @@ public class RangeAttack
             {
                 //Debug.Log("Weapon strength: " + activeUnit.Wargear.rangeWeapon.strength);
                 //Debug.Log("Defence: " + target.unitDefence);
-                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength))
+                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength) &&
+                    activeUnit.Wargear.rangeWeapon.range >= Vector3.Distance(activeUnit.transform.position, target.transform.position))
                 {
                     //activeUnit.shootAvailable = false;
                     RaycastObstacles();
@@ -53,7 +54,7 @@ public class RangeAttack
 
                     ClearAction();
                 }
-                else Debug.Log("You can't hurt this enemy!");
+                else Debug.Log("You can't attack enemy!");
             }
             else target = null;
         }
