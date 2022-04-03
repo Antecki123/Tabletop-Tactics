@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Debugger : MonoBehaviour
 {
@@ -43,6 +40,14 @@ public class Debugger : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(phaseMovement.ActiveUnit.transform.position, phaseMovement.ActiveUnit.moveLeft);
             Gizmos.DrawLine(phaseMovement.ActiveUnit.transform.position, MousePosition());
+        }
+
+        if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Actions && 
+            phaseAction.activeAction == PhaseAction.UnitAction.RangeAttack && phaseAction.activeUnit)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, phaseAction.activeUnit.Wargear.rangeWeapon.range);
+            Gizmos.DrawLine(phaseAction.activeUnit.transform.position, MousePosition());
         }
     }
 
