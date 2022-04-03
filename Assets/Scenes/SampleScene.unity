@@ -402,7 +402,7 @@ MonoBehaviour:
   animator: {fileID: 1409620504}
   unitStats: {fileID: 11400000, guid: a950b4eb72e19f04d91b1102da123753, type: 2}
   unitOwner: 1
-  wargear: {fileID: 11400000, guid: 349419fb2e7cc614a846ada1d85a20ac, type: 2}
+  wargear: {fileID: 785821396}
   unitMove: 0
   unitMeleeFight: 0
   unitRangeFight: 0
@@ -1255,8 +1255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6de9fa63280950547ad765e4e44fcbd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeAction: 0
   activeUnit: {fileID: 0}
+  activeAction: 0
 --- !u!1 &641345518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,6 +1570,7 @@ GameObject:
   - component: {fileID: 785821394}
   - component: {fileID: 785821393}
   - component: {fileID: 785821392}
+  - component: {fileID: 785821396}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Unit
@@ -1593,7 +1594,7 @@ MonoBehaviour:
   animator: {fileID: 1406082913}
   unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
   unitOwner: 0
-  wargear: {fileID: 11400000, guid: 9792f163904ee78418bb4f00c84da3ff, type: 2}
+  wargear: {fileID: 785821396}
   unitMove: 0
   unitMeleeFight: 0
   unitRangeFight: 0
@@ -1661,6 +1662,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &785821396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785821390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bb8d487799a6147847e5d79cdf20bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
+  combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
+  weaponAttribute: 1
+  elvenMadeWeapon: 0
+  masterForgedWeapon: 0
+  armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
+  shield: 0
+  banner: 0
+  elvenCloak: 0
+  warDrum: 0
+  warHorn: 0
+  theOneRing: 0
 --- !u!1 &801188444
 GameObject:
   m_ObjectHideFlags: 0
@@ -3658,7 +3683,7 @@ MonoBehaviour:
   animator: {fileID: 217068185}
   unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
   unitOwner: 1
-  wargear: {fileID: 11400000, guid: 887afce80cd8abb43bea2ba43c5ed675, type: 2}
+  wargear: {fileID: 785821396}
   unitMove: 0
   unitMeleeFight: 0
   unitRangeFight: 0
