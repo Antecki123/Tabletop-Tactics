@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 202896484}
   - component: {fileID: 202896483}
   - component: {fileID: 202896482}
+  - component: {fileID: 202896485}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Unit
@@ -402,7 +403,7 @@ MonoBehaviour:
   animator: {fileID: 1409620504}
   unitStats: {fileID: 11400000, guid: a950b4eb72e19f04d91b1102da123753, type: 2}
   unitOwner: 1
-  wargear: {fileID: 785821396}
+  wargear: {fileID: 202896485}
   unitMove: 0
   unitMeleeFight: 0
   unitRangeFight: 0
@@ -453,6 +454,30 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &202896485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202896480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bb8d487799a6147847e5d79cdf20bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
+  combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
+  weaponAttribute: 1
+  elvenMadeWeapon: 1
+  masterForgedWeapon: 0
+  armour: {fileID: 11400000, guid: 5fd490ba61c097046a0a081b941b4fc8, type: 2}
+  shield: 0
+  banner: 0
+  elvenCloak: 1
+  warDrum: 0
+  warHorn: 0
+  theOneRing: 0
 --- !u!95 &217068185 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 27362f223cf0f764a952960caa126629, type: 3}
@@ -493,6 +518,7 @@ Transform:
   m_Children:
   - {fileID: 595824327}
   - {fileID: 883025031}
+  - {fileID: 1521610144}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1232,9 +1258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e11c0ce3a6e5f4097d4a9558b1910d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activePhase: 0
   phaseMovement: {fileID: 595824330}
   phaseAction: {fileID: 595824332}
+  activePhase: 0
   activePlayer: 0
   player1Units:
   - {fileID: 785821392}
@@ -2748,6 +2774,155 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431616229}
   m_CullTransparentMesh: 1
+--- !u!1 &1521610143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1521610144}
+  - component: {fileID: 1521610145}
+  - component: {fileID: 1521610146}
+  m_Layer: 0
+  m_Name: Debugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1521610144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521610143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 277142595}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1521610145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521610143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32fba4f8a9a1b044a088daf5b5b5554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  phaseManager: {fileID: 0}
+  phaseMovement: {fileID: 0}
+  phaseAction: {fileID: 0}
+  line: {fileID: 0}
+--- !u!120 &1521610146
+LineRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521610143}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.13953371
+        value: 0.5230767
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
 --- !u!1 &1523222391
 GameObject:
   m_ObjectHideFlags: 0
@@ -3660,6 +3835,7 @@ GameObject:
   - component: {fileID: 1903133489}
   - component: {fileID: 1903133488}
   - component: {fileID: 1903133487}
+  - component: {fileID: 1903133491}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Unit
@@ -3683,7 +3859,7 @@ MonoBehaviour:
   animator: {fileID: 217068185}
   unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
   unitOwner: 1
-  wargear: {fileID: 785821396}
+  wargear: {fileID: 1903133491}
   unitMove: 0
   unitMeleeFight: 0
   unitRangeFight: 0
@@ -3751,6 +3927,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1903133491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903133485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bb8d487799a6147847e5d79cdf20bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
+  combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
+  weaponAttribute: 1
+  elvenMadeWeapon: 0
+  masterForgedWeapon: 0
+  armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
+  shield: 0
+  banner: 0
+  elvenCloak: 0
+  warDrum: 0
+  warHorn: 0
+  theOneRing: 0
 --- !u!1 &1926651522
 GameObject:
   m_ObjectHideFlags: 0
