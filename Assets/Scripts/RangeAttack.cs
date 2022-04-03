@@ -43,7 +43,9 @@ public class RangeAttack
 
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, 2)) //tempo
+                //Debug.Log("Weapon strength: " + activeUnit.Wargear.rangeWeapon.strength);
+                //Debug.Log("Defence: " + target.unitDefence);
+                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength))
                 {
                     //activeUnit.shootAvailable = false;
                     RaycastObstacles();
@@ -103,7 +105,7 @@ public class RangeAttack
 
         if (hitTarget)
         {
-            woundTarget = WoundTest.GetWoundTest(activeUnit.unitDefence, 2);    // tempo
+            woundTarget = WoundTest.GetWoundTest(target.unitDefence, activeUnit.Wargear.rangeWeapon.strength);
             if (woundTarget)
             {
                 // do something when target has been wounded
