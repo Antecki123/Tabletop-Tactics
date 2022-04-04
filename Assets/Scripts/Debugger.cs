@@ -48,7 +48,7 @@ public class Debugger : MonoBehaviour
             phaseAction.activeAction == PhaseAction.UnitAction.RangeAttack && phaseAction.activeUnit)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, phaseAction.activeUnit.Wargear.rangeWeapon.range);
+            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, phaseAction.activeUnit.RangeWeapon.range);
             Gizmos.DrawLine(phaseAction.activeUnit.transform.position, MousePosition());
         }
         if (Application.isPlaying && phaseAction.activeUnit)
