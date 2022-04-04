@@ -19,7 +19,7 @@ public class PhaseAction : MonoBehaviour
         mainCamera = Camera.main;
 
         rangeAttack = new RangeAttack(this);
-        meleeAtack = new MeleeAttack();
+        meleeAtack = new MeleeAttack(this);
         support = new Support();
     }
 
