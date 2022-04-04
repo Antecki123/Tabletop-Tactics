@@ -26,8 +26,6 @@ public class RangeAttack
 
     public void UpdateAction()
     {
-        //Debug.Log("Range Attack");
-
         if (!phaseAction.activeUnit)
             return;
         else if (!activeUnit)
@@ -96,7 +94,8 @@ public class RangeAttack
 
     private void ShootEffect()
     {
-        var hitChance = 100 - 15 * obstacles.Count;         //var hitChance = 50 / obstacles.Count;
+        // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
+        var hitChance = 100 - 15 * obstacles.Count - 1 * Mathf.Round(Vector3.Distance(activeUnit.transform.position, target.transform.position));
         var hitResult = Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
 
