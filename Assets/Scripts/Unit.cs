@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int unitRangeFight;
     [HideInInspector] public int unitStrength;
     [HideInInspector] public int unitDefence;
-    [HideInInspector] public int unitAttacks;
+    [HideInInspector] public int unitActions;
     [HideInInspector] public int unitWounds;
     [HideInInspector] public int unitCourage;
     [HideInInspector] public int unitWill;
@@ -47,7 +47,7 @@ public class Unit : MonoBehaviour
         unitRangeFight = unitStats.unitArcherySkill;
         unitStrength = unitStats.unitStrength;
         unitDefence = unitStats.unitDefence;
-        unitAttacks = unitStats.unitAttacks;
+        unitActions = unitStats.unitActions;
         unitWounds = unitStats.unitWounds;
         unitCourage = unitStats.unitCourage;
 
