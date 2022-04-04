@@ -35,7 +35,7 @@ public class Unit : MonoBehaviour
     //private bool shoot = false;
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
-    public Wargear Wargear { get => wargear; private set { } }
+    public RangeWeapon RangeWeapon { get => wargear.rangeWeapon; private set { } }
 
     private void Start()
     {
@@ -97,13 +97,12 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns strength value. Set true parametr for melee combat weapon or false for range weapon
+    /// Returns strength value for unit
     /// </summary>
-    /// <param name="combatWeapon"></param>
     /// <returns></returns>
-    public int GetStrenght(bool combatWeapon)
+    public int GetStrenght()
     {
-        var strenght = (combatWeapon) ? unitStrength + wargear.combatWeapon.strength : wargear.rangeWeapon.strength;
+        var strenght = unitStrength + wargear.combatWeapon.strength;
         return strenght;
     }
 }
