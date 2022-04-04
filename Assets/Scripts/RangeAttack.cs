@@ -42,10 +42,9 @@ public class RangeAttack
 
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
             {
-                // TODO: TU COŒ CZA NAPRAWIÆ
-                if (activeUnit.shootAvailable && WoundTest.IsPossibleToAttack(target.GetDefence(), activeUnit.GetStrenght(false)) &&
-                    activeUnit.Wargear.rangeWeapon.range >= Vector3.Distance(activeUnit.transform.position, target.transform.position) &&
-                    activeUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None)
+                if (activeUnit.RangeWeapon.type != RangeWeapon.WeaponType.None && activeUnit.shootAvailable &&
+                    WoundTest.IsPossibleToAttack(target.GetDefence(), activeUnit.RangeWeapon.strength) &&
+                    activeUnit.RangeWeapon.range >= Vector3.Distance(activeUnit.transform.position, target.transform.position))
                 {
                     //activeUnit.shootAvailable = false;
                     RaycastObstacles();
@@ -55,7 +54,7 @@ public class RangeAttack
                 }
                 else Debug.Log("You can't attack enemy!");
             }
-            else target = null;
+            ClearAction();
         }
 
         // Clear active unit
@@ -105,7 +104,7 @@ public class RangeAttack
 
         if (hitTarget)
         {
-            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), activeUnit.GetStrenght(false));
+            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), activeUnit.RangeWeapon.strength);
             if (woundTarget)
             {
                 // do something when target has been wounded
