@@ -33,7 +33,7 @@ public class UnitStats : ScriptableObject
     public int unitArcherySkill;
     public int unitStrength;
     public int unitDefence;
-    public int unitAttacks;
+    public int unitActions;
     public int unitWounds;
     public int unitCourage;
     [Space]
