@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Orc Warrior
   m_EditorClassIdentifier: 
   unitName: Orc Warrior
-  unitRace: 3
+  unitRace: 11
   unitArmy: 18
   unitType: 0
   unitHeroicTier: 0
   unitMove: 6
   unitMeleeFight: 3
-  unitRangeFight: 5
+  unitArcherySkill: 0
   unitStrength: 3
   unitDefence: 4
-  unitAttacks: 1
+  unitActions: 0
   unitWounds: 1
   unitCourage: 2
   unitWill: 0

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Legolas Greenleaf
   m_EditorClassIdentifier: 
   unitName: Legolas Greenleaf
-  unitRace: 0
+  unitRace: 3
   unitArmy: 6
   unitType: 0
   unitHeroicTier: 2
   unitMove: 6
   unitMeleeFight: 6
-  unitRangeFight: 3
+  unitArcherySkill: 0
   unitStrength: 4
   unitDefence: 4
-  unitAttacks: 2
+  unitActions: 0
   unitWounds: 2
   unitCourage: 6
   unitWill: 3

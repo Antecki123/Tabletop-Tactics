@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Heavy Armour
   m_EditorClassIdentifier: 
   type: 2
-  defence: 2
+  defence: 1

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Warrior of Minas Tirith
   m_EditorClassIdentifier: 
   unitName: Warrior of Minas Tirith
-  unitRace: 1
+  unitRace: 2
   unitArmy: 7
   unitType: 0
   unitHeroicTier: 0
   unitMove: 6
   unitMeleeFight: 3
-  unitRangeFight: 4
+  unitArcherySkill: 0
   unitStrength: 3
   unitDefence: 5
-  unitAttacks: 1
+  unitActions: 0
   unitWounds: 1
   unitCourage: 3
   unitWill: 0

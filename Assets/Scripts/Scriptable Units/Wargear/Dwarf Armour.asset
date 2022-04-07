@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39880c203be8651449e0585471abfa1a, type: 3}
   m_Name: Dwarf Armour
   m_EditorClassIdentifier: 
-  type: 0
-  defence: 0
+  type: 3
+  defence: 2
