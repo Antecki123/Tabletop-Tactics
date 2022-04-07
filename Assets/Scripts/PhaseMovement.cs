@@ -27,13 +27,15 @@ public class PhaseMovement : MonoBehaviour
         }
 
         // Set position to move
-        else if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && activeUnit)
+        else if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit, 100f, 1024) && activeUnit)
+        //else if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit) && activeUnit)
         {
             activeUnit.navMeshAgent.speed = 0f;
             //activeUnit.navMeshAgent.destination = hit.point;
 
-            var roundCoordinate = new Vector2(Mathf.Round(hit.point.x), Mathf.Round(hit.point.z));
-            activeUnit.navMeshAgent.destination = new Vector3(roundCoordinate.x, hit.point.y, roundCoordinate.y);
+            //var roundCoordinate = new Vector2(Mathf.FloorToInt(hit.point.x), Mathf.FloorToInt(hit.point.z));
+            //activeUnit.navMeshAgent.destination = new Vector3(roundCoordinate.x + .5f, hit.point.y, roundCoordinate.y + .5f);
+            activeUnit.navMeshAgent.destination = hit.collider.transform.position;
 
             StartCoroutine(MoveUnitToPosition());
         }
