@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PhaseAction : MonoBehaviour
 {
-    public enum UnitAction { None, MeleeAttack, RangeAttack, Support, BlowHorn, Defence }
+    public enum UnitAction { None, MeleeAttack, RangeAttack, Support, BlowHorn, Defence, Movement }
 
     [Header("Component References")]
     public Unit activeUnit;
@@ -61,4 +61,5 @@ public class PhaseAction : MonoBehaviour
     public void Support() => activeAction = (activeUnit) ? UnitAction.Support : UnitAction.None;
     public void BlowHorn() => activeAction = (activeUnit) ? UnitAction.BlowHorn : UnitAction.None;
     public void Defence() => activeAction = (activeUnit) ? UnitAction.Defence : UnitAction.None;
+    public void Movement() => activeAction = (activeUnit) ? UnitAction.Movement : UnitAction.None;
 }
