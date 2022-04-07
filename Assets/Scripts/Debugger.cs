@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Debugger : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Debugger : MonoBehaviour
     [SerializeField] private PhaseManager phaseManager;
     [SerializeField] private PhaseMovement phaseMovement;
     [SerializeField] private PhaseAction phaseAction;
+    [Space]
+    [SerializeField] private TextMeshProUGUI activePlayerHUD;
 
     [Header("Movement Debugger")]
     [SerializeField] private LineRenderer line;
@@ -24,12 +27,21 @@ public class Debugger : MonoBehaviour
         line.startColor = Color.red;
     }
 
+    private void Update()
+    {
+        var activePlayer = PhaseManager.instance.activePlayer;
+        if (activePlayer == PhaseManager.Player.Player1)
+            activePlayerHUD.text = "Player Red Turn";
+        else if (activePlayer == PhaseManager.Player.Player2)
+            activePlayerHUD.text = "Player Blue Turn";
+
+    }
+
     private void OnDrawGizmos()
     {
         // MOVEMENT
         if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Move && phaseMovement.ActiveUnit)
         {
-            print(phaseMovement.ActiveUnit);
             if (phaseMovement.ActiveUnit.navMeshAgent.hasPath)
             {
                 line.positionCount = phaseMovement.ActiveUnit.navMeshAgent.path.corners.Length;
