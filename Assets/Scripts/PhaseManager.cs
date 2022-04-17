@@ -6,18 +6,18 @@ public class PhaseManager : MonoBehaviour
 {
     public static PhaseManager instance;
     public enum Player { Player1, Player2 }
-    public enum Phase { Priority, Move, Actions, End }
+    public enum Phase { Priority, Actions, End }
 
     [Header("Component References")]
-    [SerializeField] private PhaseMovement phaseMovement;
-    [SerializeField] private PhaseAction phaseAction;
+    [SerializeField] private Movement phaseMovement;
+    [SerializeField] private PhaseActions phaseAction;
 
     [Header("Gameplay References")]
     public Phase activePhase = Phase.Priority;
     public Player activePlayer;
     [Space]
-    [SerializeField] private List<Unit> player1Units = new List<Unit>();
-    [SerializeField] private List<Unit> player2Units = new List<Unit>();
+    [SerializeField] private List<Unit> player1Units = new();
+    [SerializeField] private List<Unit> player2Units = new();
 
     [SerializeField] private bool player1TurnDone;
     [SerializeField] private bool player2TurnDone;
@@ -36,9 +36,6 @@ public class PhaseManager : MonoBehaviour
         {
             case Phase.Priority:
                 PriorityPhase();
-                break;
-            case Phase.Move:
-                MovePhase();
                 break;
             case Phase.Actions:
                 ActionsPhase();
@@ -62,29 +59,19 @@ public class PhaseManager : MonoBehaviour
 
         print($"Roll: {playerPriorityRoll}");
 
-        activePhase = Phase.Move;
-    }
-
-    private void MovePhase()
-    {
-        phaseMovement.enabled = true;
-        phaseAction.enabled = false;
-
-
+        activePhase = Phase.Actions;
     }
 
     private void ActionsPhase()
     {
-        phaseMovement.enabled = false;
         phaseAction.enabled = true;
-
-
     }
 
     private void EndPhase()
     {
-        phaseMovement.enabled = false;
         phaseAction.enabled = false;
+        player1TurnDone = true;
+        player2TurnDone = true;
 
         foreach (var unit in player1Units)
         {
@@ -119,8 +106,6 @@ public class PhaseManager : MonoBehaviour
             player2TurnDone = false;
 
             if (activePhase == Phase.Priority)
-                activePhase = Phase.Move;
-            else if (activePhase == Phase.Move)
                 activePhase = Phase.Actions;
             else if (activePhase == Phase.Actions)
                 activePhase = Phase.End;

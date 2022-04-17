@@ -334,8 +334,8 @@ MonoBehaviour:
   gridWidth: 20
   gridHeight: 27
   nodeMaterial: {fileID: 2100000, guid: 7fc1fe9d0fbb0294ea7cd801f0f5cf45, type: 2}
-  gridMask: 1024
   hexPrefab: {fileID: 1708051360542716010, guid: 84e2b442fd47d044c9178cc31d52f608, type: 3}
+  grid: []
 --- !u!120 &104090216
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 202896483}
   - component: {fileID: 202896482}
   - component: {fileID: 202896485}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -545,7 +545,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 917505805}
-  - {fileID: 1318535330}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -603,7 +602,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 202896480}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Speed: 0
   m_Acceleration: 100
   avoidancePriority: 50
@@ -1238,7 +1237,7 @@ Transform:
   m_GameObject: {fileID: 445191661}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.025, z: 0}
-  m_LocalScale: {x: 1, y: 0.025, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.025, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1903133490}
@@ -1455,7 +1454,6 @@ GameObject:
   m_Component:
   - component: {fileID: 595824327}
   - component: {fileID: 595824331}
-  - component: {fileID: 595824330}
   - component: {fileID: 595824332}
   m_Layer: 0
   m_Name: Phase Manager
@@ -1479,20 +1477,6 @@ Transform:
   m_Father: {fileID: 277142595}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &595824330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 595824326}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e854975cc7cab40a69ffc889d99c1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 1687258584}
-  activeUnit: {fileID: 0}
 --- !u!114 &595824331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,7 +1489,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e11c0ce3a6e5f4097d4a9558b1910d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phaseMovement: {fileID: 595824330}
   phaseAction: {fileID: 595824332}
   activePhase: 0
   activePlayer: 0
@@ -1523,9 +1506,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595824326}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6de9fa63280950547ad765e4e44fcbd3, type: 3}
+  m_Script: {fileID: 11500000, guid: 80b0faf9b54d66e4d8d69a32a93c677a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeUnit: {fileID: 0}
@@ -1844,7 +1827,7 @@ GameObject:
   - component: {fileID: 785821393}
   - component: {fileID: 785821392}
   - component: {fileID: 785821396}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -1905,7 +1888,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 785821390}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Speed: 0
   m_Acceleration: 100
   avoidancePriority: 50
@@ -2019,8 +2002,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Next turn
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fa125d0a2e155be42b0bd9e1f775e82a, type: 2}
+  m_sharedMaterial: {fileID: 2330064697495761389, guid: fa125d0a2e155be42b0bd9e1f775e82a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2142,7 +2125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27362f223cf0f764a952960caa126629, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.025
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27362f223cf0f764a952960caa126629, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2179,6 +2162,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 27362f223cf0f764a952960caa126629, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 27362f223cf0f764a952960caa126629, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 27362f223cf0f764a952960caa126629, type: 3}
       propertyPath: m_Controller
@@ -2360,7 +2347,7 @@ Transform:
   m_GameObject: {fileID: 972131489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.025, z: 0}
-  m_LocalScale: {x: 1, y: 0.025, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.025, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 785821395}
@@ -2490,8 +2477,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Player Red Turn
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fa125d0a2e155be42b0bd9e1f775e82a, type: 2}
+  m_sharedMaterial: {fileID: 2330064697495761389, guid: fa125d0a2e155be42b0bd9e1f775e82a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2515,8 +2502,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 46
+  m_fontSizeBase: 46
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2727,9 +2714,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 595824326}
-        m_TargetAssemblyTypeName: PhaseManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 595824332}
+        m_TargetAssemblyTypeName: Actions, Assembly-CSharp
+        m_MethodName: Movement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2777,104 +2764,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1267754071}
   m_CullTransparentMesh: 1
---- !u!1 &1318535329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1318535330}
-  - component: {fileID: 1318535333}
-  - component: {fileID: 1318535332}
-  - component: {fileID: 1318535331}
-  m_Layer: 0
-  m_Name: Cylinder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1318535330
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318535329}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.025, z: 0}
-  m_LocalScale: {x: 1, y: 0.025, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 202896481}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1318535331
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318535329}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!23 &1318535332
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318535329}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 89b496ad581b92a4bba643e11b39a0b7, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1318535333
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318535329}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1328895619
 GameObject:
   m_ObjectHideFlags: 0
@@ -3205,8 +3094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   phaseManager: {fileID: 0}
-  phaseMovement: {fileID: 0}
-  phaseAction: {fileID: 0}
+  actions: {fileID: 0}
   activePlayerHUD: {fileID: 1014410487}
   line: {fileID: 0}
 --- !u!120 &1521610146
@@ -4221,7 +4109,7 @@ GameObject:
   - component: {fileID: 1903133488}
   - component: {fileID: 1903133487}
   - component: {fileID: 1903133491}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -4282,8 +4170,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 1903133485}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 0
+  m_Radius: 0.4
+  m_Speed: 1.5
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 1000
@@ -4303,7 +4191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903133485}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 7.5, y: 0, z: 2.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

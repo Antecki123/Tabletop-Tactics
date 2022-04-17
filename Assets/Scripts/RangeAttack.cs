@@ -4,7 +4,7 @@ using UnityEngine;
 public class RangeAttack
 {
     [Header("Component References")]
-    [SerializeField] private PhaseAction phaseAction;
+    [SerializeField] private PhaseActions phaseAction;
     [SerializeField] private Camera mainCamera;
 
     [Header("Shooting Script")]
@@ -18,7 +18,7 @@ public class RangeAttack
         public float obstacleDistance;
     }
 
-    public RangeAttack(PhaseAction phaseAction)
+    public RangeAttack(PhaseActions phaseAction)
     {
         this.phaseAction = phaseAction;
         mainCamera = Camera.main;
@@ -67,7 +67,7 @@ public class RangeAttack
         obstacles.Clear();
 
         phaseAction.activeUnit = null;
-        phaseAction.activeAction = PhaseAction.UnitAction.None;
+        phaseAction.activeAction = PhaseActions.UnitAction.None;
     }
 
     private void RaycastObstacles()

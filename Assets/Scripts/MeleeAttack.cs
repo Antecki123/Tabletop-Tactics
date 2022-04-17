@@ -5,16 +5,16 @@ using UnityEngine;
 public class MeleeAttack
 {
     [Header("Component References")]
-    [SerializeField] private PhaseAction phaseAction;
-    [SerializeField] private Camera mainCamera;
+    private PhaseActions phaseAction;
+    private Camera mainCamera;
 
     [Header("Attack Script")]
-    [SerializeField] private Unit activeUnit;
-    [SerializeField] private Unit target;
+    private Unit activeUnit;
+    private Unit target;
 
-    private float attackDistance = 1f;
+    private readonly float attackDistance = 1f;
 
-    public MeleeAttack(PhaseAction phaseAction)
+    public MeleeAttack(PhaseActions phaseAction)
     {
         this.phaseAction = phaseAction;
         mainCamera = Camera.main;
@@ -39,6 +39,8 @@ public class MeleeAttack
                 if (phaseAction.activeUnit.duelAvailable && WoundTest.IsPossibleToAttack(target.GetDefence(), activeUnit.GetStrenght()) &&
                     attackDistance >= Vector3.Distance(phaseAction.activeUnit.transform.position, target.transform.position))
                 {
+                    activeUnit.transform.LookAt(target.transform.position);
+                    target.transform.LookAt(activeUnit.transform.position);
                     //activeUnit.duelAvailable = false;
 
                     AttackEffect();
@@ -74,6 +76,6 @@ public class MeleeAttack
         target = null;
 
         phaseAction.activeUnit = null;
-        phaseAction.activeAction = PhaseAction.UnitAction.None;
+        phaseAction.activeAction = PhaseActions.UnitAction.None;
     }
 }

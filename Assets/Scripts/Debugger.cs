@@ -6,8 +6,7 @@ public class Debugger : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private PhaseManager phaseManager;
-    [SerializeField] private PhaseMovement phaseMovement;
-    [SerializeField] private PhaseAction phaseAction;
+    [SerializeField] private PhaseActions actions;
     [Space]
     [SerializeField] private TextMeshProUGUI activePlayerHUD;
 
@@ -19,8 +18,7 @@ public class Debugger : MonoBehaviour
         mainCamera = Camera.main;
 
         phaseManager = FindObjectOfType<PhaseManager>();
-        phaseMovement = FindObjectOfType<PhaseMovement>();
-        phaseAction = FindObjectOfType<PhaseAction>();
+        actions = FindObjectOfType<PhaseActions>();
 
         line = GetComponent<LineRenderer>();
         line.startWidth = .1f;
@@ -39,34 +37,40 @@ public class Debugger : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // MOVEMENT
-        if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Move && phaseMovement.ActiveUnit)
+        if (Application.isPlaying)
         {
-            if (phaseMovement.ActiveUnit.navMeshAgent.hasPath)
+            if (actions.activeUnit)
             {
-                line.positionCount = phaseMovement.ActiveUnit.navMeshAgent.path.corners.Length;
-                line.SetPositions(phaseMovement.ActiveUnit.navMeshAgent.path.corners);
-                line.enabled = true;
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(actions.activeUnit.transform.position, 1f);
             }
-            else line.enabled = false;
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(phaseMovement.ActiveUnit.transform.position, phaseMovement.ActiveUnit.moveLeft);
-            Gizmos.DrawLine(phaseMovement.ActiveUnit.transform.position, MousePosition());
-        }
+            if (actions.activeAction == PhaseActions.UnitAction.Movement && actions.activeUnit)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
 
-        // ACTIONS
-        if (Application.isPlaying && phaseManager.activePhase == PhaseManager.Phase.Actions && 
-            phaseAction.activeAction == PhaseAction.UnitAction.RangeAttack && phaseAction.activeUnit)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, phaseAction.activeUnit.RangeWeapon.range);
-            Gizmos.DrawLine(phaseAction.activeUnit.transform.position, MousePosition());
-        }
-        if (Application.isPlaying && phaseAction.activeUnit)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(phaseAction.activeUnit.transform.position, 1f);
+                if (actions.activeUnit.navMeshAgent.hasPath)
+                {
+                    line.positionCount = actions.activeUnit.navMeshAgent.path.corners.Length;
+                    line.SetPositions(actions.activeUnit.navMeshAgent.path.corners);
+                    line.enabled = true;
+                }
+                else line.enabled = false;
+            }
+
+            else if (actions.activeAction == PhaseActions.UnitAction.RangeAttack && actions.activeUnit)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireSphere(actions.activeUnit.transform.position, actions.activeUnit.RangeWeapon.range);
+                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
+            }
+
+            else if (actions.activeAction == PhaseActions.UnitAction.MeleeAttack && actions.activeUnit)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
+            }
         }
     }
 
