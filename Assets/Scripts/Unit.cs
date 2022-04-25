@@ -10,29 +10,38 @@ public class Unit : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private UnitStats unitStats;
 
-    [Header("Unit Properties")]
+    [Header("Unit Stats")]
     [SerializeField] private PhaseManager.Player unitOwner;
     [SerializeField] private Wargear wargear;
 
-    [HideInInspector] public int unitMove;
-    [HideInInspector] public int unitMeleeFight;
-    [HideInInspector] public int unitRangeFight;
-    [HideInInspector] public int unitStrength;
-    [HideInInspector] public int unitDefence;
-    [HideInInspector] public int unitActions;
-    [HideInInspector] public int unitWounds;
-    [HideInInspector] public int unitCourage;
-    [HideInInspector] public int unitWill;
-    [HideInInspector] public int unitMight;
-    [HideInInspector] public int unitFate;
-    [Space]
-    public float moveLeft;
-    public bool shootAvailable;
-    public bool duelAvailable;
+    private int unitMove;
+    private int unitMeleeFight;
+    private int unitRangeFight;
+    private int unitStrength;
+    private int unitDefence;
+    private int unitActions;
+    private int unitWounds;
+    private int unitCourage;
+    public int unitSpeed;              // TODO: add speed stat to scripptables obj
+
+    private int unitWill;
+    private int unitMight;
+    private int unitFate;
+
+    [Header("Unit Properties")]
+    private float moveLeft;
+    private int remainingActions;
+    private bool shootAvailable;
+    private bool duelAvailable;
 
     [Header("Animations")]
     private bool move = false;
     //private bool shoot = false;
+
+    public int RemainingActions { get => remainingActions; set => remainingActions = value; }
+    public float MoveLeft { get => moveLeft; set => moveLeft = value; }
+    public bool ShootAvailable { get => shootAvailable; set => shootAvailable = value; }
+    public bool DuelAvailable { get => duelAvailable; set => duelAvailable = value; }
 
     public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
     public RangeWeapon RangeWeapon { get => wargear.rangeWeapon; private set { } }
@@ -40,20 +49,6 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         name = unitStats.name;
-        moveLeft = unitStats.unitMove;
-
-        unitMove = unitStats.unitMove;
-        unitMeleeFight = unitStats.unitMeleeFight;
-        unitRangeFight = unitStats.unitArcherySkill;
-        unitStrength = unitStats.unitStrength;
-        unitDefence = unitStats.unitDefence;
-        unitActions = unitStats.unitActions;
-        unitWounds = unitStats.unitWounds;
-        unitCourage = unitStats.unitCourage;
-
-        unitWill = unitStats.unitWill;
-        unitMight = unitStats.unitMight;
-        unitFate = unitStats.unitFate;
 
         ResetStats();
     }
@@ -69,22 +64,25 @@ public class Unit : MonoBehaviour
 
     public void ResetStats()
     {
+        unitMove = unitStats.unitMove;
+        unitMeleeFight = unitStats.unitMeleeFight;
+        unitRangeFight = unitStats.unitArcherySkill;
+        unitStrength = unitStats.unitStrength;
+        unitDefence = unitStats.unitDefence;
+        unitActions = unitStats.unitActions;
+        unitWounds = unitStats.unitWounds;
+        unitCourage = unitStats.unitCourage;
+
+        unitWill = unitStats.unitWill;
+        unitMight = unitStats.unitMight;
+        unitFate = unitStats.unitFate;
+
+        remainingActions = 2;
         moveLeft = unitStats.unitMove;
 
         duelAvailable = true;
         shootAvailable = (wargear.rangeWeapon.type != RangeWeapon.WeaponType.None);
     }
-
-    /*
-    public void GetDamage()
-    {
-        unitWounds--;
-        if (unitWounds <= 0)
-        {
-            animator.SetTrigger("death");
-            print("Unit DEAD!");
-        }
-    }*/
 
     /// <summary>
     /// Returns defence value for unit
@@ -104,5 +102,20 @@ public class Unit : MonoBehaviour
     {
         var strenght = unitStrength + wargear.combatWeapon.strength;
         return strenght;
+    }
+
+    /// <summary>
+    /// Returns unit's melee fight value
+    /// </summary>
+    /// <returns></returns>
+    public int GetMeleeFight()
+    {
+        var meleeFight = unitMeleeFight;
+        return meleeFight;
+    }
+
+    public void GuardAction()
+    {
+        unitDefence++;
     }
 }

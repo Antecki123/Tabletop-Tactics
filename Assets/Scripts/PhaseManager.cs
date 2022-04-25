@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,14 +12,17 @@ public class PhaseManager : MonoBehaviour
     [SerializeField] private PhaseActions phaseAction;
 
     [Header("Gameplay References")]
-    public Phase activePhase = Phase.Priority;
-    public Player activePlayer;
+    [SerializeField] private Phase activePhase = Phase.Priority;
+    [SerializeField] private Player activePlayer;
     [Space]
     [SerializeField] private List<Unit> player1Units = new();
     [SerializeField] private List<Unit> player2Units = new();
+    [SerializeField] private Queue<Unit> unitsQueue = new();
 
     [SerializeField] private bool player1TurnDone;
     [SerializeField] private bool player2TurnDone;
+
+    public Player ActivePlayer { get => activePlayer; }
 
     private void Awake()
     {
@@ -50,6 +52,7 @@ public class PhaseManager : MonoBehaviour
 
     private void PriorityPhase()
     {
+        /*
         var playerPriorityRoll = Random.Range(1, 3);
 
         if (playerPriorityRoll == 1)
@@ -58,6 +61,16 @@ public class PhaseManager : MonoBehaviour
             activePlayer = Player.Player2;
 
         print($"Roll: {playerPriorityRoll}");
+        */
+
+        var allUnits = FindObjectsOfType<Unit>();
+
+        System.Array.Sort(allUnits, (a, b) => a.unitSpeed.CompareTo(b.unitSpeed));
+
+        foreach (var unit in allUnits)
+            unitsQueue.Enqueue(unit);
+
+        print(unitsQueue.Count);
 
         activePhase = Phase.Actions;
     }
@@ -65,6 +78,14 @@ public class PhaseManager : MonoBehaviour
     private void ActionsPhase()
     {
         phaseAction.enabled = true;
+
+        var activeUnit = unitsQueue.Peek();
+        if (activeUnit.RemainingActions > 0)
+        {
+            PhaseActions.instance.ActiveUnit = activeUnit;
+            //unitsQueue.Dequeue();
+        }
+
     }
 
     private void EndPhase()
@@ -74,17 +95,10 @@ public class PhaseManager : MonoBehaviour
         player2TurnDone = true;
 
         foreach (var unit in player1Units)
-        {
-            unit.moveLeft = unit.unitMove;
-            unit.shootAvailable = true;
-            unit.duelAvailable = true;
-        }
+            unit.ResetStats();
+
         foreach (var unit in player2Units)
-        {
-            unit.moveLeft = unit.unitMove;
-            unit.shootAvailable = true;
-            unit.duelAvailable = true;
-        }
+            unit.ResetStats();
     }
 
     public void NextPhase_Btn()
@@ -112,5 +126,7 @@ public class PhaseManager : MonoBehaviour
             else if (activePhase == Phase.End)
                 activePhase = Phase.Priority;
         }
+
+        PhaseActions.instance.ClearActiveAction();
     }
 }

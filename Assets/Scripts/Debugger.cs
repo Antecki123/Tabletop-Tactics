@@ -27,7 +27,7 @@ public class Debugger : MonoBehaviour
 
     private void Update()
     {
-        var activePlayer = PhaseManager.instance.activePlayer;
+        var activePlayer = PhaseManager.instance.ActivePlayer;
         if (activePlayer == PhaseManager.Player.Player1)
             activePlayerHUD.text = "Player Red Turn";
         else if (activePlayer == PhaseManager.Player.Player2)
@@ -39,37 +39,37 @@ public class Debugger : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            if (actions.activeUnit)
+            if (actions.ActiveUnit)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(actions.activeUnit.transform.position, 1f);
+                Gizmos.DrawWireSphere(actions.ActiveUnit.transform.position, 1f);
             }
 
-            if (actions.activeAction == PhaseActions.UnitAction.Movement && actions.activeUnit)
+            if (actions.ActiveAction == PhaseActions.UnitAction.Movement && actions.ActiveUnit)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
+                Gizmos.DrawLine(actions.ActiveUnit.transform.position, MousePosition());
 
-                if (actions.activeUnit.navMeshAgent.hasPath)
+                if (actions.ActiveUnit.navMeshAgent.hasPath)
                 {
-                    line.positionCount = actions.activeUnit.navMeshAgent.path.corners.Length;
-                    line.SetPositions(actions.activeUnit.navMeshAgent.path.corners);
+                    line.positionCount = actions.ActiveUnit.navMeshAgent.path.corners.Length;
+                    line.SetPositions(actions.ActiveUnit.navMeshAgent.path.corners);
                     line.enabled = true;
                 }
                 else line.enabled = false;
             }
 
-            else if (actions.activeAction == PhaseActions.UnitAction.RangeAttack && actions.activeUnit)
+            else if (actions.ActiveAction == PhaseActions.UnitAction.RangeAttack && actions.ActiveUnit)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireSphere(actions.activeUnit.transform.position, actions.activeUnit.RangeWeapon.range);
-                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
+                Gizmos.DrawWireSphere(actions.ActiveUnit.transform.position, actions.ActiveUnit.RangeWeapon.range);
+                Gizmos.DrawLine(actions.ActiveUnit.transform.position, MousePosition());
             }
 
-            else if (actions.activeAction == PhaseActions.UnitAction.MeleeAttack && actions.activeUnit)
+            else if (actions.ActiveAction == PhaseActions.UnitAction.MeleeAttack && actions.ActiveUnit)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(actions.activeUnit.transform.position, MousePosition());
+                Gizmos.DrawLine(actions.ActiveUnit.transform.position, MousePosition());
             }
         }
     }

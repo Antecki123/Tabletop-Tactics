@@ -9,7 +9,6 @@ public class MeleeAttack
     private Camera mainCamera;
 
     [Header("Attack Script")]
-    private Unit activeUnit;
     private Unit target;
 
     private readonly float attackDistance = 1f;
@@ -22,25 +21,23 @@ public class MeleeAttack
 
     public void UpdateAction()
     {
-        if (!phaseAction.activeUnit)
+        if (!phaseAction.ActiveUnit)
             return;
-        else if (!activeUnit)
-            this.activeUnit = phaseAction.activeUnit;
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Set target
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && activeUnit)
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && phaseAction.ActiveUnit)
         {
             target = hit.transform.GetComponent<Unit>();
 
-            if (hit.transform.CompareTag("Unit") && target.UnitOwner != activeUnit.UnitOwner)
+            if (hit.transform.CompareTag("Unit") && target.UnitOwner != phaseAction.ActiveUnit.UnitOwner)
             {
-                if (phaseAction.activeUnit.duelAvailable && WoundTest.IsPossibleToAttack(target.GetDefence(), activeUnit.GetStrenght()) &&
-                    attackDistance >= Vector3.Distance(phaseAction.activeUnit.transform.position, target.transform.position))
+                if (phaseAction.ActiveUnit.DuelAvailable && WoundTest.IsPossibleToAttack(target.GetDefence(), phaseAction.ActiveUnit.GetStrenght()) &&
+                    attackDistance >= Vector3.Distance(phaseAction.ActiveUnit.transform.position, target.transform.position))
                 {
-                    activeUnit.transform.LookAt(target.transform.position);
-                    target.transform.LookAt(activeUnit.transform.position);
+                    phaseAction.ActiveUnit.transform.LookAt(target.transform.position);
+                    target.transform.LookAt(phaseAction.ActiveUnit.transform.position);
                     //activeUnit.duelAvailable = false;
 
                     AttackEffect();
@@ -54,15 +51,15 @@ public class MeleeAttack
     private void AttackEffect()
     {
         // Calculating melee attack chance: 50% + difference between MeleeFight of both units value multiplying by 5
-        var hitChance = 50 + (activeUnit.unitMeleeFight - target.unitMeleeFight) * 5;
+        var hitChance = 50 + (phaseAction.ActiveUnit.GetMeleeFight() - target.GetMeleeFight()) * 5;
         var hitResult = Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
 
-        Debug.Log($"{activeUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
+        Debug.Log($"{phaseAction.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
 
         if (hitTarget)
         {
-            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), activeUnit.RangeWeapon.strength);
+            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), phaseAction.ActiveUnit.RangeWeapon.strength);
             if (woundTarget)
             {
                 // do something when target has been wounded
@@ -72,10 +69,8 @@ public class MeleeAttack
 
     private void ClearAction()
     {
-        activeUnit = null;
         target = null;
 
-        phaseAction.activeUnit = null;
-        phaseAction.activeAction = PhaseActions.UnitAction.None;
+        phaseAction.ClearActiveAction();
     }
 }
