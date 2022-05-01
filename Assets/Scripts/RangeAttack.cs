@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class RangeAttack
 {
+    public static System.Action<Unit> OnShootingAttack;
+
     [Header("Component References")]
-    [SerializeField] private PhaseActions phaseAction;
+    [SerializeField] private UnitActions unitActions;
     [SerializeField] private Camera mainCamera;
 
     [Header("Shooting Script")]
@@ -17,57 +19,50 @@ public class RangeAttack
         public float obstacleDistance;
     }
 
-    public RangeAttack(PhaseActions phaseAction)
+    public RangeAttack(UnitActions phaseAction)
     {
-        this.phaseAction = phaseAction;
+        this.unitActions = phaseAction;
         mainCamera = Camera.main;
     }
 
     public void UpdateAction()
     {
-        if (!phaseAction.ActiveUnit)
-            return;
-
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
+        // Highlight grid
+        GridManager.instance.GetComponent<IHighlightGrid>().HighlightGridRange(unitActions.ActiveUnit, (int)unitActions.ActiveUnit.Wargear.rangeWeapon.range, Color.cyan);
+
         // Set target
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && phaseAction.ActiveUnit)
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && unitActions.ActiveUnit)
         {
             target = hit.transform.GetComponent<Unit>();
 
-            if (hit.transform.CompareTag("Unit") && target.UnitOwner != phaseAction.ActiveUnit.UnitOwner)
+            if (hit.transform.CompareTag("Unit") && target.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
-                if (phaseAction.ActiveUnit.RangeWeapon.type != RangeWeapon.WeaponType.None && phaseAction.ActiveUnit.ShootAvailable &&
-                    WoundTest.IsPossibleToAttack(target.GetDefence(), phaseAction.ActiveUnit.RangeWeapon.strength) &&
-                    phaseAction.ActiveUnit.RangeWeapon.range >= Vector3.Distance(phaseAction.ActiveUnit.transform.position, target.transform.position))
+                if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None &&
+                    unitActions.ActiveUnit.Wargear.rangeWeapon.range >= Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position))
                 {
-                    //activeUnit.shootAvailable = false;
+                    OnShootingAttack?.Invoke(unitActions.ActiveUnit);
+
                     RaycastObstacles();
                     ShootEffect();
 
-                    ClearAction();
+                    unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+                    unitActions.FinishAction();
                 }
                 else Debug.Log("You can't attack enemy!");
             }
-            //ClearAction();
         }
 
-        // Clear active unit
-        if (Input.GetMouseButtonDown(1) && phaseAction.ActiveUnit)
-            ClearAction();
-    }
-
-    private void ClearAction()
-    {
-        target = null;
-        obstacles.Clear();
-        phaseAction.ClearActiveAction();
+        // Clear active action
+        if (Input.GetMouseButtonDown(1))
+            unitActions.ClearAction();
     }
 
     private void RaycastObstacles()
     {
-        phaseAction.ActiveUnit.transform.LookAt(target.transform.position);
-        RaycastHit[] obstaclesHit = Physics.RaycastAll(phaseAction.ActiveUnit.transform.position + Vector3.up, phaseAction.ActiveUnit.transform.forward);
+        unitActions.ActiveUnit.transform.LookAt(target.transform.position);
+        RaycastHit[] obstaclesHit = Physics.RaycastAll(unitActions.ActiveUnit.transform.position + Vector3.up, unitActions.ActiveUnit.transform.forward);
 
         foreach (var hit in obstaclesHit)
         {
@@ -78,7 +73,7 @@ public class RangeAttack
             };
 
             // Add every obstacle between active unit and target to list
-            if (obstacle.obstacleDistance <= Vector3.Distance(phaseAction.ActiveUnit.transform.position, target.transform.position))
+            if (obstacle.obstacleDistance <= Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position))
                 obstacles.Add(obstacle);
         }
 
@@ -89,18 +84,19 @@ public class RangeAttack
     private void ShootEffect()
     {
         // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
-        var hitChance = 100 - 15 * obstacles.Count - 1 * Mathf.Round(Vector3.Distance(phaseAction.ActiveUnit.transform.position, target.transform.position));
+        var hitChance = 100 - 15 * obstacles.Count - 1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position));
         var hitResult = Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
 
-        Debug.Log($"{phaseAction.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
+        Debug.Log($"{unitActions.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
 
         if (hitTarget)
         {
-            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), phaseAction.ActiveUnit.RangeWeapon.strength);
+            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
             if (woundTarget)
             {
                 // do something when target has been wounded
+                target.GetDamage(1);
             }
         }
     }

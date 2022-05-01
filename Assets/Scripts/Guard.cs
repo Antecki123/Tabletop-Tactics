@@ -5,14 +5,15 @@ using UnityEngine;
 public class Guard
 {
     [Header("Component References")]
-    private PhaseActions phaseAction;
+    private UnitActions unitActions;
 
-    public Guard(PhaseActions phaseAction) =>  this.phaseAction = phaseAction;
+    public Guard(UnitActions phaseAction) =>  this.unitActions = phaseAction;
 
     public void UpdateAction()
     {
-        phaseAction.ActiveUnit.GuardAction();
+        //phaseAction.ActiveUnit.GuardAction();
 
-        phaseAction.ClearActiveAction();
+        unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+        unitActions.FinishAction();
     }
 }

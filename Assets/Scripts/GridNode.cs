@@ -17,18 +17,42 @@ public class GridNode : MonoBehaviour
     {
         boarder = GetComponent<LineRenderer>();
 
-        StartCoroutine(CheckObjectOnEveryHex());        //temporary
+        StartCoroutine(CheckObjectOnEveryHex());
     }
 
     private IEnumerator CheckObjectOnEveryHex()
     {
-        yield return new WaitForEndOfFrame();
-
-        if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, 10f, unitsLayer) && hit.collider.GetComponent<Unit>())
+        yield return new WaitForSeconds(.5f);
+        if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, 1f, unitsLayer) && hit.collider.GetComponent<Unit>())
         {
             unit = hit.collider.GetComponent<Unit>();
             isOccupied = true;
         }
+
+        if (Physics.Raycast(transform.position + Vector3.down * .1f, Vector3.up, out hit) && !hit.collider.GetComponent<Unit>())
+        {
+            GridManager.instance.GridNodes.Remove(this);
+            Destroy(this.gameObject);
+        }
     }
 
+    private void OnMouseOver()
+    {
+        var lineComponent = GetComponent<LineRenderer>();
+
+        if (lineComponent.startColor != Color.blue && lineComponent.startColor != Color.red && lineComponent.startColor != Color.cyan)
+        {
+            lineComponent.enabled = true;
+            lineComponent.startColor = Color.white;
+            lineComponent.endColor = Color.white;
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        var lineComponent = GetComponent<LineRenderer>();
+
+        if (lineComponent.startColor != Color.blue && lineComponent.startColor != Color.red && lineComponent.startColor != Color.cyan)
+            lineComponent.enabled = false;
+    }
 }

@@ -1,88 +1,80 @@
-using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine;
+using System;
 
+[RequireComponent(typeof(UnitAnimation))]
 public class Unit : MonoBehaviour
 {
-    private enum ActiveAction { MeleeAttack, RangeAttack, Support, ThrowWeapon, Reload }
+    public static Action<Unit> OnGetDamage;
+    public static Action<Unit> OnDeath;
+
+    public enum Player { Player1, Player2 }
 
     [Header("Component References")]
     public NavMeshAgent navMeshAgent;
-    [SerializeField] private Animator animator;
-    [SerializeField] private UnitStats unitStats;
+    [SerializeField] public UnitStats unitBaseStats;    // PUBLIC temporary for UIUnitsQueue
 
-    [Header("Unit Stats")]
-    [SerializeField] private PhaseManager.Player unitOwner;
+    [Header("Unit Properties")]
+    [SerializeField] private Player unitOwner;
     [SerializeField] private Wargear wargear;
 
+    [Header("Unit Statistics")]
     private int unitMove;
-    private int unitMeleeFight;
-    private int unitRangeFight;
+    private int unitSpeed;
+
+    private int unitFightSkill;
+    private int unitArcherySkill;
     private int unitStrength;
     private int unitDefence;
+
     private int unitActions;
     private int unitWounds;
     private int unitCourage;
-    public int unitSpeed;              // TODO: add speed stat to scripptables obj
 
     private int unitWill;
     private int unitMight;
-    private int unitFate;
 
-    [Header("Unit Properties")]
-    private float moveLeft;
-    private int remainingActions;
-    private bool shootAvailable;
-    private bool duelAvailable;
+    #region PROPERTIES
+    public Player UnitOwner { get => unitOwner; }
+    public Wargear Wargear { get => wargear; }
 
-    [Header("Animations")]
-    private bool move = false;
-    //private bool shoot = false;
+    public int UnitMove { get => unitMove; }
+    public int UnitSpeed { get => unitSpeed; }
 
-    public int RemainingActions { get => remainingActions; set => remainingActions = value; }
-    public float MoveLeft { get => moveLeft; set => moveLeft = value; }
-    public bool ShootAvailable { get => shootAvailable; set => shootAvailable = value; }
-    public bool DuelAvailable { get => duelAvailable; set => duelAvailable = value; }
+    public int UnitActions { get => unitActions; }
+    public int UnitWounds { get => unitWounds; }
+    public int UnitCourage { get => unitCourage; }
 
-    public PhaseManager.Player UnitOwner { get => unitOwner; private set { } }
-    public RangeWeapon RangeWeapon { get => wargear.rangeWeapon; private set { } }
+    public int UnitWill { get => unitWill; }
+    public int UnitMight { get => unitMight; }
+    #endregion
 
     private void Start()
     {
-        name = unitStats.name;
+        this.name = unitBaseStats.name;
+        unitWounds = unitBaseStats.unitWounds;
 
         ResetStats();
     }
 
-    private void LateUpdate()
-    {
-        if (navMeshAgent.hasPath)
-            move = true;
-        else move = false;
-
-        animator.SetBool("move", move);
-    }
-
     public void ResetStats()
     {
-        unitMove = unitStats.unitMove;
-        unitMeleeFight = unitStats.unitMeleeFight;
-        unitRangeFight = unitStats.unitArcherySkill;
-        unitStrength = unitStats.unitStrength;
-        unitDefence = unitStats.unitDefence;
-        unitActions = unitStats.unitActions;
-        unitWounds = unitStats.unitWounds;
-        unitCourage = unitStats.unitCourage;
+        unitMove = unitBaseStats.unitMove;
+        unitSpeed = unitBaseStats.unitSpeed;
+        unitActions = unitBaseStats.unitActions;
 
-        unitWill = unitStats.unitWill;
-        unitMight = unitStats.unitMight;
-        unitFate = unitStats.unitFate;
+        unitFightSkill = unitBaseStats.unitFightSkill;
+        unitArcherySkill = unitBaseStats.unitArcherySkill;
+        unitStrength = unitBaseStats.unitStrength;
+        unitDefence = unitBaseStats.unitDefence;
 
-        remainingActions = 2;
-        moveLeft = unitStats.unitMove;
+        unitActions = unitBaseStats.unitActions;
+        unitCourage = unitBaseStats.unitCourage;
 
-        duelAvailable = true;
-        shootAvailable = (wargear.rangeWeapon.type != RangeWeapon.WeaponType.None);
+        unitWill = unitBaseStats.unitWill;
+        unitMight = unitBaseStats.unitMight;
     }
+
 
     /// <summary>
     /// Returns defence value for unit
@@ -110,12 +102,47 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetMeleeFight()
     {
-        var meleeFight = unitMeleeFight;
+        var meleeFight = unitFightSkill;
         return meleeFight;
     }
 
-    public void GuardAction()
+    /// <summary>
+    /// Returns unit's archery skill value
+    /// </summary>
+    /// <returns></returns>
+    public int GetArcherySkill()
     {
-        unitDefence++;
+        var archerySkill = unitArcherySkill;
+        return archerySkill;
+    }
+
+
+    /// <summary>
+    /// Subtract action points after performing an action.
+    /// </summary>
+    /// <param name="actionPoints"></param>
+    public void ExecuteAction(int actionPoints) => unitActions -= actionPoints;
+
+    /// <summary>
+    /// Updates the health value and checks if the unit has survived
+    /// </summary>
+    /// <param name="damage"></param>
+    public void GetDamage(int damage)
+    {
+        unitWounds -= damage;
+
+        if (unitWounds <= 0)
+            KillUnit();
+        else
+            OnGetDamage?.Invoke(this);
+    }
+
+    private void KillUnit()
+    {
+        OnDeath?.Invoke(this);
+
+        GetComponent<Collider>().enabled = false;
+        navMeshAgent.enabled = false;
+        this.enabled = false;
     }
 }

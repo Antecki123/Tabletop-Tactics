@@ -1,8 +1,5 @@
 public static class WoundTest
 {
-    /// <summary>
-    /// TODO: explain wound matrix
-    /// </summary>
     // X - DEFENCE, Y - STRENGTH
     private static int[,] result =
     {
@@ -20,18 +17,24 @@ public static class WoundTest
         { 90, 90, 90, 90, 80, 80, 70, 70, 60, 60, 50, 50 }
     };
 
+    /// <summary>
+    /// Resuls matrix determines the percentage chance of hitting the opponent. The value returned is whether the Wound Test passed.
+    /// </summary>
+    /// <param name="defence">Unit's defence value.</param>
+    /// <param name="strength">Strength of attacking unit or his weapon.</param>
+    /// <returns> True if Wound Test passed, otherwise false.</returns>
     public static bool GetWoundTest(int defence, int strength)
     {
         var requiredResult = result[strength - 1, defence - 1];
         var woundResult = UnityEngine.Random.Range(1, 101);
 
         UnityEngine.Debug.Log($"Wound chance: {requiredResult}% wound result: {woundResult <= requiredResult}");
-        return (woundResult < requiredResult);
+        return woundResult <= requiredResult;
     }
 
-    public static bool IsPossibleToAttack(int defence, int strength)
+    public static bool FearTest(int courage)
     {
-        var possibility = result[strength - 1, defence - 1] != 0;
-        return possibility;
+        var testResult = UnityEngine.Random.Range(1, 11);
+        return testResult <= courage;
     }
 }

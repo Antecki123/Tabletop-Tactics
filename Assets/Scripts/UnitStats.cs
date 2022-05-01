@@ -28,18 +28,19 @@ public class UnitStats : ScriptableObject
     public UnitHeroicTier unitHeroicTier;
 
     [Header("Unit Statistics")]
-    public int unitMove;
-    public int unitMeleeFight;
-    public int unitArcherySkill;
-    public int unitStrength;
-    public int unitDefence;
-    public int unitActions;
-    public int unitWounds;
-    public int unitCourage;
+    [Tooltip("Available range of movement.")]public int unitMove;
+    [Tooltip("Determines the priority of movement for a given turn")] public int unitSpeed;
+    [Tooltip("Close range fight skill. Value used in Hit Test.")] public int unitFightSkill;
+    [Tooltip("Range attacks skill. Value used in Hit Test.")] public int unitArcherySkill;
+    [Tooltip("Strength of the unit. Value used in Wound Test.")] public int unitStrength;
+    [Tooltip("Defence of the unit. Value used in Wound Test.")] public int unitDefence;
+    [Tooltip("Remaining amonut of actions.")] public int unitActions;
+    [Tooltip("Points of health.")] public int unitWounds;
+    [Tooltip("Required for Test of Courage.")] public int unitCourage;
     [Space]
-    public int unitWill;
-    public int unitMight;
-    public int unitFate;
+    [Tooltip("Points of power. Only for hero tier.")] public int unitWill;
+    [Tooltip("Magic points. Only for hero tier.")] public int unitMight;
+    [Tooltip("Only for hero tier.")] public int unitFate;       // probably to delete
 
     [Header("Unit Prefabs")]
     public GameObject unitModel;
