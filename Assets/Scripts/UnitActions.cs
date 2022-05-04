@@ -20,8 +20,8 @@ public class UnitActions : MonoBehaviour
     private BlowHorn blowHorn;
     private Guard guard;
 
-    public Unit ActiveUnit { get => activeUnit; set => activeUnit = value; }
     public UnitAction ActiveAction { get => activeAction; private set => activeAction = value; }
+    public Unit ActiveUnit { get => activeUnit; set => activeUnit = value; }
 
     private void Awake()
     {

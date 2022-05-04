@@ -33,7 +33,7 @@ public class MeleeAttack
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && unitActions.ActiveUnit)
         {
             target = hit.transform.GetComponent<Unit>();
-            Debug.Log(Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position));
+
             if (hit.transform.CompareTag("Unit") && target.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
                 if (attackDistance >= Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position))

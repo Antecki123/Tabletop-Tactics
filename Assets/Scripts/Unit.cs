@@ -12,12 +12,12 @@ public class Unit : MonoBehaviour
 
     [Header("Component References")]
     public NavMeshAgent navMeshAgent;
-    [SerializeField] public UnitStats unitBaseStats;    // PUBLIC temporary for UIUnitsQueue
+    [SerializeField] private UnitStats unitBaseStats;
 
     [Header("Unit Properties")]
     [SerializeField] private Player unitOwner;
     [SerializeField] private Wargear wargear;
-
+    
     [Header("Unit Statistics")]
     private int unitMove;
     private int unitSpeed;
@@ -35,8 +35,9 @@ public class Unit : MonoBehaviour
     private int unitMight;
 
     #region PROPERTIES
-    public Player UnitOwner { get => unitOwner; }
-    public Wargear Wargear { get => wargear; }
+    public UnitStats UnitBaseStats { get => unitBaseStats; set => unitBaseStats = value; }
+    public Player UnitOwner { get => unitOwner; set => unitOwner = value; }
+    public Wargear Wargear { get => wargear; set => wargear = value; }
 
     public int UnitMove { get => unitMove; }
     public int UnitSpeed { get => unitSpeed; }

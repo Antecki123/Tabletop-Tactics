@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Wargear : MonoBehaviour
+[System.Serializable]
+public class Wargear
 {
     public enum WeaponAttribute { None, SingleHandedWeapon, HandAndHalfHandedWeapon, TwoHandedWeapon }
 

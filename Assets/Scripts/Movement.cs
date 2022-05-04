@@ -6,6 +6,7 @@ public class Movement
 
     [Header("Component References")]
     private readonly UnitActions unitActions;
+    private readonly GridManager gridManager;
     private readonly Camera mainCamera;
 
     private readonly int movementGridLayer = 1024;
@@ -13,22 +14,25 @@ public class Movement
     public Movement(UnitActions phaseAction)
     {
         this.unitActions = phaseAction;
+        gridManager = GridManager.instance;
+
         mainCamera = Camera.main;
     }
-    
+
     public void UpdateAction()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Highlight grid
-        GridManager.instance.GetComponent<IHighlightGrid>().HighlightGridMovement(unitActions.ActiveUnit, unitActions.ActiveUnit.UnitMove, Color.blue);
+        if (!gridManager.GridBehaviour.IsHighlighted)
+            gridManager.GridBehaviour.HighlightGridMovement(unitActions.ActiveUnit, unitActions.ActiveUnit.UnitMove, Color.blue);
 
         // Set destination
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit, 100f, movementGridLayer))
         {
             var destination = hit.collider.GetComponent<GridNode>();
 
-            if (destination.movementValue != 0 && !destination.isOccupied)
+            if (destination.MovementValue != 0 && !destination.IsOccupied)
             {
                 unitActions.ActiveUnit.navMeshAgent.destination = destination.transform.position;
                 OnUnitChangePosition?.Invoke(unitActions.ActiveUnit, destination);

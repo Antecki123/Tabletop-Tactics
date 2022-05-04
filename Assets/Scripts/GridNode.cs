@@ -3,39 +3,18 @@ using UnityEngine;
 
 public class GridNode : MonoBehaviour
 {
-    public Unit unit;
-    public bool isOccupied;
-
-    public Vector2Int position;
+    [SerializeField] private Unit unit;
+    [SerializeField] private bool isOccupied;
+    [SerializeField] private Vector2Int position;
     [Space]
-    public int movementValue = 0;
+    [SerializeField] private int movementValue = 0;
 
-    private LineRenderer boarder;
-    private readonly int unitsLayer = 512;
+    public Unit Unit { get => unit; set => unit = value; }
+    public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
+    public Vector2Int Position { get => position; set => position = value; }
+    public int MovementValue { get => movementValue; set => movementValue = value; }
 
-    private void Start()
-    {
-        boarder = GetComponent<LineRenderer>();
-
-        StartCoroutine(CheckObjectOnEveryHex());
-    }
-
-    private IEnumerator CheckObjectOnEveryHex()
-    {
-        yield return new WaitForSeconds(.5f);
-        if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, 1f, unitsLayer) && hit.collider.GetComponent<Unit>())
-        {
-            unit = hit.collider.GetComponent<Unit>();
-            isOccupied = true;
-        }
-
-        if (Physics.Raycast(transform.position + Vector3.down * .1f, Vector3.up, out hit) && !hit.collider.GetComponent<Unit>())
-        {
-            GridManager.instance.GridNodes.Remove(this);
-            Destroy(this.gameObject);
-        }
-    }
-
+    /*
     private void OnMouseOver()
     {
         var lineComponent = GetComponent<LineRenderer>();
@@ -55,4 +34,5 @@ public class GridNode : MonoBehaviour
         if (lineComponent.startColor != Color.blue && lineComponent.startColor != Color.red && lineComponent.startColor != Color.cyan)
             lineComponent.enabled = false;
     }
+    */
 }
