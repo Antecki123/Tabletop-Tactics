@@ -43,11 +43,7 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
                     if (overlappedComponent.MovementValue == 0 && !overlappedComponent.IsOccupied)
                     {
                         overlappedComponent.MovementValue = i;
-
-                        var nodeLine = overlapped.GetComponent<LineRenderer>();
-                        nodeLine.enabled = true;
-                        nodeLine.startColor = color;
-                        nodeLine.endColor = color;
+                        overlappedComponent.HighlightNode(color);
 
                         bufforList.Add(overlappedComponent);
                     }
@@ -73,12 +69,7 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
             var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range, gridMask);
 
             foreach (var overlapped in overlappedBlocks)
-            {
-                var nodeLine = overlapped.GetComponent<LineRenderer>();
-                nodeLine.enabled = true;
-                nodeLine.startColor = color;
-                nodeLine.endColor = color;
-            }
+                overlapped.GetComponent<GridNode>().HighlightNode(color);
         }
     }
 
@@ -88,13 +79,6 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
         adjacentBlocks.Clear();
 
         foreach (var node in gridManager.GridNodes)
-        {
-            var nodeLine = node.GetComponent<LineRenderer>();
-            nodeLine.enabled = true;
-            nodeLine.startColor = Color.white;
-            nodeLine.endColor = Color.white;
-
-            node.MovementValue = 0;
-        }
+            node.ClearHighlight();
     }
 }
