@@ -42,9 +42,7 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
                     var overlappedComponent = overlapped.GetComponent<GridNode>();
                     if (overlappedComponent.MovementValue == 0 && !overlappedComponent.IsOccupied)
                     {
-                        overlappedComponent.MovementValue = i;
-                        overlappedComponent.HighlightNode(color);
-
+                        overlappedComponent.HighlightNode(color, i);
                         bufforList.Add(overlappedComponent);
                     }
                 }
@@ -69,7 +67,8 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
             var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range, gridMask);
 
             foreach (var overlapped in overlappedBlocks)
-                overlapped.GetComponent<GridNode>().HighlightNode(color);
+                overlapped.GetComponent<GridNode>().HighlightNode(color, 1);
+
         }
     }
 
