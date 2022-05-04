@@ -38,7 +38,7 @@ public class BattlefieldCreator : MonoBehaviour
     [Header("Units Spawner")]
     public Transform unitsTransform;
     public List<UnitsToSpawn> unitsList = new();
-    public GameObject unitModel;
+    public GameObject[] unitModel;
 
     private void OnEnable()
     {
