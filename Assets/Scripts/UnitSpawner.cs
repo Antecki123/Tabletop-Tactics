@@ -8,7 +8,7 @@ public class UnitSpawner : MonoBehaviour, IMapBuilder
 
     private Transform unitsTransform;
     private List<UnitsToSpawn> unitsStats = new();
-    private GameObject unitModel;
+    private GameObject[] unitModel;
 
     public void Execute(BattlefieldCreator manager)
     {
@@ -38,7 +38,13 @@ public class UnitSpawner : MonoBehaviour, IMapBuilder
     {
         for (int i = 0; i < unitsStats.Count; i++)
         {
-            var newUnit = Instantiate(unitModel);
+            GameObject newUnit;
+            if (unitsStats[i].player == Unit.Player.Player1 )
+                newUnit = Instantiate(unitModel[0]);
+            else
+                newUnit = Instantiate(unitModel[1]);
+
+            //var newUnit = Instantiate(unitModel[0]);
             newUnit.transform.SetParent(unitsTransform.transform);
 
             var unitComponent = newUnit.GetComponent<Unit>();
