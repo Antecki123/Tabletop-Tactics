@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public static Action<Unit> OnGetDamage;
     public static Action<Unit> OnDeath;
 
-    public enum Player { Player1, Player2 }
+    public enum Player { Player1, Player2 , AI}
 
     [Header("Component References")]
     public NavMeshAgent navMeshAgent;
