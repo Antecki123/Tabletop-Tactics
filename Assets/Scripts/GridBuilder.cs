@@ -46,7 +46,8 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
                 // Create new hex object
                 var position = new Vector3(offsetX, 0f, offsetY);
-                var hex = Instantiate(hexPrefab, position, Quaternion.Euler(90f, 0f, 0f));
+                //var hex = Instantiate(hexPrefab, position, Quaternion.Euler(90f, 0f, 0f));
+                var hex = Instantiate(hexPrefab, position, transform.rotation);
                 hex.transform.SetParent(gridTransform.transform);
                 hex.name = $"{i} {j}";
 
@@ -57,9 +58,21 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
                 // Create hex boarder LineRenderer
                 var line = hex.AddComponent<LineRenderer>();
-                line.startWidth = .025f;
+                line.startWidth = .07f;
+                line.endWidth = .07f;
                 line.loop = true;
                 line.positionCount = 6;
+
+                line.useWorldSpace = false;
+                line.material = new Material(Shader.Find("Shader Graphs/Border"));
+                line.SetPosition(0, new Vector3(0f, .05f, .5f) + transform.position);
+                line.SetPosition(1, new Vector3(.5f, .05f, .25f) + transform.position);
+                line.SetPosition(2, new Vector3(.5f, .05f, -.25f) + transform.position);
+                line.SetPosition(3, new Vector3(0f, .05f, -.5f) + transform.position);
+                line.SetPosition(4, new Vector3(-.5f, .05f, -.25f) + transform.position);
+                line.SetPosition(5, new Vector3(-.5f, .05f, .25f) + transform.position);
+
+                /*
                 line.material = new Material(Shader.Find("Universal Render Pipeline/Particles/Unlit"));
 
                 line.SetPosition(0, new Vector3(0f + offsetX, 0f, .5f + offsetY) + transform.position);
@@ -68,6 +81,7 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
                 line.SetPosition(3, new Vector3(0f + offsetX, 0f, -.5f + offsetY) + transform.position);
                 line.SetPosition(4, new Vector3(-.5f + offsetX, 0f, -.25f + offsetY) + transform.position);
                 line.SetPosition(5, new Vector3(-.5f + offsetX, 0f, .25f + offsetY) + transform.position);
+                */
 
                 line.enabled = true;
                 gridAmount++;

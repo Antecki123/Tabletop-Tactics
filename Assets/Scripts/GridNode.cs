@@ -97,7 +97,7 @@ public class GridNode : MonoBehaviour
 
         for (int i = 0; i < lineComponent.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
+            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .08f, lineComponent.GetPosition(i).z);
             lineComponent.SetPosition(i, newPosition);
         }
 
@@ -115,7 +115,7 @@ public class GridNode : MonoBehaviour
 
         for (int i = 0; i < lineComponent.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .0f, lineComponent.GetPosition(i).z);
+            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
             lineComponent.SetPosition(i, newPosition);
         }
 
