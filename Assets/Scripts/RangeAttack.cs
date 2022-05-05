@@ -47,6 +47,8 @@ public class RangeAttack
                     RaycastObstacles();
                     ShootEffect();
 
+                    obstacles.Clear();
+
                     unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
                     unitActions.FinishAction();
                 }
@@ -84,7 +86,7 @@ public class RangeAttack
     private void ShootEffect()
     {
         // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
-        var hitChance = 100 - 15 * obstacles.Count - 1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position));
+        var hitChance = 100 - (15 * obstacles.Count - 1) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position)));
         var hitResult = Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
 
