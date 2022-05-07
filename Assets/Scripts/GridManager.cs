@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,22 +5,17 @@ public class GridManager : MonoBehaviour
 {
     public static GridManager instance;
 
-    [Header("Grid References")]
-    [SerializeField] private GridBehaviour gridBehaviour;
+    [Header("Grid Properties")]
     [SerializeField] private Vector2Int gridDimensions;
-    [Space]
-    [SerializeField] private List<GridNode> gridNodes = new();
+    [SerializeField] private List<GridCell> gridNodes = new();
 
-    public GridBehaviour GridBehaviour { get => gridBehaviour; }
     public Vector2Int GridDimensions { get => gridDimensions; set => gridDimensions = value; }
-    public List<GridNode> GridNodes { get => gridNodes; }
+    public List<GridCell> GridNodes { get => gridNodes; }
 
     private void Awake()
     {
-        if (!instance)
-            instance = this;
-        else
-            Destroy(this.gameObject);
+        if (!instance) instance = this;
+        else Destroy(this.gameObject);
     }
 
     private void OnEnable()
@@ -35,7 +29,7 @@ public class GridManager : MonoBehaviour
         Unit.OnDeath -= RemoveUnitFromGrid;
     }
 
-    private void UpdateUnitPosition(Unit movingUnit, GridNode newPosition)
+    private void UpdateUnitPosition(Unit movingUnit, GridCell newPosition)
     {
         var oldPosition = gridNodes.Find(position => position.Unit == movingUnit);
 
@@ -57,7 +51,7 @@ public class GridManager : MonoBehaviour
     {
         await System.Threading.Tasks.Task.Delay(500);
 
-        var nodesList = FindObjectsOfType<GridNode>();
+        var nodesList = FindObjectsOfType<GridCell>();
         foreach (var node in nodesList)
         {
             if (Physics.Raycast(node.transform.position + Vector3.down * .1f, Vector3.up, out RaycastHit hit))

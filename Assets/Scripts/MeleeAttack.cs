@@ -27,7 +27,10 @@ public class MeleeAttack
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Highlight grid
-        GridManager.instance.GetComponent<IHighlightGrid>().HighlightGridRange(unitActions.ActiveUnit, (int)attackDistance, Color.red);
+        unitActions.gridBehaviour.HighlightGridRange(unitActions.ActiveUnit, (int)attackDistance, Color.red);
+
+        // Turn on the Pointer
+        unitActions.arcRenderer.TurnOn(unitActions.ActiveUnit.transform);
 
         // Set target
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && unitActions.ActiveUnit)

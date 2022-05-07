@@ -10,6 +10,9 @@ public class UnitActions : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private QueueBehavior queueBehavior;
     [Space]
+    public PositionArcRenderer arcRenderer;
+    public GridBehaviour gridBehaviour;
+    [Space]
     [SerializeField] private UnitAction activeAction;
     [SerializeField] private Unit activeUnit;
 
@@ -58,7 +61,9 @@ public class UnitActions : MonoBehaviour
     public void ClearAction()
     {
         ActiveAction = UnitAction.None;
-        GridManager.instance.GetComponent<IHighlightGrid>().ClearHighlight();
+
+        gridBehaviour.ClearHighlight();
+        arcRenderer.TurnOff();
     }
 
     public void FinishAction()

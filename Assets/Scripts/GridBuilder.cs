@@ -9,7 +9,7 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
     private GameObject hexPrefab;
     private Transform gridTransform;
 
-    private int gridAmount = 0;
+    private int cellsAmount = 0;
 
     public void Execute(BattlefieldCreator manager)
     {
@@ -28,7 +28,7 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
     private IEnumerator WaitForBulidGrid()
     {
-        while (gridAmount < gridDimensions.x * gridDimensions.y)
+        while (cellsAmount < gridDimensions.x * gridDimensions.y)
             yield return new WaitForEndOfFrame();
 
         Debug.Log($"Grid Loaded ({gridDimensions.x}x{gridDimensions.y})");
@@ -46,46 +46,75 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
                 // Create new hex object
                 var position = new Vector3(offsetX, 0f, offsetY);
-                //var hex = Instantiate(hexPrefab, position, Quaternion.Euler(90f, 0f, 0f));
-                var hex = Instantiate(hexPrefab, position, transform.rotation);
+                //var hex = Instantiate(hexPrefab, position, transform.rotation);
+                var hex = CreateHexagonMesh();
+                hex.transform.position = new Vector3(offsetX, 0f, offsetY);
                 hex.transform.SetParent(gridTransform.transform);
                 hex.name = $"{i} {j}";
 
-                var hexComponent = hex.GetComponent<GridNode>();
+                // Create GridCell component
+                var hexComponent = hex.AddComponent<GridCell>();
                 hexComponent.Position = new Vector2Int(i, j);
 
-                GridManager.instance.GridNodes.Add(hexComponent);
+                GridManager.instance.GridNodes.Add(hexComponent);   // TODO: moze dodac ref zamiast singleton?
 
                 // Create hex boarder LineRenderer
                 var line = hex.AddComponent<LineRenderer>();
-                line.startWidth = .07f;
-                line.endWidth = .07f;
+                line.startWidth = .05f;
+                line.endWidth = .05f;
+                line.startColor = Color.black;
+                line.endColor = Color.black;
+
                 line.loop = true;
                 line.positionCount = 6;
-
                 line.useWorldSpace = false;
-                line.material = new Material(Shader.Find("Shader Graphs/Border"));
-                line.SetPosition(0, new Vector3(0f, .05f, .5f) + transform.position);
-                line.SetPosition(1, new Vector3(.5f, .05f, .25f) + transform.position);
-                line.SetPosition(2, new Vector3(.5f, .05f, -.25f) + transform.position);
-                line.SetPosition(3, new Vector3(0f, .05f, -.5f) + transform.position);
-                line.SetPosition(4, new Vector3(-.5f, .05f, -.25f) + transform.position);
-                line.SetPosition(5, new Vector3(-.5f, .05f, .25f) + transform.position);
 
-                /*
                 line.material = new Material(Shader.Find("Universal Render Pipeline/Particles/Unlit"));
+                //line.material = new Material(Shader.Find("Shader Graphs/Border"));
 
-                line.SetPosition(0, new Vector3(0f + offsetX, 0f, .5f + offsetY) + transform.position);
-                line.SetPosition(1, new Vector3(.5f + offsetX, 0f, .25f + offsetY) + transform.position);
-                line.SetPosition(2, new Vector3(.5f + offsetX, 0f, -.25f + offsetY) + transform.position);
-                line.SetPosition(3, new Vector3(0f + offsetX, 0f, -.5f + offsetY) + transform.position);
-                line.SetPosition(4, new Vector3(-.5f + offsetX, 0f, -.25f + offsetY) + transform.position);
-                line.SetPosition(5, new Vector3(-.5f + offsetX, 0f, .25f + offsetY) + transform.position);
-                */
+                line.SetPosition(0, new Vector3(0f, 0f, .5f) + transform.position);
+                line.SetPosition(1, new Vector3(.5f, .0f, .25f) + transform.position);
+                line.SetPosition(2, new Vector3(.5f, 0f, -.25f) + transform.position);
+                line.SetPosition(3, new Vector3(0f, 0f, -.5f) + transform.position);
+                line.SetPosition(4, new Vector3(-.5f, 0f, -.25f) + transform.position);
+                line.SetPosition(5, new Vector3(-.5f, 0f, .25f) + transform.position);
 
                 line.enabled = true;
-                gridAmount++;
+                cellsAmount++;
             }
         }
+    }
+
+    private GameObject CreateHexagonMesh()
+    {
+        Vector3[] vertices = new Vector3[7] { new Vector3(0f, 0f, 0f),
+                                              new Vector3(0f, 0f, .5f),
+                                              new Vector3(.5f, .0f, .25f) ,
+                                              new Vector3(.5f, 0f, -.25f) ,
+                                              new Vector3(0f, 0f, -.5f),
+                                              new Vector3(-.5f, 0f, -.25f),
+                                              new Vector3(-.5f, 0f, .25f) };
+
+        Vector2[] uvs = new Vector2[7] { new Vector2(0f, 0f),
+                                         new Vector2(0f, .5f),
+                                         new Vector2(.5f, .25f),
+                                         new Vector2(.5f, -.25f),
+                                         new Vector2(0f, -.5f),
+                                         new Vector2(-.5f, -.25f),
+                                         new Vector2(-.5f, .25f) };
+
+        int[] triangles = new int[18] { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
+
+        Mesh mesh = new();
+        mesh.name = "Hexagon";
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
+
+        var hexObj = new GameObject("hex", typeof(MeshFilter));
+        hexObj.GetComponent<MeshFilter>().mesh = mesh;
+        hexObj.AddComponent<MeshCollider>().sharedMesh = mesh;
+
+        return hexObj;
     }
 }

@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class Movement
 {
-    public static System.Action<Unit, GridNode> OnUnitChangePosition;
+    public static System.Action<Unit, GridCell> OnUnitChangePosition;
 
     [Header("Component References")]
     private readonly UnitActions unitActions;
-    private readonly GridManager gridManager;
     private readonly Camera mainCamera;
 
     private readonly int movementGridLayer = 1024;
@@ -14,8 +13,6 @@ public class Movement
     public Movement(UnitActions phaseAction)
     {
         this.unitActions = phaseAction;
-        gridManager = GridManager.instance;
-
         mainCamera = Camera.main;
     }
 
@@ -24,13 +21,15 @@ public class Movement
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Highlight grid
-        if (!gridManager.GridBehaviour.IsHighlighted)
-            gridManager.GridBehaviour.HighlightGridMovement(unitActions.ActiveUnit, unitActions.ActiveUnit.UnitMove, Color.blue);
+        unitActions.gridBehaviour.HighlightGridMovement(unitActions.ActiveUnit, unitActions.ActiveUnit.UnitMove, Color.blue);
+
+        // Turn on the Pointer
+        unitActions.arcRenderer.TurnOn(unitActions.ActiveUnit.transform);
 
         // Set destination
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit, 100f, movementGridLayer))
         {
-            var destination = hit.collider.GetComponent<GridNode>();
+            var destination = hit.collider.GetComponent<GridCell>();
 
             if (destination.MovementValue != 0 && !destination.IsOccupied)
             {

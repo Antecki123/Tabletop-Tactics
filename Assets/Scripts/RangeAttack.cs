@@ -30,7 +30,10 @@ public class RangeAttack
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         // Highlight grid
-        GridManager.instance.GetComponent<IHighlightGrid>().HighlightGridRange(unitActions.ActiveUnit, (int)unitActions.ActiveUnit.Wargear.rangeWeapon.range, Color.cyan);
+        unitActions.gridBehaviour.HighlightGridRange(unitActions.ActiveUnit, (int)unitActions.ActiveUnit.Wargear.rangeWeapon.range, Color.cyan);
+
+        // Turn on the Pointer
+        unitActions.arcRenderer.TurnOn(unitActions.ActiveUnit.transform);
 
         // Set target
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && unitActions.ActiveUnit)

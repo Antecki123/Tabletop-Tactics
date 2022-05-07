@@ -37,7 +37,7 @@ Material:
     - _QueueOffset: 0
     m_Colors:
     - _Color: {r: 0, g: 8.847059, b: 16, a: 1}
-    - _Speed: {r: 1, g: 0, b: 0, a: 0}
+    - _Speed: {r: -1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &7406920182528183489
 MonoBehaviour:

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridNode : MonoBehaviour
+public class GridCell : MonoBehaviour
 {
     [SerializeField] private Unit unit;
     [SerializeField] private bool isOccupied;
@@ -29,7 +29,7 @@ public class GridNode : MonoBehaviour
 
         for (int i = 0; i < lineComponent.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
+            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .07f, lineComponent.GetPosition(i).z);
             lineComponent.SetPosition(i, newPosition);
         }
 
@@ -74,15 +74,15 @@ public class GridNode : MonoBehaviour
         var lineComponent = GetComponent<LineRenderer>();
 
         lineComponent.enabled = true;
-        lineComponent.startColor = Color.white;
-        lineComponent.endColor = Color.white;
+        lineComponent.startColor = Color.black;
+        lineComponent.endColor = Color.black;
 
         lineComponent.startWidth = .05f;
         lineComponent.endWidth = .05f;
 
         for (int i = 0; i < lineComponent.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, 0f, lineComponent.GetPosition(i).z);
+            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
             lineComponent.SetPosition(i, newPosition);
         }
 
@@ -97,7 +97,7 @@ public class GridNode : MonoBehaviour
 
         for (int i = 0; i < lineComponent.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .08f, lineComponent.GetPosition(i).z);
+            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
             lineComponent.SetPosition(i, newPosition);
         }
 

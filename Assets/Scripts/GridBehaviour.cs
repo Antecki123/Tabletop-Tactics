@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridBehaviour : MonoBehaviour, IHighlightGrid
+public class GridBehaviour : MonoBehaviour
 {
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private LineRenderer borderLine;
 
-    private List<GridNode> adjacentBlocks = new();
+    private List<GridCell> adjacentBlocks = new();
     private readonly int gridMask = 1024;
 
     private bool isHighlighted = false;
-
-    public bool IsHighlighted { get => isHighlighted; }
 
     public void HighlightGridMovement(Unit unit, int range, Color color)
     {
@@ -31,7 +30,7 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
 
         for (int i = 1; i <= range; i++)
         {
-            List<GridNode> bufforList = new();
+            List<GridCell> bufforList = new();
 
             foreach (var block in adjacentBlocks)
             {
@@ -39,11 +38,13 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
 
                 foreach (var overlapped in overlappedBlocks)
                 {
-                    var overlappedComponent = overlapped.GetComponent<GridNode>();
+                    var overlappedComponent = overlapped.GetComponent<GridCell>();
                     if (overlappedComponent.MovementValue == 0 && !overlappedComponent.IsOccupied)
                     {
                         overlappedComponent.HighlightNode(color, i);
                         bufforList.Add(overlappedComponent);
+
+                        //HighlightBorder(range);
                     }
                 }
             }
@@ -67,7 +68,7 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
             var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range, gridMask);
 
             foreach (var overlapped in overlappedBlocks)
-                overlapped.GetComponent<GridNode>().HighlightNode(color, 1);
+                overlapped.GetComponent<GridCell>().HighlightNode(color, 1);
 
         }
     }
@@ -79,5 +80,25 @@ public class GridBehaviour : MonoBehaviour, IHighlightGrid
 
         foreach (var node in gridManager.GridNodes)
             node.ClearHighlight();
+    }
+
+    // IN DEVELOPMENT
+    public void HighlightBorder(int range)
+    {
+        borderLine.startWidth = .07f;
+        borderLine.endWidth = .07f;
+        borderLine.loop = true;
+        //borderLine.positionCount = 6;
+        borderLine.useWorldSpace = false;
+
+        GridCell[] outerBlocks = gridManager.GridNodes.ToArray();
+
+        foreach (var block in outerBlocks)
+        {
+            if (block.MovementValue == range)
+            {
+                block.transform.position = new Vector3(block.transform.position.x, 0.5f, block.transform.position.z);
+            }
+        }
     }
 }
