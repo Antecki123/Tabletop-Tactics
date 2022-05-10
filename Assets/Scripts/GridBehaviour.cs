@@ -5,7 +5,7 @@ public class GridBehaviour : MonoBehaviour
 {
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
-    [SerializeField] private LineRenderer borderLine;
+    private LineRenderer borderLine;        // in dev
 
     private List<GridCell> adjacentBlocks = new();
     private readonly int gridMask = 1024;
@@ -34,7 +34,7 @@ public class GridBehaviour : MonoBehaviour
 
             foreach (var block in adjacentBlocks)
             {
-                var overlappedBlocks = Physics.OverlapSphere(block.transform.position, 1, gridMask);
+                var overlappedBlocks = Physics.OverlapSphere(block.transform.position, .75f, gridMask);
 
                 foreach (var overlapped in overlappedBlocks)
                 {
@@ -65,7 +65,7 @@ public class GridBehaviour : MonoBehaviour
             isHighlighted = true;
 
             var centerNode = gridManager.GridNodes.Find(node => node.Unit == unit);
-            var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range, gridMask);
+            var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range * .75f, gridMask);
 
             foreach (var overlapped in overlappedBlocks)
                 overlapped.GetComponent<GridCell>().HighlightNode(color, 1);

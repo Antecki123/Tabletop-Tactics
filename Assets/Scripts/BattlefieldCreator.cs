@@ -34,6 +34,7 @@ public class BattlefieldCreator : MonoBehaviour
 
     [Header("Scenery Builder")]
     public List<GameObject> scenery;
+    public ObstaclesDensity obstaclesDensity;
 
     [Header("Units Spawner")]
     public Transform unitsTransform;
@@ -81,3 +82,4 @@ public class BattlefieldCreator : MonoBehaviour
 }
 
 public enum MapSize { S, M, L, XL, XXL }
+public enum ObstaclesDensity { Density1, Density2, Density3, Density4, Density5 }

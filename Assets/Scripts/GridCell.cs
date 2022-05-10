@@ -35,7 +35,7 @@ public class GridCell : MonoBehaviour
 
         MovementValue = movementValue;
     }
-
+    
     public void CheckIsOnOutside()
     {
         bool[] borderNumber = new bool[6];
@@ -87,39 +87,5 @@ public class GridCell : MonoBehaviour
         }
 
         MovementValue = 0;
-    }
-
-    // ==============================
-    //
-    private void OnMouseOver()
-    {
-        var lineComponent = GetComponent<LineRenderer>();
-
-        for (int i = 0; i < lineComponent.positionCount; i++)
-        {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
-            lineComponent.SetPosition(i, newPosition);
-        }
-
-        /*if (lineComponent.startColor != Color.blue && lineComponent.startColor != Color.red && lineComponent.startColor != Color.cyan)
-        {
-            lineComponent.enabled = true;
-            lineComponent.startColor = Color.white;
-            lineComponent.endColor = Color.white;
-        }*/
-    }
-
-    private void OnMouseExit()
-    {
-        var lineComponent = GetComponent<LineRenderer>();
-
-        for (int i = 0; i < lineComponent.positionCount; i++)
-        {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .05f, lineComponent.GetPosition(i).z);
-            lineComponent.SetPosition(i, newPosition);
-        }
-
-        /*if (lineComponent.startColor != Color.blue && lineComponent.startColor != Color.red && lineComponent.startColor != Color.cyan)
-            lineComponent.enabled = false;*/
     }
 }
