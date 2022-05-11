@@ -63,12 +63,12 @@ public class UnitSpawner : MonoBehaviour, IMapBuilder
     {
         foreach (var slot in GridManager.instance.GridNodes)
         {
-            if (playerNumber == 1 && slot.Position.x == 0 && !slot.IsOccupied)
+            if (playerNumber == 1 && slot.Coordinates.x == 0 && !slot.IsOccupied)
             {
                 slot.IsOccupied = true;
                 return slot.transform.position;
             }
-            else if (playerNumber == 2 && slot.Position.x == GridManager.instance.GridDimensions.x - 1 && !slot.IsOccupied)
+            else if (playerNumber == 2 && slot.Coordinates.x == GridManager.instance.GridDimensions.x - 1 && !slot.IsOccupied)
             {
                 slot.IsOccupied = true;
                 return slot.transform.position;

@@ -59,7 +59,7 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
                 // Create GridCell component
                 var hexComponent = hex.AddComponent<GridCell>();
-                hexComponent.Position = new Vector2Int(i, j);
+                hexComponent.Coordinates = new Vector2Int(i, j);
 
                 GridManager.instance.GridNodes.Add(hexComponent);   // TODO: moze dodac ref zamiast singleton?
 

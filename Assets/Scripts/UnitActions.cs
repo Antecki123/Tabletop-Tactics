@@ -9,10 +9,11 @@ public class UnitActions : MonoBehaviour
 
     [Header("Component References")]
     [SerializeField] private QueueBehavior queueBehavior;
-    [Space]
-    public PositionArcRenderer arcRenderer;
     public GridBehaviour gridBehaviour;
-    [Space]
+    [Header("Movement Lines")]
+    public PositionArcRenderer arcRenderer;
+    public MovementPathRenderer pathRenderer;
+    [Header("Unit Actions Properties")]
     [SerializeField] private UnitAction activeAction;
     [SerializeField] private Unit activeUnit;
 
@@ -64,6 +65,7 @@ public class UnitActions : MonoBehaviour
 
         gridBehaviour.ClearHighlight();
         arcRenderer.TurnOff();
+        pathRenderer.TurnOff();
     }
 
     public void FinishAction()

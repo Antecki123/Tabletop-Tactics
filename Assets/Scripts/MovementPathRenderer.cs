@@ -6,19 +6,23 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class MovementPathRenderer : MonoBehaviour
 {
+    [Header("Component References")]
+    private AStarPathfinding pathfinding;
     private LineRenderer line;
     private Camera mainCamera;
 
-    private Transform originPoint;
     private bool isActive;
+    private GridCell originPoint;
 
     private void Start()
     {
         line = GetComponent<LineRenderer>();
         mainCamera = Camera.main;
+
+        pathfinding = new();
     }
 
-    public void TurnOn(Transform origin)
+    public void TurnOn(GridCell origin)
     {
         originPoint = origin;
         isActive = true;
@@ -32,30 +36,32 @@ public class MovementPathRenderer : MonoBehaviour
 
     private void Update()
     {
-        if (isActive)
+        CalculatePath();
+    }
+
+    private void CalculatePath()
+    {
+        var mouseHit = MousePosition();
+
+        if (isActive && mouseHit)
         {
+            var path = pathfinding.FindPath(originPoint, mouseHit).ToArray();
+            for (int i = 0; i < path.Length; i++)
+                path[i] += Vector3.up * .5f;
+
             line.enabled = true;
-            CalculatePath();
+            line.positionCount = path.Length;
+            line.SetPositions(path);
         }
         else
             line.enabled = false;
     }
 
-    private void CalculatePath()
+    private GridCell MousePosition()
     {
-        var pointList = new List<Vector3>();
-        for (int i = 0; i < pointList.Count; i++)
-        {
+        int layerMask = 1024;
 
-        }
-
-        line.positionCount = pointList.Count;
-        line.SetPositions(pointList.ToArray());
-    }
-
-    private Vector3 MousePosition()
-    {
-        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
-        return hit.point;
+        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, layerMask);
+        return hit.collider.GetComponent<GridCell>();
     }
 }

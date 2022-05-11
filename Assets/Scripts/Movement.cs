@@ -24,7 +24,7 @@ public class Movement
         unitActions.gridBehaviour.HighlightGridMovement(unitActions.ActiveUnit, unitActions.ActiveUnit.UnitMove, Color.blue);
 
         // Turn on the Pointer
-        unitActions.arcRenderer.TurnOn(unitActions.ActiveUnit.transform);
+        unitActions.pathRenderer.TurnOn(GridManager.instance.GridNodes.Find(node => node.Unit == unitActions.ActiveUnit));
 
         // Set destination
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit, 100f, movementGridLayer))

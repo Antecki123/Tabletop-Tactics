@@ -4,18 +4,46 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
+    [Header("Node Properties")]
     [SerializeField] private Unit unit;
     [SerializeField] private bool isOccupied;
-    [SerializeField] private Vector2Int position;
+    [SerializeField] private Vector2Int coordinates;
+    [SerializeField] private List<GridCell> adjacentCells = new();
     [Space]
-    [SerializeField] private int movementValue = 0;
+    [SerializeField] private int movementValue = 0;     // to delete G value
+
+    // ========================= IN DEVELOPMENT A*
+    [SerializeField, Tooltip("Cost from start tile to this tile.")] private int gCost = 0;
+    [SerializeField, Tooltip("Estimated cost from this tile to destination tile.")] private int hCost = 0;
+
+    public int GCost { get => gCost; set => gCost = value; }
+    public int HCost { get => hCost; set => hCost = value; }
+    public int FCost { get { return gCost + hCost; } }
+    // ========================= IN DEVELOPMENT A*
 
     #region PROPERTIES
     public Unit Unit { get => unit; set => unit = value; }
     public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
-    public Vector2Int Position { get => position; set => position = value; }
-    public int MovementValue { get => movementValue; set => movementValue = value; }
+    public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
+    public int MovementValue { get => movementValue; set => movementValue = value; }        // to delete
+
+    public List<GridCell> AdjacentCells { get => adjacentCells; set => adjacentCells = value; }
     #endregion
+
+    private void Start() => Invoke("GetAdjacentBlocks", 5);
+
+    private void GetAdjacentBlocks()
+    {
+        int gridMask = 1024;
+        float overlapRange = .75f;
+
+        var overlappedBlocks = Physics.OverlapSphere(transform.position, overlapRange, gridMask);
+
+        foreach (var block in overlappedBlocks)
+            adjacentCells.Add(block.GetComponent<GridCell>());
+
+        adjacentCells.Remove(this);
+    }
 
     public void HighlightNode(Color color, int movementValue)
     {
@@ -34,39 +62,6 @@ public class GridCell : MonoBehaviour
         }
 
         MovementValue = movementValue;
-    }
-    
-    public void CheckIsOnOutside()
-    {
-        bool[] borderNumber = new bool[6];
-        /*
-        var grid = GridManager.instance.GridNodes;
-
-        var border0 = grid.Find(node => (node.Position.x == this.Position.x && node.Position.y == this.Position.y + 1));
-        if (border0.movementValue == 0)
-            borderNumber[0] = true;
-        */
-
-        var nodeLine = GetComponent<LineRenderer>();
-
-        for (int i = 0; i < borderNumber.Length; i++)
-        {
-            if (borderNumber[i] == true && i != borderNumber.Length - 1)
-            {
-                var startPosition = new Vector3(nodeLine.GetPosition(i).x, .2f, nodeLine.GetPosition(i).z);
-                var endPosition = new Vector3(nodeLine.GetPosition(i + 1).x, .2f, nodeLine.GetPosition(i + 1).z);
-                nodeLine.SetPosition(i, startPosition);
-                nodeLine.SetPosition(i + 1, endPosition);
-            }
-            else if (borderNumber[i] == true && i == borderNumber.Length - 1)
-            {
-                var startPosition = new Vector3(nodeLine.GetPosition(i).x, .2f, nodeLine.GetPosition(i).z);
-                var endPosition = new Vector3(nodeLine.GetPosition(0).x, .2f, nodeLine.GetPosition(0).z);
-                nodeLine.SetPosition(i, startPosition);
-                nodeLine.SetPosition(0, endPosition);
-            }
-        }
-        
     }
 
     public void ClearHighlight()
