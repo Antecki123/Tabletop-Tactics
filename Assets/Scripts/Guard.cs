@@ -1,19 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Guard
+public class Guard : MonoBehaviour
 {
+    #region Actions
+    // Guard action
+    public static Action<Unit> OnGuard;
+    #endregion
+
     [Header("Component References")]
     private UnitActions unitActions;
 
-    public Guard(UnitActions phaseAction) =>  this.unitActions = phaseAction;
+    private void OnEnable()
+    {
+        unitActions = GetComponent<UnitActions>();
+    }
 
-    public void UpdateAction()
+    public void Start()
     {
         //phaseAction.ActiveUnit.GuardAction();
+        OnGuard?.Invoke(unitActions.ActiveUnit);
 
         unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+
         unitActions.FinishAction();
+        this.enabled = false;
     }
 }
