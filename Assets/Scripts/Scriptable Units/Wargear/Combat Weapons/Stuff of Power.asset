@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a37ecba969dc8e45a83f823e3b3da70, type: 3}
-  m_Name: Sword
+  m_Name: Stuff of Power
   m_EditorClassIdentifier: 
-  type: 1
+  type: 5
   strength: 0
   range: 1
   weaponPrefab: {fileID: 0}
