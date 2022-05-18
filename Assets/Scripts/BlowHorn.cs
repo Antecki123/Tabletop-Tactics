@@ -5,7 +5,7 @@ public class BlowHorn
 {
     [Header("Component References")]
     private UnitActions unitActions;
-    private int actionRange = 2;
+    //private int actionRange = 2;
 
     public BlowHorn(UnitActions phaseAction) => this.unitActions = phaseAction;
 
