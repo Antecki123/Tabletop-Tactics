@@ -13,6 +13,7 @@ public class UnitActions : MonoBehaviour
     [SerializeField] private Movement movement;
     [SerializeField] private RangeAttack rangeAttack;
     [SerializeField] private MeleeAttack meleeAttack;
+    [SerializeField] private Guard guard;
     
     public Unit ActiveUnit { get => queueBehavior.UnitsQueue[0]; }
 
@@ -29,12 +30,14 @@ public class UnitActions : MonoBehaviour
     public void Movement() => movement.enabled = true;
     public void RangeAttack() => rangeAttack.enabled = true;
     public void MeleeAttack() => meleeAttack.enabled = true;
+    public void Guard() => guard.enabled = true;
 
     public void ClearActions()
     {
         movement.enabled = false;
         rangeAttack.enabled = false;
         meleeAttack.enabled = false;
+        guard.enabled = false;
     }
     #endregion
 }
