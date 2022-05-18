@@ -7,4 +7,5 @@ public class CombatWeapon : ScriptableObject
 
     public WeaponType type;
     public int strength;
+    public int range;
 }
