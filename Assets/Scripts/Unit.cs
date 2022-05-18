@@ -1,6 +1,5 @@
-using UnityEngine.AI;
-using UnityEngine;
 using System;
+using UnityEngine;
 
 [RequireComponent(typeof(UnitAnimation))]
 public class Unit : MonoBehaviour
