@@ -5,10 +5,7 @@ using UnityEngine;
 
 public class QueueBehavior : MonoBehaviour
 {
-    [Header("Queue Properties")]
-    [SerializeField] private List<Unit> unitsQueue = new();
-
-    public List<Unit> UnitsQueue { get => unitsQueue; }
+    [field: SerializeField] public List<Unit> UnitsQueue { get; private set; }
 
     private void OnEnable()
     {
@@ -23,21 +20,14 @@ public class QueueBehavior : MonoBehaviour
 
     public void CreateNewQueue(Unit[] allUnits)
     {
-        unitsQueue = allUnits.ToList();
-        unitsQueue.Sort((a, b) => a.UnitSpeed.CompareTo(b.UnitSpeed));
-        unitsQueue.RemoveAll(unit => unit.UnitWounds <= 0);
-        unitsQueue.Reverse();
+        UnitsQueue = allUnits.ToList();
+        UnitsQueue.Sort((a, b) => a.UnitSpeed.CompareTo(b.UnitSpeed));
+        UnitsQueue.RemoveAll(unit => unit.UnitWounds <= 0);
+        UnitsQueue.Reverse();
     }
 
     private void RemoveUnitFromQueue(Unit removedUnit)
     {
-        unitsQueue.Remove(removedUnit);
-    }
-
-    private void ChangePositionToLast(Unit unit)
-    {
-        var unitMoved = unitsQueue.Find(u => u == unit);
-        unitsQueue.Remove(unitMoved);
-        unitsQueue.Add(unitMoved);
+        UnitsQueue.Remove(removedUnit);
     }
 }

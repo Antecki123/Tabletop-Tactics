@@ -1,48 +1,77 @@
 using UnityEngine;
 using System;
 
-public class MeleeAttack
+public class MeleeAttack : MonoBehaviour
 {
+    #region Actions
     public static Action<Unit> OnAttack;
     public static Action<Unit> OnBlock;
     public static Action<Unit> OnAvoid;
 
+    // Turn on pointer
+    public static Action<GridCell, GridCell> OnFindingTarget;
+    // Turn off pointer
+    public static Action OnClearAction;
+    #endregion
+
     [Header("Component References")]
-    private readonly UnitActions unitActions;
-    private readonly Camera mainCamera;
+    private UnitActions unitActions;
+    private Camera mainCamera;
 
-    [Header("Attack Script")]
-    private Unit target;
+    private Unit targetUnit;
 
-    private readonly float attackDistance = 1.25f;
+    private GridCell originNode;
+    private GridCell targetNode;
 
-    public MeleeAttack(UnitActions phaseAction)
+    private void OnEnable()
     {
-        this.unitActions = phaseAction;
+        unitActions = GetComponent<UnitActions>();
         mainCamera = Camera.main;
+
+        originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
     }
 
-    public void UpdateAction()
+    private void OnDisable()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        targetUnit = null;
+        originNode = null;
+        targetNode = null;
 
-        // Highlight grid
-        unitActions.gridBehaviour.HighlightGridRange(unitActions.ActiveUnit, (int)attackDistance, Color.red);
+        OnClearAction?.Invoke();
+    }
 
-        // Turn on the Pointer
-        unitActions.arcRenderer.TurnOn(unitActions.ActiveUnit.transform);
-
-        // Set target
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out RaycastHit hit) && unitActions.ActiveUnit)
+    public void Update()
+    {
+        // Clear action
+        if (Input.GetMouseButtonDown(1) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
         {
-            target = hit.transform.GetComponent<Unit>();
+            this.enabled = false;
+            return;
+        }
 
-            if (hit.transform.CompareTag("Unit") && target.UnitOwner != unitActions.ActiveUnit.UnitOwner)
+        // Find target (set pointer)
+        if ((targetNode = GetTargetNode()) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        {
+            OnFindingTarget?.Invoke(originNode, targetNode);
+        }
+        else
+        {
+            OnClearAction?.Invoke();
+            return;
+        }
+
+        // Attack target
+        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        {
+            if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
-                if (attackDistance >= Vector3.Distance(unitActions.ActiveUnit.transform.position, target.transform.position))
+                if (originNode.AdjacentCells.Contains(targetNode))
                 {
-                    unitActions.ActiveUnit.transform.LookAt(target.transform.position);
-                    target.transform.LookAt(unitActions.ActiveUnit.transform.position);
+                    unitActions.ActiveUnit.Action = Unit.CurrentAction.MeleeAttack;
+
+                    // Turn dueling units on each other's direction
+                    unitActions.ActiveUnit.transform.LookAt(targetUnit.transform.position);
+                    targetUnit.transform.LookAt(unitActions.ActiveUnit.transform.position);
 
                     OnAttack?.Invoke(unitActions.ActiveUnit);
                     AttackEffect();
@@ -50,20 +79,19 @@ public class MeleeAttack
                     //unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
                     unitActions.ActiveUnit.ExecuteAction(1);
                     unitActions.FinishAction();
+
+                    this.enabled = false;
+                    return;
                 }
-                else Debug.Log("You can't attack enemy!");
+                else Debug.Log("You can't attack enemy. Enemy is too far!");
             }
         }
-
-        // Clear active action
-        if (Input.GetMouseButtonDown(1))
-            unitActions.ClearAction();
     }
 
     private void AttackEffect()
     {
         // Calculating melee attack chance: 50% + difference between MeleeFight of both unit's values multiplying by 5
-        var hitChance = 50 + (unitActions.ActiveUnit.GetMeleeFight() - target.GetMeleeFight()) * 5;
+        var hitChance = 50 + (unitActions.ActiveUnit.GetMeleeFight() - targetUnit.GetMeleeFight()) * 5;
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = hitChance >= hitResult;
 
@@ -71,14 +99,24 @@ public class MeleeAttack
 
         if (hitTarget)
         {
-            var woundTarget = WoundTest.GetWoundTest(target.GetDefence(), unitActions.ActiveUnit.GetStrenght());
+            var woundTarget = WoundTest.GetWoundTest(targetUnit.GetDefence(), unitActions.ActiveUnit.GetStrenght());
             if (woundTarget)
             {
                 // Action when target has been wounded
-                target.GetDamage(1);
+                targetUnit.GetDamage(1);
             }
-            else OnBlock?.Invoke(target);
+            else OnBlock?.Invoke(targetUnit);
         }
-        else OnAvoid?.Invoke(target);
+        else OnAvoid?.Invoke(targetUnit);
+    }
+
+    private GridCell GetTargetNode()
+    {
+        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f, 1024);
+
+        if (hit.collider)
+            return hit.collider.GetComponent<GridCell>();
+        else
+            return null;
     }
 }

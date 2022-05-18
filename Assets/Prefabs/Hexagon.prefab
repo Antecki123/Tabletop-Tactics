@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708051360542716010}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -113,5 +113,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   isOccupied: 0
-  position: {x: 0, y: 0}
+  coordinates: {x: 0, y: 0}
+  adjacentCells: []
   movementValue: 0
+  gCost: 0
+  hCost: 0
+  connection: {fileID: 0}

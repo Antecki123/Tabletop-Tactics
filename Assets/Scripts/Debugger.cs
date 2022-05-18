@@ -4,9 +4,9 @@ using TMPro;
 public class Debugger : MonoBehaviour
 {
     [Header("Component References")]
-    [SerializeField] private UnitActions actions;
-    [Space]
     [SerializeField] private TextMeshProUGUI activePlayerHUD;
+
+    private UnitActions actions;
 
     private void Awake()
     {
@@ -16,7 +16,7 @@ public class Debugger : MonoBehaviour
 
     private void Update()
     {
-        if (actions.ActiveUnit)
+        if (actions)
             activePlayerHUD.text = $"Active Unit: {actions.ActiveUnit.name}";
     }
 }

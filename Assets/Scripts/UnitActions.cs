@@ -1,90 +1,40 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 public class UnitActions : MonoBehaviour
 {
     public static Action<Unit> OnFinishAction;
 
-    public enum UnitAction { None, MeleeAttack, RangeAttack, Support, BlowHorn, Defence, Movement, Wait }
-
     [Header("Component References")]
     [SerializeField] private QueueBehavior queueBehavior;
-    public GridBehaviour gridBehaviour;
-    [Header("Movement Lines")]
-    public PositionArcRenderer arcRenderer;
-    public MovementPathRenderer pathRenderer;
-    [Header("Unit Actions Properties")]
-    [SerializeField] private UnitAction activeAction;
-    [SerializeField] private Unit activeUnit;
+    public AStarPathfinding pathfinding;
 
-    [Header("Actions")]
-    private Movement movement;
-    private RangeAttack rangeAttack;
-    private MeleeAttack meleeAtack;
-    private BlowHorn blowHorn;
-    private Guard guard;
-
-    public UnitAction ActiveAction { get => activeAction; private set => activeAction = value; }
-    public Unit ActiveUnit { get => activeUnit; set => activeUnit = value; }
-
-    private void Awake()
-    {
-        movement = new Movement(this);
-        rangeAttack = new RangeAttack(this);
-        meleeAtack = new MeleeAttack(this);
-        blowHorn = new BlowHorn(this);
-        guard = new Guard(this);
-    }
-
-    private void Update()
-    {
-        // Set active unit
-        if (!ActiveUnit && queueBehavior.UnitsQueue.Count != 0)
-            ActiveUnit = queueBehavior.UnitsQueue[0];
-
-        // Select active action script
-        if (ActiveAction == UnitAction.RangeAttack && ActiveUnit.UnitActions > 0)
-            rangeAttack.UpdateAction();
-
-        else if (ActiveAction == UnitAction.MeleeAttack && ActiveUnit.UnitActions > 0)
-            meleeAtack.UpdateAction();
-
-        else if (ActiveAction == UnitAction.Defence && ActiveUnit.UnitActions > 0)
-            guard.UpdateAction();
-
-        else if (ActiveAction == UnitAction.Movement && ActiveUnit.UnitActions > 0)
-            movement.UpdateAction();
-
-        else if (ActiveAction == UnitAction.BlowHorn && ActiveUnit.UnitActions > 0)
-            blowHorn.UpdateAction();
-    }
-
-    public void ClearAction()
-    {
-        ActiveAction = UnitAction.None;
-
-        gridBehaviour.ClearHighlight();
-        arcRenderer.TurnOff();
-        pathRenderer.TurnOff();
-    }
+    [Header("Actions States")]
+    [SerializeField] private Movement movement;
+    [SerializeField] private RangeAttack rangeAttack;
+    [SerializeField] private MeleeAttack meleeAttack;
+    
+    public Unit ActiveUnit { get => queueBehavior.UnitsQueue[0]; }
 
     public void FinishAction()
     {
-        ClearAction();
+        //Debug.Log("FINISH Action");
+        ActiveUnit.Action = Unit.CurrentAction.None;
 
         if (ActiveUnit.UnitActions == 0)
-        {
             OnFinishAction?.Invoke(ActiveUnit);
-            ActiveUnit = null;
-        }
     }
 
-    //public void Support() => ActiveAction = UnitAction.Support;
+    #region UI Action Buttons
+    public void Movement() => movement.enabled = true;
+    public void RangeAttack() => rangeAttack.enabled = true;
+    public void MeleeAttack() => meleeAttack.enabled = true;
 
-    public void Movement() => ActiveAction = UnitAction.Movement;
-    public void RangeAttack() => ActiveAction = UnitAction.RangeAttack;
-    public void MeleeAttack() => ActiveAction = UnitAction.MeleeAttack;
-    public void BlowHorn() => ActiveAction = UnitAction.BlowHorn;
-    public void Defence() => ActiveAction = UnitAction.Defence;
-    public void Wait() => ActiveAction = UnitAction.Wait;
+    public void ClearActions()
+    {
+        movement.enabled = false;
+        rangeAttack.enabled = false;
+        meleeAttack.enabled = false;
+    }
+    #endregion
 }

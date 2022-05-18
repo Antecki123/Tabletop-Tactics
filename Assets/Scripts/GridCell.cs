@@ -10,15 +10,24 @@ public class GridCell : MonoBehaviour
     [SerializeField] private Vector2Int coordinates;
     [SerializeField] private List<GridCell> adjacentCells = new();
     [Space]
-    [SerializeField] private int movementValue = 0;     // to delete G value
+    [SerializeField] private int movementValue = -1;     // to delete, G value
+    private LineRenderer line;
 
     // ========================= IN DEVELOPMENT A*
     [SerializeField, Tooltip("Cost from start tile to this tile.")] private int gCost = 0;
     [SerializeField, Tooltip("Estimated cost from this tile to destination tile.")] private int hCost = 0;
+    [Space]
+    [SerializeField] private GridCell connection;
+
+    public int GetDistance(GridCell targetNode)
+    {
+        return (int)Vector3.Distance(transform.position, targetNode.transform.position);
+    }
 
     public int GCost { get => gCost; set => gCost = value; }
     public int HCost { get => hCost; set => hCost = value; }
     public int FCost { get { return gCost + hCost; } }
+    public GridCell Connection { get => connection; set => connection = value; }
     // ========================= IN DEVELOPMENT A*
 
     #region PROPERTIES
@@ -30,7 +39,11 @@ public class GridCell : MonoBehaviour
     public List<GridCell> AdjacentCells { get => adjacentCells; set => adjacentCells = value; }
     #endregion
 
-    private void Start() => Invoke("GetAdjacentBlocks", 5);
+    private void Start()
+    {
+        line = GetComponent<LineRenderer>();
+        Invoke(nameof(GetAdjacentBlocks), 5);
+    }
 
     private void GetAdjacentBlocks()
     {
@@ -45,23 +58,22 @@ public class GridCell : MonoBehaviour
         adjacentCells.Remove(this);
     }
 
-    public void HighlightNode(Color color, int movementValue)
+    public void HighlightNode(Color color , int movement)
     {
-        var lineComponent = GetComponent<LineRenderer>();
-        lineComponent.enabled = true;
-        lineComponent.startColor = color;
-        lineComponent.endColor = color;
+        line.enabled = true;
+        line.startColor = color;
+        line.endColor = color;
 
-        lineComponent.startWidth = .05f;
-        lineComponent.endWidth = .05f;
+        line.startWidth = .05f;
+        line.endWidth = .05f;
 
-        for (int i = 0; i < lineComponent.positionCount; i++)
+        for (int i = 0; i < line.positionCount; i++)
         {
-            var newPosition = new Vector3(lineComponent.GetPosition(i).x, .07f, lineComponent.GetPosition(i).z);
-            lineComponent.SetPosition(i, newPosition);
+            var newPosition = new Vector3(line.GetPosition(i).x, .07f, line.GetPosition(i).z);
+            line.SetPosition(i, newPosition);
         }
 
-        MovementValue = movementValue;
+        movementValue = movement;
     }
 
     public void ClearHighlight()
@@ -81,6 +93,6 @@ public class GridCell : MonoBehaviour
             lineComponent.SetPosition(i, newPosition);
         }
 
-        MovementValue = 0;
+        MovementValue = -1;
     }
 }

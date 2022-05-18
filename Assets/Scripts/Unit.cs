@@ -9,13 +9,14 @@ public class Unit : MonoBehaviour
     public static Action<Unit> OnDeath;
 
     public enum Player { Player1, Player2 , AI}
+    public enum CurrentAction { None, Movement, RangeAttack, MeleeAttack}
 
     [Header("Component References")]
-    public NavMeshAgent navMeshAgent;
     [SerializeField] private UnitStats unitBaseStats;
 
     [Header("Unit Properties")]
     [SerializeField] private Player unitOwner;
+    [SerializeField] private CurrentAction action;
     [SerializeField] private Wargear wargear;
     
     [Header("Unit Statistics")]
@@ -37,6 +38,7 @@ public class Unit : MonoBehaviour
     #region PROPERTIES
     public UnitStats UnitBaseStats { get => unitBaseStats; set => unitBaseStats = value; }
     public Player UnitOwner { get => unitOwner; set => unitOwner = value; }
+    public CurrentAction Action { get => action; set => action = value; }
     public Wargear Wargear { get => wargear; set => wargear = value; }
 
     public int UnitMove { get => unitMove; }
@@ -143,7 +145,6 @@ public class Unit : MonoBehaviour
         OnDeath?.Invoke(this);
 
         GetComponent<Collider>().enabled = false;
-        navMeshAgent.enabled = false;
         this.enabled = false;
     }
 }

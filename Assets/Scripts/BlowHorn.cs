@@ -24,10 +24,10 @@ public class BlowHorn
     {
         var highlightDuration = 3000;
 
-        unitActions.gridBehaviour.HighlightGridRange(unitActions.ActiveUnit, actionRange, Color.yellow);
+        //unitActions.gridBehaviour.HighlightGridRange(unitActions.ActiveUnit, actionRange, Color.yellow);
         await System.Threading.Tasks.Task.Delay(highlightDuration);
 
-        unitActions.gridBehaviour.ClearHighlight();
+        //unitActions.gridBehaviour.ClearHighlight();
         unitActions.FinishAction();
     }
 }

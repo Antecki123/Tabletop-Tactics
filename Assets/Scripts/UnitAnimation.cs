@@ -1,17 +1,14 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class UnitAnimation : MonoBehaviour
 {
     [Header("Component References")]
     private Animator animator;
-    private NavMeshAgent navMeshAgent;
     private Unit unit;
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
         unit = GetComponent<Unit>();
     }
 
@@ -36,10 +33,10 @@ public class UnitAnimation : MonoBehaviour
         Unit.OnDeath -= DeathAnimation;
     }
 
-    private void LateUpdate()
+    private void MovementAnimation(Unit unit, GridCell cell)
     {
-        // Movement
-        animator.SetBool("move", navMeshAgent.hasPath);
+        if (unit == this.unit)
+            animator.SetBool("move", true);
     }
 
     private void DeathAnimation(Unit unit)

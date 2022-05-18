@@ -1,70 +1,76 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class AStarPathfinding
+public class AStarPathfinding : MonoBehaviour
 {
-    public List<Vector3> FindPath(GridCell originNode, GridCell targetNode)
+    [field: SerializeField] public List<Vector3> CurrentPath { get; private set; }
+
+    public void FindPath(GridCell startNode, GridCell targetNode)
     {
-        List<GridCell> openSet = new();
-        HashSet<GridCell> closedSet = new();
+        var toSearch = new List<GridCell>() { startNode };
+        var processed = new List<GridCell>();
 
-        openSet.Add(originNode);
-
-        while (openSet.Count > 0)
+        while (toSearch.Any())
         {
-            GridCell currentNode = openSet[0];
+            var current = toSearch[0];
+            foreach (var t in toSearch)
+                if (t.FCost < current.FCost || t.FCost == current.FCost && t.HCost < current.HCost) current = t;
 
-            for (int i = 0; i < openSet.Count; i++)
+            processed.Add(current);
+            toSearch.Remove(current);
+
+            if (current == targetNode)
             {
-                if (openSet[i].FCost < currentNode.FCost || openSet[i].FCost == currentNode.FCost &&
-                    openSet[i].HCost < currentNode.HCost)
+                var currentPathTile = targetNode;
+                var path = new List<GridCell>();
+                var count = 100;
+
+                while (currentPathTile != startNode)
                 {
-                    currentNode = openSet[i];
+                    path.Add(currentPathTile);
+                    currentPathTile = currentPathTile.Connection;
+                    count--;
+                    if (count < 0)
+                        throw new Exception();
                 }
+
+                path.Add(startNode);
+
+                // Set new path
+                CurrentPath = ConvertListToVector3(path);
             }
 
-            openSet.Remove(currentNode);
-            closedSet.Add(currentNode);
-
-            if (currentNode == targetNode)
-                return ConvertListToVector3(closedSet);
-            
-            foreach (var adjacent in currentNode.AdjacentCells)
+            foreach (var neighbor in current.AdjacentCells.Where(t => !t.IsOccupied && !processed.Contains(t)))
             {
-                if (adjacent.IsOccupied || closedSet.Contains(adjacent))
-                    continue;
+                var inSearch = toSearch.Contains(neighbor);
 
-                int newMovementCostToNeighbour = currentNode.GCost + GetDistance(currentNode, adjacent);
-                if (newMovementCostToNeighbour < adjacent.GCost || !openSet.Contains(adjacent))
+                var costToNeighbor = current.GCost + current.GetDistance(neighbor);
+
+                if (!inSearch || costToNeighbor < neighbor.GCost)
                 {
-                    adjacent.GCost = newMovementCostToNeighbour;
-                    adjacent.HCost = GetDistance(adjacent, targetNode);
+                    neighbor.GCost = costToNeighbor;
+                    neighbor.Connection = current;
 
-                    if (!openSet.Contains(adjacent))
+                    if (!inSearch)
                     {
-                        openSet.Add(adjacent);
+                        neighbor.HCost = neighbor.GetDistance(targetNode);
+                        toSearch.Add(neighbor);
                     }
                 }
             }
         }
-
-        return ConvertListToVector3(closedSet);
     }
 
-    private int GetDistance(GridCell currentNode, GridCell targetNode)
-    {
-        return (int)Math.Round(Vector3.Distance(currentNode.transform.position, targetNode.transform.position));
-    }
-
-    private List<Vector3> ConvertListToVector3(HashSet<GridCell> hashSetCollection)
+    private List<Vector3> ConvertListToVector3(List<GridCell> path)
     {
         List<Vector3> positions = new();
 
-        foreach (var item in hashSetCollection)
+        foreach (var item in path)
             positions.Add(item.transform.position);
 
+        positions.Reverse();
         return positions;
     }
 }
