@@ -18,7 +18,7 @@ public class Movement : MonoBehaviour
 
     private GridCell originNode;
     private GridCell targetNode;
-    private GridCell bufforNode;
+    private GridCell lastNode;
 
     private void OnEnable()
     {
@@ -33,7 +33,9 @@ public class Movement : MonoBehaviour
     {
         originNode = null;
         targetNode = null;
+        lastNode = null;
 
+        OnClearAction?.Invoke();
         GridManager.instance.gridBehaviour.ClearMovementValues();
     }
 
@@ -49,15 +51,16 @@ public class Movement : MonoBehaviour
         // Find path (set visual path)
         if ((targetNode = GetTargetNode()) && !targetNode.IsOccupied && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
         {
-            if (targetNode != bufforNode)
+            if (targetNode != lastNode)
             {
-                bufforNode = targetNode;
+                lastNode = targetNode;
                 unitActions.pathfinding.FindPath(originNode, targetNode);
                 OnNewPath?.Invoke();
             }
         }
         else
         {
+            lastNode = null;
             OnClearAction?.Invoke();
             return;
         }
