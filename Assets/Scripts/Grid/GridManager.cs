@@ -4,6 +4,8 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public static GridManager instance;
+    [Header("Grid Component References")]
+    public GridBehaviour gridBehaviour;
 
     [Header("Grid Properties")]
     [SerializeField] private Vector2Int gridDimensions;

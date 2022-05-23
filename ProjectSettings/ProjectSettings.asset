@@ -153,6 +153,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.LOTRTabletop
     Standalone: com.DefaultCompany.LOTR-Tabletop
   buildNumber:
     Standalone: 0

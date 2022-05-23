@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ public class MovementPathRenderer : MonoBehaviour
         if (path.Length > 0)
         {
             for (int i = 0; i < path.Length; i++)
-                path[i] += Vector3.up * .3f;
+                path[i] += Vector3.up * .1f;
 
             line.enabled = true;
             line.positionCount = path.Length;
@@ -54,7 +55,7 @@ public class MovementPathRenderer : MonoBehaviour
         if (pathfinding.CurrentPath.Count > 0)
         {
             positionMarker.SetActive(true);
-            positionMarker.transform.position = pathfinding.CurrentPath[^1] + Vector3.up * .35f;
+            positionMarker.transform.position = pathfinding.CurrentPath[^1] + Vector3.up * .15f;
         }
     }
 }

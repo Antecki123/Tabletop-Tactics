@@ -14,16 +14,22 @@ public class Guard : MonoBehaviour
     private void OnEnable()
     {
         unitActions = GetComponent<UnitActions>();
+
+        ExecuteAction();
     }
 
-    public void Start()
+    public void ExecuteAction()
     {
-        //phaseAction.ActiveUnit.GuardAction();
-        OnGuard?.Invoke(unitActions.ActiveUnit);
+        if (unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        {
+            unitActions.ActiveUnit.Action = Unit.CurrentAction.Guard;
 
-        unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+            //phaseAction.ActiveUnit.GuardAction();
+            OnGuard?.Invoke(unitActions.ActiveUnit);
 
-        unitActions.FinishAction();
-        this.enabled = false;
+            unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+            unitActions.FinishAction();
+            this.enabled = false;
+        }
     }
 }

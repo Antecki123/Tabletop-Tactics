@@ -282,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 178d390b5708dfb4a8cca160886ae7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridBehaviour: {fileID: 104090217}
   gridDimensions: {x: 0, y: 0}
   gridNodes: []
 --- !u!114 &104090217
@@ -364,6 +365,7 @@ GameObject:
   - component: {fileID: 173733284}
   - component: {fileID: 173733285}
   - component: {fileID: 173733286}
+  - component: {fileID: 173733287}
   m_Layer: 0
   m_Name: Unit Actions
   m_TagString: Untagged
@@ -412,10 +414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   queueBehavior: {fileID: 595824333}
   pathfinding: {fileID: 105926882}
-  movement: {fileID: 173733282}
-  rangeAttack: {fileID: 173733284}
-  meleeAttack: {fileID: 173733285}
-  guard: {fileID: 173733286}
 --- !u!114 &173733284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,6 +448,18 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6486e647bf313d4f9fc7f46e11bbd52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &173733287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173733280}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3dce57c8432dc489196f11059be4e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &220217728
@@ -712,11 +722,15 @@ PrefabInstance:
     - target: {fileID: 4330575851187970572, guid: 125006e3d0554a64484221add6795d3c, type: 3}
       propertyPath: unitBaseStats
       value: 
-      objectReference: {fileID: 11400000, guid: a950b4eb72e19f04d91b1102da123753, type: 2}
+      objectReference: {fileID: 11400000, guid: 5869fd2c51844bf49b22fc4af8c9e167, type: 2}
     - target: {fileID: 4330575851187970572, guid: 125006e3d0554a64484221add6795d3c, type: 3}
       propertyPath: wargear.armour
       value: 
       objectReference: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
+    - target: {fileID: 4330575851187970572, guid: 125006e3d0554a64484221add6795d3c, type: 3}
+      propertyPath: wargear.theOneRing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4330575851187970572, guid: 125006e3d0554a64484221add6795d3c, type: 3}
       propertyPath: wargear.rangeWeapon
       value: 
@@ -725,6 +739,10 @@ PrefabInstance:
       propertyPath: wargear.combatWeapon
       value: 
       objectReference: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
+    - target: {fileID: 4330575851187970572, guid: 125006e3d0554a64484221add6795d3c, type: 3}
+      propertyPath: wargear.elvenMadeWeapon
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4330575851187970575, guid: 125006e3d0554a64484221add6795d3c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -4744,6 +4762,14 @@ PrefabInstance:
     - target: {fileID: 7209769630504641955, guid: 10fa46a2279db1a41937cd4552f5733b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230968001820270727, guid: 10fa46a2279db1a41937cd4552f5733b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7232764431759420339, guid: 10fa46a2279db1a41937cd4552f5733b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7464760424924551511, guid: 10fa46a2279db1a41937cd4552f5733b, type: 3}
       propertyPath: m_StaticEditorFlags

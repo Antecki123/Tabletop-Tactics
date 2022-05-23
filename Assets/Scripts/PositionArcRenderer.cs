@@ -80,7 +80,7 @@ public class PositionArcRenderer : MonoBehaviour
 
     private void SetMarkerPosition(GridCell origin, GridCell target)
     {
-        if (targetNode)
+        if (targetNode && !origin.Equals(target))
         {
             positionMarker.SetActive(true);
             positionMarker.transform.position = targetNode.transform.position + Vector3.up * .3f;

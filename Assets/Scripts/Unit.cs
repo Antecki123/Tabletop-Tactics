@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public static Action<Unit> OnDeath;
 
     public enum Player { Player1, Player2 , AI}
-    public enum CurrentAction { None, Movement, RangeAttack, MeleeAttack}
+    public enum CurrentAction { None, Movement, RangeAttack, MeleeAttack, Guard, CastSpell}
 
     [Header("Component References")]
     [SerializeField] private UnitStats unitBaseStats;

@@ -18,6 +18,7 @@ public class UnitAnimation : MonoBehaviour
         MeleeAttack.OnAttack += AttackAnimation;
         MeleeAttack.OnBlock +=BlockAnimation;
         MeleeAttack.OnAvoid += AvoidAnimation;
+        Guard.OnGuard += GuardAnimation;
 
         Unit.OnGetDamage += GetHitAnimation;
         Unit.OnDeath += DeathAnimation;
@@ -28,6 +29,7 @@ public class UnitAnimation : MonoBehaviour
         MeleeAttack.OnAttack -= AttackAnimation;
         MeleeAttack.OnBlock -=BlockAnimation;
         MeleeAttack.OnAvoid -= AvoidAnimation;
+        Guard.OnGuard -= GuardAnimation;
 
         Unit.OnGetDamage -= GetHitAnimation;
         Unit.OnDeath -= DeathAnimation;
@@ -61,6 +63,12 @@ public class UnitAnimation : MonoBehaviour
     {
         if (unit == this.unit)
             animator.SetTrigger("attack");
+    }
+
+    private void GuardAnimation(Unit unit)
+    {
+        if (unit == this.unit)
+            animator.SetTrigger("guard");
     }
 
     // TODO

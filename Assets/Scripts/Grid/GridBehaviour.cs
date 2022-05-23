@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridBehaviour : MonoBehaviour
@@ -6,72 +7,49 @@ public class GridBehaviour : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
 
-    private List<GridCell> highlightedBlocks = new();
-    private readonly int gridMask = 1024;
-
-    private bool isHighlighted = false;
-
-    public void HighlightGridMovement(Unit unit, int range, Color color)
+    private void OnEnable()
     {
-        if (!isHighlighted)
+
+    }
+    private void OnDisable()
+    {
+
+    }
+
+    public void CalculateMaxMovementRange(GridCell startNode, int range)
+    {
+        List<GridCell> movementList = new() { startNode };
+        List<GridCell> bufforList = new();
+
+        ClearMovementValues();
+        startNode.MovementValue = 0;
+
+        for (int i = 1; i <= range; i++)
         {
-            ClearHighlight();
-            isHighlighted = true;
-
-            var centerNode = gridManager.GridNodes.Find(node => node.Unit == unit);
-            centerNode.HighlightNode(color, 0);
-
-            highlightedBlocks.Add(centerNode);
-
-            for (int i = 1; i <= range; i++)
+            foreach (var node in movementList)
             {
-                List<GridCell> bufforList = new();
-
-                foreach (var block in highlightedBlocks)
+                foreach (var adjacentCells in node.AdjacentCells.Where(a => !a.IsOccupied && a.MovementValue < 0))
                 {
-                    var overlappedBlocks = block.AdjacentCells;
-
-                    foreach (var overlapped in overlappedBlocks)
-                    {
-                        if (overlapped.MovementValue == -1 && !overlapped.IsOccupied)
-                        {
-                            overlapped.HighlightNode(color, i);
-                            bufforList.Add(overlapped);
-                        }
-                    }
+                    adjacentCells.MovementValue = i;
+                    bufforList.Add(adjacentCells);
                 }
-
-                foreach (var block in bufforList)
-                    highlightedBlocks.Add(block);
-
-                bufforList = null;
             }
+
+            foreach (var node in bufforList.Where(n => !movementList.Contains(n)))
+                movementList.Add(node);
+
+            bufforList.Clear();
         }
     }
 
-    public void HighlightGridRange(Unit unit, int range, Color color)
+    public void CaclulateRange()
     {
-        ClearHighlight();
 
-        if (!isHighlighted)
-        {
-            isHighlighted = true;
-
-            var centerNode = gridManager.GridNodes.Find(node => node.Unit == unit);
-            var overlappedBlocks = Physics.OverlapSphere(centerNode.transform.position, range * .75f, gridMask);
-
-            foreach (var overlapped in overlappedBlocks)
-                overlapped.GetComponent<GridCell>().HighlightNode(color, 1);
-
-        }
     }
 
-    public void ClearHighlight()
+    public void ClearMovementValues()
     {
-        isHighlighted = false;
-        highlightedBlocks.Clear();
-
-        foreach (var node in gridManager.GridNodes)
-            node.ClearHighlight();
+        foreach (var node in gridManager.GridNodes.Where(n => n.MovementValue >= 0))
+            node.MovementValue = -1;
     }
 }

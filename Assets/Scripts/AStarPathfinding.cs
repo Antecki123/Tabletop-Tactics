@@ -12,14 +12,17 @@ public class AStarPathfinding : MonoBehaviour
         var toSearch = new List<GridCell>() { startNode };
         var processed = new List<GridCell>();
 
+        toSearch.Add(startNode);
+
         while (toSearch.Any())
         {
             var current = toSearch[0];
             foreach (var t in toSearch)
-                if (t.FCost < current.FCost || t.FCost == current.FCost && t.HCost < current.HCost) current = t;
+                if (t.FCost < current.FCost || t.FCost == current.FCost && t.HCost < current.HCost)
+                    current = t;
 
-            processed.Add(current);
             toSearch.Remove(current);
+            processed.Add(current);
 
             if (current == targetNode)
             {
@@ -39,13 +42,13 @@ public class AStarPathfinding : MonoBehaviour
                 path.Add(startNode);
 
                 // Set new path
-                CurrentPath = ConvertListToVector3(path);
+                CurrentPath = ConvertPathToVector3(path);
+                return;
             }
 
             foreach (var neighbor in current.AdjacentCells.Where(t => !t.IsOccupied && !processed.Contains(t)))
             {
                 var inSearch = toSearch.Contains(neighbor);
-
                 var costToNeighbor = current.GCost + current.GetDistance(neighbor);
 
                 if (!inSearch || costToNeighbor < neighbor.GCost)
@@ -63,7 +66,7 @@ public class AStarPathfinding : MonoBehaviour
         }
     }
 
-    private List<Vector3> ConvertListToVector3(List<GridCell> path)
+    private List<Vector3> ConvertPathToVector3(List<GridCell> path)
     {
         List<Vector3> positions = new();
 

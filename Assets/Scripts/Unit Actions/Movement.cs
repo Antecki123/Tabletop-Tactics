@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     public static Action<Unit, GridCell> OnUnitChangePosition;
     // New path has been found
     public static Action OnNewPath;
-    // Turn off pointers
+    // Clear action
     public static Action OnClearAction;
     #endregion
 
@@ -18,6 +18,7 @@ public class Movement : MonoBehaviour
 
     private GridCell originNode;
     private GridCell targetNode;
+    private GridCell bufforNode;
 
     private void OnEnable()
     {
@@ -25,13 +26,15 @@ public class Movement : MonoBehaviour
         mainCamera = Camera.main;
 
         originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
+
+        GridManager.instance.gridBehaviour.CalculateMaxMovementRange(originNode, unitActions.ActiveUnit.UnitMove);
     }
     private void OnDisable()
     {
         originNode = null;
         targetNode = null;
 
-        OnClearAction?.Invoke();
+        GridManager.instance.gridBehaviour.ClearMovementValues();
     }
 
     private void Update()
@@ -46,8 +49,12 @@ public class Movement : MonoBehaviour
         // Find path (set visual path)
         if ((targetNode = GetTargetNode()) && !targetNode.IsOccupied && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
         {
-            unitActions.pathfinding.FindPath(originNode, targetNode);
-            OnNewPath?.Invoke();
+            if (targetNode != bufforNode)
+            {
+                bufforNode = targetNode;
+                unitActions.pathfinding.FindPath(originNode, targetNode);
+                OnNewPath?.Invoke();
+            }
         }
         else
         {
@@ -57,7 +64,7 @@ public class Movement : MonoBehaviour
 
         // Set destination and start movement
         if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None &&
-            unitActions.pathfinding.CurrentPath.Count > 0)
+            unitActions.pathfinding.CurrentPath.Count > 0 && targetNode.MovementValue > 0)
         {
             unitActions.ActiveUnit.Action = Unit.CurrentAction.Movement;
             UnitMovement();
