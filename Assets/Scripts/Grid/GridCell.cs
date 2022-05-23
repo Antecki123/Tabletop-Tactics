@@ -20,6 +20,7 @@ public class GridCell : MonoBehaviour
 
     #region PROPERTIES
     [field: SerializeField] public Unit Unit { get; set; }
+    [field: SerializeField] public GameObject Obstacle { get; set; }
     [field: SerializeField] public bool IsOccupied { get; set; }
     [field: SerializeField] public Vector2Int Coordinates { get; set; }
     [field: SerializeField] public int MovementValue { get; set; }
