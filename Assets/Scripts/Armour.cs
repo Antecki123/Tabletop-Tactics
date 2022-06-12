@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Wargear", menuName = "Scriptable Objects/New Armour")]
+[CreateAssetMenu(fileName = "New Wargear", menuName = "Scriptable Objects/Wargear/New Armour")]
 public class Armour : ScriptableObject
 {
     public enum ArmourType { None, LightArmour, HeavyArmour, DwarfArmour }

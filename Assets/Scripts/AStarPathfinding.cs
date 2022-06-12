@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AStarPathfinding : MonoBehaviour
+public class AStarPathfinding : ScriptableObject
 {
     [field: SerializeField] public List<Vector3> CurrentPath { get; private set; }
+
+    private void OnEnable() => CurrentPath.Clear();
 
     public void FindPath(GridCell startNode, GridCell targetNode)
     {
@@ -41,7 +43,7 @@ public class AStarPathfinding : MonoBehaviour
 
                 path.Add(startNode);
 
-                // Set new path
+                // Create new path and add positions to list
                 CurrentPath = ConvertPathToVector3(path);
                 return;
             }

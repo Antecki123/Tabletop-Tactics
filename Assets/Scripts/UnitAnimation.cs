@@ -14,31 +14,33 @@ public class UnitAnimation : MonoBehaviour
 
     private void OnEnable()
     {
-        RangeAttack.OnShootingAttack += ShootAnimation;
-        MeleeAttack.OnAttack += AttackAnimation;
-        MeleeAttack.OnBlock +=BlockAnimation;
-        MeleeAttack.OnAvoid += AvoidAnimation;
-        Guard.OnGuard += GuardAnimation;
+        Movement.OnMovementAnimation += MovementAnimation;
+        RangeAttack.OnShootAnimation += ShootAnimation;
+        MeleeAttack.OnAttackAnimation += AttackAnimation;
+        MeleeAttack.OnBlockAnimation += BlockAnimation;
+        MeleeAttack.OnAvoidAnimation += AvoidAnimation;
+        Guard.OnGuardAnimation += GuardAnimation;
 
         Unit.OnGetDamage += GetHitAnimation;
         Unit.OnDeath += DeathAnimation;
     }
     private void OnDisable()
     {
-        RangeAttack.OnShootingAttack -= ShootAnimation;
-        MeleeAttack.OnAttack -= AttackAnimation;
-        MeleeAttack.OnBlock -=BlockAnimation;
-        MeleeAttack.OnAvoid -= AvoidAnimation;
-        Guard.OnGuard -= GuardAnimation;
+        Movement.OnMovementAnimation -= MovementAnimation;
+        RangeAttack.OnShootAnimation -= ShootAnimation;
+        MeleeAttack.OnAttackAnimation -= AttackAnimation;
+        MeleeAttack.OnBlockAnimation -= BlockAnimation;
+        MeleeAttack.OnAvoidAnimation -= AvoidAnimation;
+        Guard.OnGuardAnimation -= GuardAnimation;
 
         Unit.OnGetDamage -= GetHitAnimation;
         Unit.OnDeath -= DeathAnimation;
     }
 
-    private void MovementAnimation(Unit unit, GridCell cell)
+    private void MovementAnimation(Unit unit, bool state)
     {
         if (unit == this.unit)
-            animator.SetBool("move", true);
+            animator.SetBool("move", state);
     }
 
     private void DeathAnimation(Unit unit)

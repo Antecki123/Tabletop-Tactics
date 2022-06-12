@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 2
   strength: 2
   range: 24
+  arrowPrefab: {fileID: 8994745073708300823, guid: 20a7594b4b53eb346aa0fc1025ffa8bd, type: 3}

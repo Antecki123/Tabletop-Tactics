@@ -4,14 +4,9 @@ using System;
 public class MeleeAttack : MonoBehaviour
 {
     #region Actions
-    public static Action<Unit> OnAttack;
-    public static Action<Unit> OnBlock;
-    public static Action<Unit> OnAvoid;
-
-    // Turn on pointer
-    public static Action<GridCell, GridCell> OnFindingTarget;
-    // Turn off pointer
-    public static Action OnClearAction;
+    public static Action<Unit> OnAttackAnimation;
+    public static Action<Unit> OnBlockAnimation;
+    public static Action<Unit> OnAvoidAnimation;
     #endregion
 
     [Header("Component References")]
@@ -22,6 +17,7 @@ public class MeleeAttack : MonoBehaviour
 
     private GridCell originNode;
     private GridCell targetNode;
+    private GridCell lastNode;
 
     private void OnEnable()
     {
@@ -35,45 +31,58 @@ public class MeleeAttack : MonoBehaviour
     {
         targetUnit = null;
         originNode = null;
-        targetNode = null;
+        lastNode = null;
 
-        OnClearAction?.Invoke();
+        VisualEfects.instace.ArcMarker?.TurnOffMarker();
+        VisualEfects.instace.PositionMarker?.TurnOffMarker();
     }
 
     public void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(1) && unitActions.State == UnitActions.UnitState.Idle)
         {
+            VisualEfects.instace.ArcMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
             this.enabled = false;
             return;
         }
 
         // Find target (set pointer)
-        if ((targetNode = GetTargetNode()) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if ((targetNode = GetTargetNode()) && unitActions.State == UnitActions.UnitState.Idle)
         {
-            OnFindingTarget?.Invoke(originNode, targetNode);
+            if (targetNode != lastNode)
+            {
+                lastNode = targetNode;
+
+                VisualEfects.instace.ArcMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.instace.PositionMarker?.TurnOnMarker(originNode, targetNode);
+            }
         }
         else
         {
-            OnClearAction?.Invoke();
+            lastNode = null;
+
+            VisualEfects.instace.ArcMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
             return;
         }
 
         // Attack target
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle)
         {
             if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
                 if (originNode.AdjacentCells.Contains(targetNode))
                 {
-                    unitActions.ActiveUnit.Action = Unit.CurrentAction.MeleeAttack;
+                    unitActions.State = UnitActions.UnitState.ExecutingAction;
 
                     // Turn dueling units on each other's direction
                     unitActions.ActiveUnit.transform.LookAt(targetUnit.transform.position);
                     targetUnit.transform.LookAt(unitActions.ActiveUnit.transform.position);
 
-                    OnAttack?.Invoke(unitActions.ActiveUnit);
+                    OnAttackAnimation?.Invoke(unitActions.ActiveUnit);
                     AttackEffect();
 
                     //unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
@@ -105,9 +114,9 @@ public class MeleeAttack : MonoBehaviour
                 // Action when target has been wounded
                 targetUnit.GetDamage(1);
             }
-            else OnBlock?.Invoke(targetUnit);
+            else OnBlockAnimation?.Invoke(targetUnit);
         }
-        else OnAvoid?.Invoke(targetUnit);
+        else OnAvoidAnimation?.Invoke(targetUnit);
     }
 
     private GridCell GetTargetNode()

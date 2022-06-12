@@ -1,21 +1,19 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(UnitAnimation))]
+[RequireComponent(typeof(UnitAnimation)), SelectionBase]
 public class Unit : MonoBehaviour
 {
     public static Action<Unit> OnGetDamage;
     public static Action<Unit> OnDeath;
 
     public enum Player { Player1, Player2 , AI}
-    public enum CurrentAction { None, Movement, RangeAttack, MeleeAttack, Guard, CastSpell}
 
     [Header("Component References")]
     [SerializeField] private UnitStats unitBaseStats;
 
     [Header("Unit Properties")]
     [SerializeField] private Player unitOwner;
-    [SerializeField] private CurrentAction action;
     [SerializeField] private Wargear wargear;
     
     [Header("Unit Statistics")]
@@ -37,7 +35,6 @@ public class Unit : MonoBehaviour
     #region PROPERTIES
     public UnitStats UnitBaseStats { get => unitBaseStats; set => unitBaseStats = value; }
     public Player UnitOwner { get => unitOwner; set => unitOwner = value; }
-    public CurrentAction Action { get => action; set => action = value; }
     public Wargear Wargear { get => wargear; set => wargear = value; }
 
     public int UnitMove { get => unitMove; }

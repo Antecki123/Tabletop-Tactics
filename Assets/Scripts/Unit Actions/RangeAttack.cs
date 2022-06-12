@@ -5,12 +5,8 @@ using UnityEngine;
 public class RangeAttack : MonoBehaviour
 {
     #region Actions
-    // Attack
-    public static Action<Unit> OnShootingAttack;
-    // Turn on pointer
-    public static Action<GridCell, GridCell> OnFindingTarget;
-    // Turn off pointer
-    public static Action OnClearAction;
+    // Shoot Animation
+    public static Action<Unit> OnShootAnimation;
     #endregion
 
     [Header("Component References")]
@@ -22,6 +18,10 @@ public class RangeAttack : MonoBehaviour
 
     private GridCell originNode;
     private GridCell targetNode;
+    private GridCell lastNode;
+
+    private bool hitTargetEvent = false;
+    private bool isTargetWounded = false;
 
     [Serializable]
     private struct Obstacle
@@ -37,6 +37,8 @@ public class RangeAttack : MonoBehaviour
         mainCamera = Camera.main;
 
         originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
+
+        Projectile.OnTargetHit += ReturnShootResult;
     }
     private void OnDisable()
     {
@@ -45,52 +47,85 @@ public class RangeAttack : MonoBehaviour
         targetNode = null;
         obstacles.Clear();
 
-        OnClearAction?.Invoke();
+        hitTargetEvent = false;
+        isTargetWounded = false;
+
+        VisualEfects.instace.ArcMarker?.TurnOffMarker();
+        VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
+        Projectile.OnTargetHit -= ReturnShootResult;
     }
 
     public void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(1) && unitActions.State == UnitActions.UnitState.Idle)
         {
+            VisualEfects.instace.ArcMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
             this.enabled = false;
             return;
         }
 
         // Find target (set pointer)
-        if ((targetNode = GetTargetNode()) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if ((targetNode = GetTargetNode()) && unitActions.State == UnitActions.UnitState.Idle)
         {
-            OnFindingTarget?.Invoke(originNode, targetNode);
+            if (targetNode != lastNode)
+            {
+                lastNode = targetNode;
+
+                VisualEfects.instace.ArcMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.instace.PositionMarker?.TurnOnMarker(originNode, targetNode);
+            }
         }
         else
         {
-            OnClearAction?.Invoke();
+            lastNode = null;
+
+            VisualEfects.instace.ArcMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
             return;
         }
 
         // Attack target
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle)
         {
             if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
                 if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None && !originNode.AdjacentCells.Contains(targetNode) &&
                     unitActions.ActiveUnit.Wargear.rangeWeapon.range >= Vector3.Distance(unitActions.ActiveUnit.transform.position, targetUnit.transform.position))
                 {
-                    unitActions.ActiveUnit.Action = Unit.CurrentAction.RangeAttack;
-                    OnShootingAttack?.Invoke(unitActions.ActiveUnit);
+                    unitActions.State = UnitActions.UnitState.ExecutingAction;
+                    OnShootAnimation?.Invoke(unitActions.ActiveUnit);
 
-                    RaycastObstacles();
-                    ShootEffect();
-
+                    ExecuteAction();
                     unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
-                    unitActions.FinishAction();
-
-                    this.enabled = false;
-                    return;
                 }
             }
-            else Debug.Log("You can't attack this enemy!");
+            else Debug.Log("You can't attack this unit!");
         }
+    }
+
+    private async void ExecuteAction()
+    {
+        // wait for animation delay in millis
+        var animationDelay = 2000;
+        await System.Threading.Tasks.Task.Delay(animationDelay);
+
+        RaycastObstacles();
+        ShootCalculation();
+
+        hitTargetEvent = true;
+
+        while (hitTargetEvent)
+            await System.Threading.Tasks.Task.Yield();
+
+        if (isTargetWounded)
+            targetUnit.GetDamage(1);
+
+        unitActions.FinishAction();
+        this.enabled = false;
     }
 
     private void RaycastObstacles()
@@ -116,14 +151,14 @@ public class RangeAttack : MonoBehaviour
         obstacles.Sort((a, b) => a.obstacleDistance.CompareTo(b.obstacleDistance));
     }
 
-    private void ShootEffect()
+    private void ShootCalculation()
     {
         // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
         var hitChance = 100 - (15 * obstacles.Count - 1) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, targetUnit.transform.position)));
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = (hitResult < hitChance);
 
-        Debug.Log($"{unitActions.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
+        //Debug.Log($"{unitActions.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
 
         if (hitTarget)
         {
@@ -131,10 +166,29 @@ public class RangeAttack : MonoBehaviour
             if (woundTarget)
             {
                 // do something when target has been wounded
-                targetUnit.GetDamage(1);
+                isTargetWounded = true;
+                //targetUnit.GetDamage(1);
             }
         }
+        InstantiateteProjectile(hitTarget);
     }
+
+    private void InstantiateteProjectile(bool getHit)
+    {
+        var offset = Vector3.up;
+        var activeUnit = unitActions.ActiveUnit;
+
+        var projectile = Instantiate(activeUnit.Wargear.rangeWeapon.arrowPrefab,
+            activeUnit.transform.position + offset, activeUnit.transform.rotation);
+
+        var projectileComponent = projectile.GetComponent<Projectile>();
+        projectileComponent.startPoint = unitActions.ActiveUnit.transform.position + offset;
+
+        projectileComponent.targetPoint = (getHit) ? targetUnit.transform.position + offset :
+            targetUnit.transform.position + activeUnit.transform.forward * UnityEngine.Random.Range(-3, 10);
+    }
+
+    private void ReturnShootResult() => hitTargetEvent = false;
 
     private GridCell GetTargetNode()
     {

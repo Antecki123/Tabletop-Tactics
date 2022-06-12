@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Warrior of Minas Tirith
   m_EditorClassIdentifier: 
   unitName: Warrior of Minas Tirith
-  unitRace: 2
-  unitArmy: 7
+  unitArmy: 2
   unitType: 0
   unitHeroicTier: 0
   unitMove: 6
@@ -28,6 +27,6 @@ MonoBehaviour:
   unitCourage: 3
   unitWill: 0
   unitMight: 0
-  unitFate: 0
+  AIValue: 0
   unitModel: {fileID: 0}
   unitImage: {fileID: 21300000, guid: 725e7d47880647d4e881113f2218def7, type: 3}

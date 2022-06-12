@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
@@ -8,9 +7,17 @@ public class TurnManager : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private UnitActions unitActions;
     [SerializeField] private QueueBehavior queueBehavior;
+    [Space]
+    [SerializeField] private GameEvent OnNewTurn;
+    [SerializeField] private FloatVariable turnsCounter;
 
     [Header("Gameplay References")]
     [SerializeField] private Phase activePhase = Phase.Priority;
+
+    private void Start()
+    {
+        turnsCounter.value = 0;
+    }
 
     private void Update()
     {
@@ -32,6 +39,9 @@ public class TurnManager : MonoBehaviour
 
     private void PriorityPhase()
     {
+        turnsCounter.value++;
+        OnNewTurn?.Invoke();
+
         unitActions.enabled = false;
 
         queueBehavior.CreateNewQueue(FindObjectsOfType<Unit>());

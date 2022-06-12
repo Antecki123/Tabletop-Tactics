@@ -1,11 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class QueueBehavior : MonoBehaviour
+public class QueueBehavior : ScriptableObject
 {
-    [field: SerializeField] public List<Unit> UnitsQueue { get; private set; }
+    public List<Unit> UnitsQueue { get; private set; }
+    public Unit ActiveUnit { get => UnitsQueue.First();}
 
     private void OnEnable()
     {
@@ -15,7 +15,7 @@ public class QueueBehavior : MonoBehaviour
     private void OnDisable()
     {
         Unit.OnDeath -= RemoveUnitFromQueue;
-        UnitActions.OnFinishAction += RemoveUnitFromQueue;
+        UnitActions.OnFinishAction -= RemoveUnitFromQueue;
     }
 
     public void CreateNewQueue(Unit[] allUnits)

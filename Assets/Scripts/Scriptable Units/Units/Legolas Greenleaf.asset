@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Legolas Greenleaf
   m_EditorClassIdentifier: 
   unitName: Legolas Greenleaf
-  unitRace: 3
-  unitArmy: 6
+  unitArmy: 0
   unitType: 0
   unitHeroicTier: 2
   unitMove: 6
@@ -28,6 +27,6 @@ MonoBehaviour:
   unitCourage: 6
   unitWill: 3
   unitMight: 2
-  unitFate: 3
+  AIValue: 0
   unitModel: {fileID: 0}
   unitImage: {fileID: 21300000, guid: a0df683479254cb47a6a615e626174b4, type: 3}

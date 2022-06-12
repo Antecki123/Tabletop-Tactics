@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Orc Warrior
   m_EditorClassIdentifier: 
   unitName: Orc Warrior
-  unitRace: 11
-  unitArmy: 18
+  unitArmy: 1
   unitType: 0
   unitHeroicTier: 0
   unitMove: 6
@@ -28,6 +27,6 @@ MonoBehaviour:
   unitCourage: 2
   unitWill: 0
   unitMight: 0
-  unitFate: 0
+  AIValue: 0
   unitModel: {fileID: 0}
   unitImage: {fileID: 21300000, guid: 41cdd4119b424394ab3c2d17f15a158a, type: 3}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Wargear", menuName = "Scriptable Objects/New Range Weapon")]
+[CreateAssetMenu(fileName = "New Wargear", menuName = "Scriptable Objects/Wargear/New Range Weapon")]
 public class RangeWeapon : ScriptableObject
 {
     public enum WeaponType
@@ -12,4 +12,6 @@ public class RangeWeapon : ScriptableObject
     public WeaponType type;
     public int strength;
     public float range;
+    [Space]
+    public GameObject arrowPrefab;
 }

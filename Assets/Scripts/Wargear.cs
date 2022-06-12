@@ -3,17 +3,14 @@ using UnityEngine;
 [System.Serializable]
 public class Wargear
 {
-    public enum WeaponAttribute { None, SingleHandedWeapon, HandAndHalfHandedWeapon, TwoHandedWeapon }
-
     [Header("Weapons")]
     public RangeWeapon rangeWeapon;
     public CombatWeapon combatWeapon;
     [Space]
-    public WeaponAttribute weaponAttribute;
     public bool elvenMadeWeapon;
     public bool masterForgedWeapon;
 
-    [Header("Armor")]
+    [Header("Armour")]
     public Armour armour;
     public bool shield;
 

@@ -38,14 +38,14 @@ public class CastSpell : MonoBehaviour
     private void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(1) && unitActions.State ==  UnitActions.UnitState.Idle)
         {
             this.enabled = false;
             return;
         }
 
         // Find target (set pointer)
-        if ((targetNode = GetTargetNode()) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if ((targetNode = GetTargetNode()) && unitActions.State == UnitActions.UnitState.Idle)
         {
             OnFindingTarget?.Invoke(originNode, targetNode);
         }
@@ -55,7 +55,7 @@ public class CastSpell : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle)
         {
             print("Cast Spell");
         }

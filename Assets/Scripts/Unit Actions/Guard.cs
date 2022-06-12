@@ -5,7 +5,7 @@ public class Guard : MonoBehaviour
 {
     #region Actions
     // Guard action
-    public static Action<Unit> OnGuard;
+    public static Action<Unit> OnGuardAnimation;
     #endregion
 
     [Header("Component References")]
@@ -18,14 +18,18 @@ public class Guard : MonoBehaviour
         ExecuteAction();
     }
 
-    public void ExecuteAction()
+    public async void ExecuteAction()
     {
-        if (unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        var animationTime = 2000; //ms
+
+        if (unitActions.State == UnitActions.UnitState.Idle)
         {
-            unitActions.ActiveUnit.Action = Unit.CurrentAction.Guard;
+            unitActions.State = UnitActions.UnitState.ExecutingAction;
 
             //phaseAction.ActiveUnit.GuardAction();
-            OnGuard?.Invoke(unitActions.ActiveUnit);
+            OnGuardAnimation?.Invoke(unitActions.ActiveUnit);
+
+            await System.Threading.Tasks.Task.Delay(animationTime);
 
             unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
             unitActions.FinishAction();

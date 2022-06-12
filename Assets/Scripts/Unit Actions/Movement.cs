@@ -4,12 +4,11 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     #region Actions
-    // Unit changed his position
+    // Send info to grid about new unit position
     public static Action<Unit, GridCell> OnUnitChangePosition;
-    // New path has been found
-    public static Action OnNewPath;
-    // Clear action
-    public static Action OnClearAction;
+
+    // Movement animation
+    public static Action<Unit, bool> OnMovementAnimation;
     #endregion
 
     [Header("Component References")]
@@ -35,41 +34,52 @@ public class Movement : MonoBehaviour
         targetNode = null;
         lastNode = null;
 
-        OnClearAction?.Invoke();
+        VisualEfects.instace.MovementMarker?.TurnOffMarker();
+        VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
         GridManager.instance.gridBehaviour.ClearMovementValues();
     }
 
     private void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if (Input.GetMouseButtonDown(1) && unitActions.State == UnitActions.UnitState.Idle)
         {
+            VisualEfects.instace.MovementMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
             this.enabled = false;
             return;
         }
 
         // Find path (set visual path)
-        if ((targetNode = GetTargetNode()) && !targetNode.IsOccupied && unitActions.ActiveUnit.Action == Unit.CurrentAction.None)
+        if ((targetNode = GetTargetNode()) && !targetNode.IsOccupied && unitActions.State == UnitActions.UnitState.Idle)
         {
             if (targetNode != lastNode)
             {
                 lastNode = targetNode;
+
                 unitActions.pathfinding.FindPath(originNode, targetNode);
-                OnNewPath?.Invoke();
+
+                VisualEfects.instace.MovementMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.instace.PositionMarker?.TurnOnMarker(originNode, targetNode);
             }
         }
         else
         {
             lastNode = null;
-            OnClearAction?.Invoke();
+
+            VisualEfects.instace.MovementMarker?.TurnOffMarker();
+            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+
             return;
         }
 
         // Set destination and start movement
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.ActiveUnit.Action == Unit.CurrentAction.None &&
-            unitActions.pathfinding.CurrentPath.Count > 0 && targetNode.MovementValue > 0)
+        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && targetNode.MovementValue > 0 &&
+            unitActions.pathfinding.CurrentPath.Count > 0)
         {
-            unitActions.ActiveUnit.Action = Unit.CurrentAction.Movement;
+            unitActions.State = UnitActions.UnitState.ExecutingAction;
             UnitMovement();
 
             OnUnitChangePosition?.Invoke(unitActions.ActiveUnit, targetNode);
@@ -81,20 +91,20 @@ public class Movement : MonoBehaviour
     {
         var path = unitActions.pathfinding.CurrentPath;
         var unit = unitActions.ActiveUnit;
-        var velocity = 6f;
+        var velocity = 2f;
 
         for (int i = 1; i < path.Count; i++)
         {
             if (i < path.Count) unit.transform.LookAt(path[i]);
-            while (Vector3.Distance(unit.transform.position, path[i]) >= .3f)
+            while (Vector3.Distance(unit.transform.position, path[i]) >= .05f)
             {
-                //Debug.Log($"Distance to corner {i}: {Vector3.Distance(unit.transform.position, path[i])}.");
+                OnMovementAnimation?.Invoke(unit, true);
 
-                unit.transform.position = Vector3.Lerp(unit.transform.position, path[i], velocity * Time.deltaTime);
+                unit.transform.position = Vector3.MoveTowards(unit.transform.position, path[i], velocity * Time.deltaTime);
                 await System.Threading.Tasks.Task.Yield();
             }
-            //Debug.Log($"Corner {i} reached.");
         }
+        OnMovementAnimation?.Invoke(unit, false);
 
         path.Clear();
         unitActions.FinishAction();
