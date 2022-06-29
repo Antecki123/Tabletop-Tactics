@@ -8,11 +8,12 @@ public class GridManager : MonoBehaviour
     public GridBehaviour gridBehaviour;
 
     [Header("Grid Properties")]
-    [SerializeField] private Vector2Int gridDimensions;
     [SerializeField] private List<GridCell> gridNodes = new();
 
-    public Vector2Int GridDimensions { get => gridDimensions; set => gridDimensions = value; }
     public List<GridCell> GridNodes { get => gridNodes; }
+
+    [field: SerializeField] public List<GridCell> GridCellsList { get; set; }
+    [field: SerializeField] public Vector2Int GridDimensions { get; set; }
 
     private void Awake()
     {

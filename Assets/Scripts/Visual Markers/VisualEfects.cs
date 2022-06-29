@@ -39,6 +39,7 @@ public interface IVisualMarker
 
 public interface IGridHighlight
 {
-    public void TurnOnHighlight(int range);
+    public void TurnOnHighlight(GridCell startNode, int range);
+    public void TurnOnHighlightMovement();
     public void TurnOffHighlight();
 }

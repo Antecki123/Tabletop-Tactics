@@ -1,12 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-    [Header("Node Attributes")]
-    private LineRenderer line;
-    private List<GridCell> adjacentCells = new();
-
     #region A* Pathfinding
     public float GCost { get; set; }
     public float HCost { get; set; }
@@ -20,33 +17,27 @@ public class GridCell : MonoBehaviour
 
     #region PROPERTIES
     [field: SerializeField] public Unit Unit { get; set; }
-    [field: SerializeField] public GameObject Obstacle { get; set; }
+    //[field: SerializeField] public Obstacle Obstacle { get; set; }
     [field: SerializeField] public bool IsOccupied { get; set; }
     [field: SerializeField] public Vector2Int Coordinates { get; set; }
-    [field: SerializeField] public int MovementValue { get; set; }
+    [field: SerializeField] public int MovementValue { get; set; } = -1;
 
-    public List<GridCell> AdjacentCells { get => adjacentCells; private set => adjacentCells = value; }
+    [field: SerializeField] public HashSet<GridCell> AdjacentCells { get; private set; } = new();
     #endregion
 
-    private void Start()
-    {
-        line = GetComponent<LineRenderer>();
-        Invoke(nameof(GetAdjacentBlocks), 3);
+    private void Start() => StartCoroutine(GetAdjacentBlocks());
 
-        MovementValue = -1;
-    }
-
-    private void GetAdjacentBlocks()
+    private IEnumerator GetAdjacentBlocks()
     {
-        int gridMask = 1024;
-        float overlapRange = .75f;
+        var gridMask = 1024;
+        var overlapRange = .75f;
+
+        yield return new WaitForEndOfFrame();
 
         var overlappedBlocks = Physics.OverlapSphere(transform.position, overlapRange, gridMask);
-
         foreach (var block in overlappedBlocks)
             AdjacentCells.Add(block.GetComponent<GridCell>());
 
         AdjacentCells.Remove(this);
-        print("Node loaded.");
     }
 }

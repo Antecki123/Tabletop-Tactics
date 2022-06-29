@@ -63,11 +63,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitBaseStats: {fileID: 0}
   unitOwner: 0
-  action: 0
   wargear:
     rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
     combatWeapon: {fileID: 11400000, guid: decd17e7aff1ecf4cb049703230cbe46, type: 2}
-    weaponAttribute: 0
     elvenMadeWeapon: 0
     masterForgedWeapon: 0
     armour: {fileID: 11400000, guid: 5fd490ba61c097046a0a081b941b4fc8, type: 2}
@@ -89,6 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2ff3ece240633448f7941c80f117cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 7886891889458155068}
+  unit: {fileID: 4330575851187970572}
 --- !u!1001 &4330575851789792173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,5 +165,10 @@ PrefabInstance:
 --- !u!4 &4293041739896050758 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 27362f223cf0f764a952960caa126629, type: 3}
+  m_PrefabInstance: {fileID: 4330575851789792173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7886891889458155068 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 27362f223cf0f764a952960caa126629, type: 3}
   m_PrefabInstance: {fileID: 4330575851789792173}
   m_PrefabAsset: {fileID: 0}

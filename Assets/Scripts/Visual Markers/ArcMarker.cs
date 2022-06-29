@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class ArcMarker : MonoBehaviour , IVisualMarker
+public class ArcMarker : MonoBehaviour, IVisualMarker
 {
+    [Header("Component References")]
+    [SerializeField] private LineRenderer line;
+
     [Header("Range Action Arc Attributes")]
     [SerializeField, Range(1, 100)] private int resolution = 20;
 
-    private LineRenderer line;
-
     private GridCell originNode;
     private GridCell targetNode;
-
-    private void Start()
-    {
-        line = GetComponent<LineRenderer>();
-    }
 
     public void TurnOnMarker(GridCell origin, GridCell target)
     {
