@@ -10,21 +10,20 @@ public class UnitActions : MonoBehaviour
     public enum UnitState { Idle, ExecutingAction }
 
     [Header("Component References")]
-    [SerializeField] private QueueBehavior queueBehavior;
+    [SerializeField] private UnitsQueue unitsQueue;
     [SerializeField] internal AStarPathfinding pathfinding;
 
     [Header("UI References")]
     [SerializeField] private UIActionButtons UIActionButtons;
-    [Space]
 
     [Header("Actions States")]
-    private Movement movement;
-    private RangeAttack rangeAttack;
-    private MeleeAttack meleeAttack;
-    private Guard guard;
-    private CastSpell castSpell;
+    [SerializeField] private Movement movement;
+    [SerializeField] private RangeAttack rangeAttack;
+    [SerializeField] private MeleeAttack meleeAttack;
+    [SerializeField] private Guard guard;
+    [SerializeField] private CastSpell castSpell;
 
-    public Unit ActiveUnit { get => queueBehavior.UnitsQueue[0]; }
+    public Unit ActiveUnit { get => unitsQueue.ActiveUnit; }
     [field: SerializeField] public UnitState State { get; set; }
 
     private void OnEnable()
@@ -47,15 +46,6 @@ public class UnitActions : MonoBehaviour
         UIActionButtons.OnClickCastSpellAction -= CastSpell;
 
         UIActionButtons.OnClearAction -= ClearActions;
-    }
-
-    private void Start()
-    {
-        movement = GetComponent<Movement>();
-        rangeAttack = GetComponent<RangeAttack>();
-        meleeAttack = GetComponent<MeleeAttack>();
-        guard = GetComponent<Guard>();
-        castSpell = GetComponent<CastSpell>();
     }
 
     public void FinishAction()

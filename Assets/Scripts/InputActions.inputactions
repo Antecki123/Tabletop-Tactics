@@ -31,6 +31,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Left Mouse Button",
+                    "type": "Button",
+                    "id": "f615477e-0623-457a-873d-0998c1e57374",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Mouse Button",
+                    "type": "Button",
+                    "id": "a49ff686-2d6f-43e4-9cef-882066b32638",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -51,7 +69,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Horizontal Axis",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -62,7 +80,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Horizontal Axis",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -84,7 +102,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Vertical Axis",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -95,7 +113,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Vertical Axis",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -117,7 +135,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -128,22 +146,49 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard",
+                    "groups": "PC",
                     "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "74da8f97-8e5c-413f-a636-a4bc7fa03783",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Left Mouse Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ce5bb2df-c3c9-4557-a292-5be85c5ff09e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Right Mouse Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
     ],
     "controlSchemes": [
         {
-            "name": "Keyboard",
-            "bindingGroup": "Keyboard",
+            "name": "PC",
+            "bindingGroup": "PC",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
                     "isOptional": true,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
                     "isOR": false
                 }
             ]

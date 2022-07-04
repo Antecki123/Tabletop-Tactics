@@ -1,7 +1,13 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Component References")]
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private InputsManager inputs;
+
     [Header("Camera Settings")]
     [SerializeField, Range(1, 30)] private float panSpeed = 50f;
     [SerializeField, Range(1, 30)] private float scrollSpeed = 50f;
@@ -10,37 +16,27 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector2 mapBoundaryY;
     [SerializeField] private Vector2 mapBoundaryZ;
 
-    private float horizontalMovement;
-    private float verticalMovement;
-    private float scroll;
+    private void Start() => StartCoroutine(InitialSettings());
 
-    private InputActions inputActions;
-    private void OnEnable() => inputActions.Enable();
-    private void OnDisable() => inputActions.Disable();
-
-    private void Awake()
+    private IEnumerator InitialSettings()
     {
-        inputActions = new InputActions();
+        yield return new WaitForEndOfFrame();
 
-        inputActions.Gameplay_Battle.HorizontalAxis.started += ctx => horizontalMovement = ctx.ReadValue<float>();
-        inputActions.Gameplay_Battle.HorizontalAxis.canceled += ctx => horizontalMovement = 0.0f;
+        mapBoundaryX.x = 0.0f;
+        mapBoundaryX.y = gridManager.GridDimensions.x;
 
-        inputActions.Gameplay_Battle.VerticalAxis.started += ctx => verticalMovement = ctx.ReadValue<float>();
-        inputActions.Gameplay_Battle.VerticalAxis.canceled += ctx => verticalMovement = 0.0f;
-
-        inputActions.Gameplay_Battle.Scroll.started += ctx => scroll = ctx.ReadValue<float>();
-        inputActions.Gameplay_Battle.Scroll.canceled += ctx => scroll = 0.0f;
-
+        mapBoundaryZ.x = -5.0f;
+        mapBoundaryZ.y = gridManager.GridDimensions.y * .866f - 7.0f;
     }
 
     private void Update()
     {
         Vector3 position = transform.position;
 
-        position.x += panSpeed * horizontalMovement * Time.deltaTime;
-        position.z += panSpeed * verticalMovement * Time.deltaTime;
+        position.x += panSpeed * inputs.HorizontalMovement * Time.deltaTime;
+        position.z += panSpeed * inputs.VerticalMovement * Time.deltaTime;
 
-        position.y -= scrollSpeed * scroll * Time.deltaTime;
+        position.y -= scrollSpeed * inputs.Scroll * Time.deltaTime;
 
         position.x = Mathf.Clamp(position.x, min: mapBoundaryX.x, max: mapBoundaryX.y);
         position.y = Mathf.Clamp(position.y, min: mapBoundaryY.x, max: mapBoundaryY.y);

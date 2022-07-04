@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    public enum Phase { Priority, Actions, End }
+    public enum Phase { NewTurn, Actions, End }
 
     [Header("Component References")]
     [SerializeField] private UnitActions unitActions;
-    [SerializeField] private QueueBehavior queueBehavior;
+    [SerializeField] private UnitsQueue unitsQueue;
     [Space]
     [SerializeField] private GameEvent OnNewTurn;
     [SerializeField] private FloatVariable turnsCounter;
 
     [Header("Gameplay References")]
-    [SerializeField] private Phase activePhase = Phase.Priority;
+    [SerializeField] private Phase activePhase = Phase.NewTurn;
 
     private void Start()
     {
@@ -21,30 +21,27 @@ public class TurnManager : MonoBehaviour
 
     private void Update()
     {
-        switch (activePhase)
-        {
-            case Phase.Priority:
-                PriorityPhase();
-                break;
-            case Phase.Actions:
-                ActionsPhase();
-                break;
-            case Phase.End:
-                EndPhase();
-                break;
-            default:
-                break;
-        }
+        if (activePhase == Phase.NewTurn)
+            NewTurn();
+
+        else if (activePhase == Phase.Actions)
+            ActionsPhase();
+
+        else if (activePhase == Phase.End)
+            EndPhase();
     }
 
-    private void PriorityPhase()
+    private void NewTurn()
     {
+        // UI: turns counter++, new turn popup panel
+        // new units queue, 
+
         turnsCounter.value++;
-        OnNewTurn?.Invoke();
+        OnNewTurn.Invoke();
 
         unitActions.enabled = false;
 
-        queueBehavior.CreateNewQueue(FindObjectsOfType<Unit>());
+        unitsQueue.CreateNewQueue(FindObjectsOfType<Unit>());
 
         activePhase = Phase.Actions;
     }
@@ -53,7 +50,7 @@ public class TurnManager : MonoBehaviour
     {
         unitActions.enabled = true;
 
-        if (queueBehavior.UnitsQueue.Count == 0)
+        if (unitsQueue.UnitsList.Count == 0)
             activePhase = Phase.End;
     }
 
@@ -64,6 +61,6 @@ public class TurnManager : MonoBehaviour
         foreach (var unit in FindObjectsOfType<Unit>())
             unit.ResetStats();
 
-        activePhase = Phase.Priority;
+        activePhase = Phase.NewTurn;
     }
 }

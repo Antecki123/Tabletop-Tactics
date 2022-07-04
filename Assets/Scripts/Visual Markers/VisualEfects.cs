@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class VisualEfects : MonoBehaviour
 {
-    public static VisualEfects instace;
+    public static VisualEfects Instance;
 
     [Header("Markers References")]
     [SerializeField] private GameObject arcMarker;
@@ -24,8 +24,8 @@ public class VisualEfects : MonoBehaviour
 
     private void Awake()
     {
-        if (!instace)
-            instace = this;
+        if (!Instance)
+            Instance = this;
         else
             Destroy(gameObject);
     }

@@ -53,6 +53,24 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Left Mouse Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""f615477e-0623-457a-873d-0998c1e57374"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Mouse Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""a49ff686-2d6f-43e4-9cef-882066b32638"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -73,7 +91,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Horizontal Axis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -84,7 +102,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Horizontal Axis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -106,7 +124,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Vertical Axis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -117,7 +135,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Vertical Axis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -139,7 +157,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -150,22 +168,49 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard"",
+                    ""groups"": ""PC"",
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74da8f97-8e5c-413f-a636-a4bc7fa03783"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Left Mouse Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce5bb2df-c3c9-4557-a292-5be85c5ff09e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Right Mouse Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Keyboard"",
-            ""bindingGroup"": ""Keyboard"",
+            ""name"": ""PC"",
+            ""bindingGroup"": ""PC"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
                     ""isOptional"": true,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
                     ""isOR"": false
                 }
             ]
@@ -177,6 +222,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Gameplay_Battle_HorizontalAxis = m_Gameplay_Battle.FindAction("Horizontal Axis", throwIfNotFound: true);
         m_Gameplay_Battle_VerticalAxis = m_Gameplay_Battle.FindAction("Vertical Axis", throwIfNotFound: true);
         m_Gameplay_Battle_Scroll = m_Gameplay_Battle.FindAction("Scroll", throwIfNotFound: true);
+        m_Gameplay_Battle_LeftMouseButton = m_Gameplay_Battle.FindAction("Left Mouse Button", throwIfNotFound: true);
+        m_Gameplay_Battle_RightMouseButton = m_Gameplay_Battle.FindAction("Right Mouse Button", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -239,6 +286,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Battle_HorizontalAxis;
     private readonly InputAction m_Gameplay_Battle_VerticalAxis;
     private readonly InputAction m_Gameplay_Battle_Scroll;
+    private readonly InputAction m_Gameplay_Battle_LeftMouseButton;
+    private readonly InputAction m_Gameplay_Battle_RightMouseButton;
     public struct Gameplay_BattleActions
     {
         private @InputActions m_Wrapper;
@@ -246,6 +295,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @HorizontalAxis => m_Wrapper.m_Gameplay_Battle_HorizontalAxis;
         public InputAction @VerticalAxis => m_Wrapper.m_Gameplay_Battle_VerticalAxis;
         public InputAction @Scroll => m_Wrapper.m_Gameplay_Battle_Scroll;
+        public InputAction @LeftMouseButton => m_Wrapper.m_Gameplay_Battle_LeftMouseButton;
+        public InputAction @RightMouseButton => m_Wrapper.m_Gameplay_Battle_RightMouseButton;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay_Battle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -264,6 +315,12 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Scroll.started -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnScroll;
+                @LeftMouseButton.started -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnLeftMouseButton;
+                @LeftMouseButton.performed -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnLeftMouseButton;
+                @LeftMouseButton.canceled -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnLeftMouseButton;
+                @RightMouseButton.started -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnRightMouseButton;
+                @RightMouseButton.performed -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnRightMouseButton;
+                @RightMouseButton.canceled -= m_Wrapper.m_Gameplay_BattleActionsCallbackInterface.OnRightMouseButton;
             }
             m_Wrapper.m_Gameplay_BattleActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,17 +334,23 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @LeftMouseButton.started += instance.OnLeftMouseButton;
+                @LeftMouseButton.performed += instance.OnLeftMouseButton;
+                @LeftMouseButton.canceled += instance.OnLeftMouseButton;
+                @RightMouseButton.started += instance.OnRightMouseButton;
+                @RightMouseButton.performed += instance.OnRightMouseButton;
+                @RightMouseButton.canceled += instance.OnRightMouseButton;
             }
         }
     }
     public Gameplay_BattleActions @Gameplay_Battle => new Gameplay_BattleActions(this);
-    private int m_KeyboardSchemeIndex = -1;
-    public InputControlScheme KeyboardScheme
+    private int m_PCSchemeIndex = -1;
+    public InputControlScheme PCScheme
     {
         get
         {
-            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
-            return asset.controlSchemes[m_KeyboardSchemeIndex];
+            if (m_PCSchemeIndex == -1) m_PCSchemeIndex = asset.FindControlSchemeIndex("PC");
+            return asset.controlSchemes[m_PCSchemeIndex];
         }
     }
     public interface IGameplay_BattleActions
@@ -295,5 +358,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnHorizontalAxis(InputAction.CallbackContext context);
         void OnVerticalAxis(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnLeftMouseButton(InputAction.CallbackContext context);
+        void OnRightMouseButton(InputAction.CallbackContext context);
     }
 }

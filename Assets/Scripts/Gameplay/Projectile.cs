@@ -6,10 +6,10 @@ public class Projectile : MonoBehaviour
 {
     public static Action OnTargetHit;
 
+    [SerializeField] internal float velocity = 15f;
+    [Space]
     internal Vector3 startPoint;
     internal Vector3 targetPoint;
-    internal float velocity = 15f;
-    [Space]
     private List<Vector3> path = new();
 
     public void Start()

@@ -12,8 +12,11 @@ public class Movement : MonoBehaviour
     #endregion
 
     [Header("Component References")]
-    private UnitActions unitActions;
-    private Camera mainCamera;
+    [SerializeField] private UnitActions unitActions;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private InputsManager inputs;
+    [Space]
+    [SerializeField] private Camera mainCamera;
 
     private GridCell originNode;
     private GridCell targetNode;
@@ -21,12 +24,10 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
-        unitActions = GetComponent<UnitActions>();
-        mainCamera = Camera.main;
+        originNode = gridManager.GridCellsList.Find(o => o.Unit == unitActions.ActiveUnit);
 
-        originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
-
-        GridManager.instance.gridBehaviour.CalculateMaxMovementRange(originNode, unitActions.ActiveUnit.UnitMove);
+        gridManager.CalculateMaxMovementRange(originNode, unitActions.ActiveUnit.UnitMove);
+        VisualEfects.Instance.GridMovementRange.TurnOnHighlightMovement();
     }
     private void OnDisable()
     {
@@ -34,19 +35,20 @@ public class Movement : MonoBehaviour
         targetNode = null;
         lastNode = null;
 
-        VisualEfects.instace.MovementMarker?.TurnOffMarker();
-        VisualEfects.instace.PositionMarker?.TurnOffMarker();
+        VisualEfects.Instance.MovementMarker?.TurnOffMarker();
+        VisualEfects.Instance.PositionMarker?.TurnOffMarker();
+        VisualEfects.Instance.GridMovementRange?.TurnOffHighlight();
 
-        GridManager.instance.gridBehaviour.ClearMovementValues();
+        gridManager.ClearMovementValues();
     }
 
     private void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.State == UnitActions.UnitState.Idle)
+        if (inputs.RightMouseButton && unitActions.State == UnitActions.UnitState.Idle)
         {
-            VisualEfects.instace.MovementMarker?.TurnOffMarker();
-            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+            VisualEfects.Instance.MovementMarker?.TurnOffMarker();
+            VisualEfects.Instance.PositionMarker?.TurnOffMarker();
 
             this.enabled = false;
             return;
@@ -61,22 +63,22 @@ public class Movement : MonoBehaviour
 
                 unitActions.pathfinding.FindPath(originNode, targetNode);
 
-                VisualEfects.instace.MovementMarker?.TurnOnMarker(originNode, targetNode);
-                VisualEfects.instace.PositionMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.Instance.MovementMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.Instance.PositionMarker?.TurnOnMarker(originNode, targetNode);
             }
         }
         else
         {
             lastNode = null;
 
-            VisualEfects.instace.MovementMarker?.TurnOffMarker();
-            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+            VisualEfects.Instance.MovementMarker?.TurnOffMarker();
+            VisualEfects.Instance.PositionMarker?.TurnOffMarker();
 
             return;
         }
 
         // Set destination and start movement
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && targetNode.MovementValue > 0 &&
+        if (inputs.LeftMouseButton && GetTargetNode() == targetNode && targetNode.MovementValue > 0 &&
             unitActions.pathfinding.CurrentPath.Count > 0)
         {
             unitActions.State = UnitActions.UnitState.ExecutingAction;
@@ -113,7 +115,7 @@ public class Movement : MonoBehaviour
 
     private GridCell GetTargetNode()
     {
-        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f, 1024);
+        Physics.Raycast(mainCamera.ScreenPointToRay(inputs.MousePosition), out RaycastHit hit, 100f, 1024);
 
         if (hit.collider)
             return hit.collider.GetComponent<GridCell>();

@@ -3,16 +3,16 @@ using UnityEngine;
 public class ActiveUnitMarker : MonoBehaviour
 {
     [Header("Component References")]
-    [SerializeField] private QueueBehavior queue;
+    [SerializeField] private UnitsQueue queue;
     [SerializeField] private UnitActions actions;
     [Space]
     [SerializeField] private GameObject unitMarker;
 
     public void Update()
     {
-        if (queue.UnitsQueue.Count != 0 && actions.State != UnitActions.UnitState.ExecutingAction)
+        if (queue.UnitsList.Count != 0 && actions.State != UnitActions.UnitState.ExecutingAction)
         {
-            unitMarker.transform.position = queue.UnitsQueue[0].transform.position + Vector3.up * .2f;
+            unitMarker.transform.position = queue.ActiveUnit.transform.position + Vector3.up * .2f;
             unitMarker.SetActive(true);
         }
         else

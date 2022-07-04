@@ -1,25 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public static GridManager instance;
-    [Header("Grid Component References")]
-    public GridBehaviour gridBehaviour;
-
-    [Header("Grid Properties")]
-    [SerializeField] private List<GridCell> gridNodes = new();
-
-    public List<GridCell> GridNodes { get => gridNodes; }
-
     [field: SerializeField] public List<GridCell> GridCellsList { get; set; }
     [field: SerializeField] public Vector2Int GridDimensions { get; set; }
-
-    private void Awake()
-    {
-        if (!instance) instance = this;
-        else Destroy(this.gameObject);
-    }
 
     private void OnEnable()
     {
@@ -34,7 +20,7 @@ public class GridManager : MonoBehaviour
 
     private void UpdateUnitPosition(Unit movingUnit, GridCell newPosition)
     {
-        var oldPosition = gridNodes.Find(position => position.Unit == movingUnit);
+        var oldPosition = GridCellsList.Find(p => p.Unit == movingUnit);
 
         oldPosition.IsOccupied = false;
         oldPosition.Unit = null;
@@ -45,7 +31,7 @@ public class GridManager : MonoBehaviour
 
     private void RemoveUnitFromGrid(Unit removedUnit)
     {
-        var position = gridNodes.Find(pos => pos.Unit == removedUnit);
+        var position = GridCellsList.Find(p => p.Unit == removedUnit);
         position.Unit = null;
         position.IsOccupied = false;
     }
@@ -59,7 +45,7 @@ public class GridManager : MonoBehaviour
         {
             if (Physics.Raycast(node.transform.position + Vector3.down * .1f, Vector3.up, out RaycastHit hit))
             {
-                gridNodes.Remove(node);
+                GridCellsList.Remove(node);
                 Destroy(node.gameObject);
             }
         }
@@ -70,7 +56,7 @@ public class GridManager : MonoBehaviour
         var unitsLayer = 512;
         await System.Threading.Tasks.Task.Delay(500);
 
-        foreach (var node in gridNodes)
+        foreach (var node in GridCellsList)
         {
             if (Physics.Raycast(node.transform.position + Vector3.down * .1f, Vector3.up, out RaycastHit hit, 1f, unitsLayer))
             {
@@ -78,5 +64,37 @@ public class GridManager : MonoBehaviour
                 node.IsOccupied = true;
             }
         }
+    }
+
+    public void CalculateMaxMovementRange(GridCell startNode, int range)
+    {
+        var movementList = new List<GridCell>() { startNode };
+        var bufforList = new List<GridCell>();
+
+        ClearMovementValues();
+        startNode.MovementValue = 0;
+
+        for (int i = 1; i <= range; i++)
+        {
+            foreach (var node in movementList)
+            {
+                foreach (var adjacentCells in node.AdjacentCells.Where(a => !a.IsOccupied && a.MovementValue < 0))
+                {
+                    adjacentCells.MovementValue = i;
+                    bufforList.Add(adjacentCells);
+                }
+            }
+
+            foreach (var node in bufforList.Where(n => !movementList.Contains(n)))
+                movementList.Add(node);
+
+            bufforList.Clear();
+        }
+    }
+
+    public void ClearMovementValues()
+    {
+        foreach (var node in GridCellsList.Where(n => n.MovementValue >= 0))
+            node.MovementValue = -1;
     }
 }

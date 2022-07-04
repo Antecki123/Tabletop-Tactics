@@ -110,7 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0044db07e0902543a2e38e6ef49fb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPoint: {x: 0, y: 0, z: 0}
-  targetPoint: {x: 0, y: 0, z: 0}
-  velocity: 10
-  path: []
+  velocity: 25

@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class GridHighlight : MonoBehaviour, IGridHighlight
 {
+    [Header("Component References")]
+    [SerializeField] private GridManager gridManager;
+
     [ContextMenu("Turn Off Highlight")]
     public void TurnOffHighlight()
     {
-        var nodes = FindObjectsOfType<GridCell>();
+        var nodes = gridManager.GridCellsList;
 
         foreach (var node in nodes.Where(n => n.MovementValue > 0))
         {
@@ -28,7 +28,7 @@ public class GridHighlight : MonoBehaviour, IGridHighlight
     [ContextMenu("Highlight")]
     public void TurnOnHighlightMovement()
     {
-        var nodes = FindObjectsOfType<GridCell>();
+        var nodes = gridManager.GridCellsList;
 
         foreach (var node in nodes.Where(n => n.MovementValue > 0))
         {

@@ -15,8 +15,11 @@ public class CastSpell : MonoBehaviour
     #endregion
 
     [Header("Component References")]
-    private UnitActions unitActions;
-    private Camera mainCamera;
+    [SerializeField] private UnitActions unitActions;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private InputsManager inputs;
+    [Space]
+    [SerializeField] private Camera mainCamera;
 
     private GridCell originNode;
     private GridCell targetNode;
@@ -26,7 +29,7 @@ public class CastSpell : MonoBehaviour
         unitActions = GetComponent<UnitActions>();
         mainCamera = Camera.main;
 
-        originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
+        originNode = gridManager.GridCellsList.Find(n => n.Unit == unitActions.ActiveUnit);
     }
     private void OnDisable()
     {

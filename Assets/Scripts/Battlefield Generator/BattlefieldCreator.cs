@@ -41,7 +41,7 @@ public class BattlefieldCreator : MonoBehaviour
     {
         if (battlefieldComponents.Count > 0)
             battlefieldComponents.Dequeue().Execute();
-        //else
-        //turnManager.enabled = true;
+        else
+            turnManager.enabled = true;
     }
 }

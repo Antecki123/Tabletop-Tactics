@@ -29,10 +29,7 @@ public class SceneryBuilder : MonoBehaviour, IMapBuilder
         obstaclesToPlaceCount = gridManager.GridCellsList.Count * ObstaclesDensity * .01f;
 
         while (obstaclesToPlaceCount > 0)
-        {
-            print("WAITING FOR SCENERY.");
             InstantiateObstacle();
-        }
 
         Debug.Log($"SCENERY LOADED.");
         Response();
@@ -64,6 +61,7 @@ public class SceneryBuilder : MonoBehaviour, IMapBuilder
                     gridCell.Coordinates.x < gridManager.GridDimensions.x - padding)
                 {
                     gridCell.IsOccupied = true;
+                    gridCell.GetComponent<LineRenderer>().enabled = false; //TODO: LINE RENDERER DISAPPEAR RANDOMLY
                 }
                 else
                 {

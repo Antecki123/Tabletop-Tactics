@@ -6,11 +6,11 @@ using System.Linq;
 public class AIUnitController : MonoBehaviour
 {
     public Unit activeUnit;
-    public QueueBehavior queueBehavior;
+    public UnitsQueue unitsQueue;
 
     public void ExecuteAction()
     {
-        activeUnit = queueBehavior.ActiveUnit;
+        activeUnit = unitsQueue.ActiveUnit;
 
         // if unit has a range reapon
         if (activeUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None)

@@ -10,8 +10,14 @@ public class RangeAttack : MonoBehaviour
     #endregion
 
     [Header("Component References")]
-    private UnitActions unitActions;
-    private Camera mainCamera;
+    [SerializeField] private UnitActions unitActions;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private InputsManager inputs;
+    [Space]
+    [SerializeField] private Camera mainCamera;
+    [Space]
+    [SerializeField] private FloatVariable probability;
+    [SerializeField] private GameEvent updateProbability;
 
     private Unit targetUnit;
     private List<Obstacle> obstacles = new();
@@ -36,7 +42,7 @@ public class RangeAttack : MonoBehaviour
         unitActions = GetComponent<UnitActions>();
         mainCamera = Camera.main;
 
-        originNode = GridManager.instance.GridNodes.Find(n => n.Unit == unitActions.ActiveUnit);
+        originNode = gridManager.GridCellsList.Find(n => n.Unit == unitActions.ActiveUnit);
 
         Projectile.OnTargetHit += ReturnShootResult;
     }
@@ -50,8 +56,8 @@ public class RangeAttack : MonoBehaviour
         hitTargetEvent = false;
         isTargetWounded = false;
 
-        VisualEfects.instace.ArcMarker?.TurnOffMarker();
-        VisualEfects.instace.PositionMarker?.TurnOffMarker();
+        VisualEfects.Instance.ArcMarker?.TurnOffMarker();
+        VisualEfects.Instance.PositionMarker?.TurnOffMarker();
 
         Projectile.OnTargetHit -= ReturnShootResult;
     }
@@ -59,10 +65,10 @@ public class RangeAttack : MonoBehaviour
     public void Update()
     {
         // Clear action
-        if (Input.GetMouseButtonDown(1) && unitActions.State == UnitActions.UnitState.Idle)
+        if (inputs.RightMouseButton && unitActions.State == UnitActions.UnitState.Idle)
         {
-            VisualEfects.instace.ArcMarker?.TurnOffMarker();
-            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+            VisualEfects.Instance.ArcMarker?.TurnOffMarker();
+            VisualEfects.Instance.PositionMarker?.TurnOffMarker();
 
             this.enabled = false;
             return;
@@ -75,21 +81,21 @@ public class RangeAttack : MonoBehaviour
             {
                 lastNode = targetNode;
 
-                VisualEfects.instace.ArcMarker?.TurnOnMarker(originNode, targetNode);
-                VisualEfects.instace.PositionMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.Instance.ArcMarker?.TurnOnMarker(originNode, targetNode);
+                VisualEfects.Instance.PositionMarker?.TurnOnMarker(originNode, targetNode);
             }
         }
         else
         {
             lastNode = null;
 
-            VisualEfects.instace.ArcMarker?.TurnOffMarker();
-            VisualEfects.instace.PositionMarker?.TurnOffMarker();
+            VisualEfects.Instance.ArcMarker?.TurnOffMarker();
+            VisualEfects.Instance.PositionMarker?.TurnOffMarker();
             return;
         }
 
         // Attack target
-        if (Input.GetMouseButtonDown(0) && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle)
+        if (inputs.LeftMouseButton && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle)
         {
             if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
             {
@@ -156,7 +162,7 @@ public class RangeAttack : MonoBehaviour
         // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
         var hitChance = 100 - (15 * obstacles.Count - 1) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, targetUnit.transform.position)));
         var hitResult = UnityEngine.Random.Range(1, 101);
-        var hitTarget = (hitResult < hitChance);
+        var hitTarget = hitResult < hitChance;
 
         //Debug.Log($"{unitActions.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
 
@@ -170,6 +176,8 @@ public class RangeAttack : MonoBehaviour
                 //targetUnit.GetDamage(1);
             }
         }
+
+        probability.value = hitChance;
         InstantiateteProjectile(hitTarget);
     }
 
@@ -192,7 +200,7 @@ public class RangeAttack : MonoBehaviour
 
     private GridCell GetTargetNode()
     {
-        Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f, 1024);
+        Physics.Raycast(mainCamera.ScreenPointToRay(inputs.MousePosition), out RaycastHit hit, 100f, 1024);
 
         if (hit.collider)
             return hit.collider.GetComponent<GridCell>();

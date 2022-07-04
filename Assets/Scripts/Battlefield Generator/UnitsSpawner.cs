@@ -89,6 +89,7 @@ public class UnitsSpawner : MonoBehaviour, IMapBuilder
         {
             foreach (var slot in gridManager.GridCellsList
                 .Where(s => !s.IsOccupied && s.Coordinates.x == 0)
+                .Where(s => s.Coordinates.y % 2 == 0)
                 .Reverse())
             {
                 slotPosition = slot;
@@ -99,7 +100,7 @@ public class UnitsSpawner : MonoBehaviour, IMapBuilder
         {
             foreach (var slot in gridManager.GridCellsList
                 .Where(s => !s.IsOccupied && s.Coordinates.x == gridManager.GridDimensions.x - 1)
-                .Reverse())
+                .Where(s => s.Coordinates.y % 2 != 0))
             {
                 slotPosition = slot;
                 return slotPosition;
