@@ -425,8 +425,8 @@ MonoBehaviour:
   gridManager: {fileID: 104090215}
   inputs: {fileID: 436858051}
   mainCamera: {fileID: 1687258584}
-  probability: {fileID: 11400000, guid: 00235baca8dd0f149bae4a4ce31c69da, type: 2}
-  updateProbability: {fileID: 0}
+  hitProbability: {fileID: 11400000, guid: 00235baca8dd0f149bae4a4ce31c69da, type: 2}
+  updateProbability: {fileID: 11400000, guid: 3be288d131883294fa190275395e3943, type: 2}
 --- !u!114 &173733285
 MonoBehaviour:
   m_ObjectHideFlags: 0
