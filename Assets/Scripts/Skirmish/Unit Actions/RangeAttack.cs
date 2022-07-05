@@ -8,8 +8,6 @@ public class RangeAttack : MonoBehaviour
     #region Actions
     // Shoot Animation
     public static Action<Unit> OnShootAnimation;
-
-    //public static Action<bool> OnProbabilityCounterActive;
     #endregion
 
     [Header("Component References")]
@@ -36,6 +34,8 @@ public class RangeAttack : MonoBehaviour
 
         originNode = gridManager.GridCellsList.Find(n => n.Unit == unitActions.ActiveUnit);
 
+        VisualEfects.Instance.GridHighlight.TurnOnHighlightSimpleRange(originNode, (int)unitActions.ActiveUnit.Wargear.rangeWeapon.range);
+
         Projectile.OnTargetHit += ReturnShootResult;
     }
     private void OnDisable()
@@ -47,9 +47,9 @@ public class RangeAttack : MonoBehaviour
 
         VisualEfects.Instance.ArcMarker?.TurnOffMarker();
         VisualEfects.Instance.PositionMarker?.TurnOffMarker();
+        VisualEfects.Instance.GridHighlight.TurnOffHighlight();
 
         Projectile.OnTargetHit -= ReturnShootResult;
-        //OnProbabilityCounterActive?.Invoke(false);
     }
 
     private void Update()
@@ -63,7 +63,7 @@ public class RangeAttack : MonoBehaviour
 
         // Calculations
         if (unitActions.State == UnitActions.UnitState.Idle && (targetNode = GetTargetNode()) && targetNode.Unit &&
-            targetNode.Unit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
+            targetNode.Unit.UnitOwner != unitActions.ActiveUnit.UnitOwner && targetNode.BlockValue > 0)
         {
             if (targetNode != lastNode)
             {
@@ -85,7 +85,8 @@ public class RangeAttack : MonoBehaviour
         }
 
         // Attack target
-        if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle && GetTargetNode() == targetNode)
+        if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle && 
+            GetTargetNode() == targetNode && targetNode.BlockValue > 0)
         {
             if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None && !originNode.AdjacentCells.Contains(targetNode) &&
                 unitActions.ActiveUnit.Wargear.rangeWeapon.range >= Vector3.Distance(unitActions.ActiveUnit.transform.position, targetNode.Unit.transform.position))
@@ -104,7 +105,7 @@ public class RangeAttack : MonoBehaviour
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = hitResult < hitProbability.value;
 
-        var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
+        //var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
 
         // wait for animation delay in millis
         var animationDelay = 2000;
@@ -117,8 +118,15 @@ public class RangeAttack : MonoBehaviour
         while (hitTargetEvent)
             await Task.Yield();
 
-        if (woundTarget)
+        /*if (woundTarget)
+        {
             targetNode.Unit.GetDamage(1);
+            Debug.Log($"[{originNode.Unit.name}] Target wounded.");
+        }
+        else
+        {
+            Debug.Log($"[{originNode.Unit.name}] Attack blocked.");
+        }*/
 
         unitActions.FinishAction();
         this.enabled = false;
@@ -141,8 +149,7 @@ public class RangeAttack : MonoBehaviour
         }
 
         // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 2% per every distance unit
-        var hitChance = 100 - (15 * obstacles.Count - 1) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, targetNode.Unit.transform.position)));
-        //var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
+        var hitChance = 100 - (15 * obstacles.Count) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, targetNode.Unit.transform.position)));
 
         hitProbability.value = hitChance;
         updateProbability?.Invoke();

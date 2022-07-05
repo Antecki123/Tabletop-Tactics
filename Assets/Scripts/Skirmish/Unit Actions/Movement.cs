@@ -26,8 +26,8 @@ public class Movement : MonoBehaviour
     {
         originNode = gridManager.GridCellsList.Find(o => o.Unit == unitActions.ActiveUnit);
 
-        gridManager.CalculateMaxMovementRange(originNode, unitActions.ActiveUnit.UnitMove);
-        VisualEfects.Instance.GridMovementRange.TurnOnHighlightMovement();
+        VisualEfects.Instance.GridHighlight.TurnOnHighlightMovement(originNode,
+            unitActions.ActiveUnit.UnitMove, unitActions.ActiveUnit.UnitActions);
     }
     private void OnDisable()
     {
@@ -37,7 +37,7 @@ public class Movement : MonoBehaviour
 
         VisualEfects.Instance.MovementMarker?.TurnOffMarker();
         VisualEfects.Instance.PositionMarker?.TurnOffMarker();
-        VisualEfects.Instance.GridMovementRange?.TurnOffHighlight();
+        VisualEfects.Instance.GridHighlight?.TurnOffHighlight();
 
         gridManager.ClearMovementValues();
     }
@@ -47,9 +47,6 @@ public class Movement : MonoBehaviour
         // Clear action
         if (inputs.RightMouseButton && unitActions.State == UnitActions.UnitState.Idle)
         {
-            VisualEfects.Instance.MovementMarker?.TurnOffMarker();
-            VisualEfects.Instance.PositionMarker?.TurnOffMarker();
-
             this.enabled = false;
             return;
         }
@@ -78,18 +75,20 @@ public class Movement : MonoBehaviour
         }
 
         // Set destination and start movement
-        if (inputs.LeftMouseButton && GetTargetNode() == targetNode && targetNode.MovementValue > 0 &&
-            unitActions.pathfinding.CurrentPath.Count > 0)
+        if (inputs.LeftMouseButton && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle &&
+            targetNode.BlockValue > 0 && unitActions.pathfinding.CurrentPath.Count > 0)
         {
             unitActions.State = UnitActions.UnitState.ExecutingAction;
-            UnitMovement();
+            ExecuteAction();
 
             OnUnitChangePosition?.Invoke(unitActions.ActiveUnit, targetNode);
-            unitActions.ActiveUnit.ExecuteAction(1);
+
+            var actionPoints = (targetNode.BlockValue <= unitActions.ActiveUnit.UnitMove) ? 1 : unitActions.ActiveUnit.UnitActions;
+            unitActions.ActiveUnit.ExecuteAction(actionPoints);
         }
     }
 
-    private async void UnitMovement()
+    private async void ExecuteAction()
     {
         var path = unitActions.pathfinding.CurrentPath;
         var unit = unitActions.ActiveUnit;

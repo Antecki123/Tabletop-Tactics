@@ -17,10 +17,9 @@ public class GridCell : MonoBehaviour
 
     #region PROPERTIES
     [field: SerializeField] public Unit Unit { get; set; }
-    //[field: SerializeField] public Obstacle Obstacle { get; set; }
     [field: SerializeField] public bool IsOccupied { get; set; }
     [field: SerializeField] public Vector2Int Coordinates { get; set; }
-    [field: SerializeField] public int MovementValue { get; set; } = -1;
+    [field: SerializeField] public int BlockValue { get; set; } = -1;
 
     [field: SerializeField] public HashSet<GridCell> AdjacentCells { get; private set; } = new();
     #endregion

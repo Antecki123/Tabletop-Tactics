@@ -36,51 +36,21 @@ public class GridManager : MonoBehaviour
         position.IsOccupied = false;
     }
 
-    public async void UpdateObstaclesOnGrid()
-    {
-        await System.Threading.Tasks.Task.Delay(500);
-
-        var nodesList = FindObjectsOfType<GridCell>();
-        foreach (var node in nodesList)
-        {
-            if (Physics.Raycast(node.transform.position + Vector3.down * .1f, Vector3.up, out RaycastHit hit))
-            {
-                GridCellsList.Remove(node);
-                Destroy(node.gameObject);
-            }
-        }
-    }
-
-    public async void UpdateUnitsOnGrid()
-    {
-        var unitsLayer = 512;
-        await System.Threading.Tasks.Task.Delay(500);
-
-        foreach (var node in GridCellsList)
-        {
-            if (Physics.Raycast(node.transform.position + Vector3.down * .1f, Vector3.up, out RaycastHit hit, 1f, unitsLayer))
-            {
-                node.Unit = hit.collider.GetComponent<Unit>();
-                node.IsOccupied = true;
-            }
-        }
-    }
-
-    public void CalculateMaxMovementRange(GridCell startNode, int range)
+    public void CalculateMovementRange(GridCell startNode, int range)
     {
         var movementList = new List<GridCell>() { startNode };
         var bufforList = new List<GridCell>();
 
         ClearMovementValues();
-        startNode.MovementValue = 0;
+        startNode.BlockValue = 0;
 
         for (int i = 1; i <= range; i++)
         {
             foreach (var node in movementList)
             {
-                foreach (var adjacentCells in node.AdjacentCells.Where(a => !a.IsOccupied && a.MovementValue < 0))
+                foreach (var adjacentCells in node.AdjacentCells.Where(a => !a.IsOccupied && a.BlockValue < 0))
                 {
-                    adjacentCells.MovementValue = i;
+                    adjacentCells.BlockValue = i;
                     bufforList.Add(adjacentCells);
                 }
             }
@@ -92,9 +62,35 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void CalculateMaxRange(GridCell startNode, int range)
+    {
+        var rangeList = new List<GridCell>() { startNode };
+        var bufforList = new List<GridCell>();
+
+        ClearMovementValues();
+        startNode.BlockValue = 0;
+
+        for (int i = 1; i <= range; i++)
+        {
+            foreach (var node in rangeList)
+            {
+                foreach (var adjacentCells in node.AdjacentCells.Where(a => a.BlockValue < 0))
+                {
+                    adjacentCells.BlockValue = i;
+                    bufforList.Add(adjacentCells);
+                }
+            }
+
+            foreach (var node in bufforList.Where(n => !rangeList.Contains(n)))
+                rangeList.Add(node);
+
+            bufforList.Clear();
+        }
+    }
+
     public void ClearMovementValues()
     {
-        foreach (var node in GridCellsList.Where(n => n.MovementValue >= 0))
-            node.MovementValue = -1;
+        foreach (var node in GridCellsList.Where(n => n.BlockValue >= 0))
+            node.BlockValue = -1;
     }
 }

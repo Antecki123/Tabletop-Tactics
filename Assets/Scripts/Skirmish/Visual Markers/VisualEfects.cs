@@ -10,16 +10,14 @@ public class VisualEfects : MonoBehaviour
     [SerializeField] private GameObject positionMarker;
     [Space]
     [Header("Grid Highlights")]
-    [SerializeField] private GameObject gridMovementRange;
-    [SerializeField] private GameObject gridRange;
+    [SerializeField] private GameObject gridHighlight;
 
     #region Properties
     public IVisualMarker ArcMarker { get => arcMarker.GetComponent<IVisualMarker>(); }
     public IVisualMarker MovementMarker { get => movementMarker.GetComponent<IVisualMarker>(); }
     public IVisualMarker PositionMarker { get => positionMarker.GetComponent<IVisualMarker>(); }
 
-    public IGridHighlight GridMovementRange { get => gridMovementRange.GetComponent<IGridHighlight>(); }
-    public IGridHighlight GridRange { get => gridRange.GetComponent<IGridHighlight>(); }
+    public IGridHighlight GridHighlight { get => gridHighlight.GetComponent<IGridHighlight>(); }
     #endregion
 
     private void Awake()
@@ -39,7 +37,7 @@ public interface IVisualMarker
 
 public interface IGridHighlight
 {
-    public void TurnOnHighlight(GridCell startNode, int range);
-    public void TurnOnHighlightMovement();
+    public void TurnOnHighlightSimpleRange(GridCell startNode, int range);
+    public void TurnOnHighlightMovement(GridCell startNode, int range, int actions);
     public void TurnOffHighlight();
 }
