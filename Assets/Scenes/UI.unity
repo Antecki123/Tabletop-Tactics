@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 255955455}
   - component: {fileID: 255955457}
   - component: {fileID: 255955456}
-  - component: {fileID: 255955458}
+  - component: {fileID: 255955460}
   - component: {fileID: 255955459}
   m_Layer: 5
   m_Name: Turn Counter
@@ -203,20 +203,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255955454}
   m_CullTransparentMesh: 1
---- !u!114 &255955458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 255955454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cab181deda96054d8eadbf9aa89dd97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  counterValue: {fileID: 11400000, guid: 6cb693a3efdc7f145b1d741fa11b95fe, type: 2}
-  counterText: {fileID: 1237777260}
 --- !u!114 &255955459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,9 +219,9 @@ MonoBehaviour:
   unityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 255955458}
-        m_TargetAssemblyTypeName: UITurnCounter, Assembly-CSharp
-        m_MethodName: UpdateCounter
+      - m_Target: {fileID: 255955460}
+        m_TargetAssemblyTypeName: UIValueDisplay, Assembly-CSharp
+        m_MethodName: UpdateValue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -245,6 +231,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &255955460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255955454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe70fd1356409204d934c9f5f624ffa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1237777260}
+  variable: {fileID: 11400000, guid: 6cb693a3efdc7f145b1d741fa11b95fe, type: 2}
 --- !u!1 &485991497
 GameObject:
   m_ObjectHideFlags: 0
