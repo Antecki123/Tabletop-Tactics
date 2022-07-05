@@ -712,8 +712,8 @@ GameObject:
   - component: {fileID: 621459353}
   - component: {fileID: 621459357}
   - component: {fileID: 621459356}
-  - component: {fileID: 621459355}
-  - component: {fileID: 621459354}
+  - component: {fileID: 621459358}
+  - component: {fileID: 621459359}
   m_Layer: 5
   m_Name: Hit Probability
   m_TagString: Untagged
@@ -744,48 +744,6 @@ RectTransform:
   m_AnchoredPosition: {x: -30, y: 100}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 1, y: 0}
---- !u!114 &621459354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621459352}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f719eda455f9fb845b0ebd71772f3544, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameEvent: {fileID: 0}
-  unityEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 621459355}
-        m_TargetAssemblyTypeName: UITurnCounter, Assembly-CSharp
-        m_MethodName: UpdateCounter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &621459355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621459352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cab181deda96054d8eadbf9aa89dd97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  counterValue: {fileID: 11400000, guid: 00235baca8dd0f149bae4a4ce31c69da, type: 2}
-  counterText: {fileID: 1998813465}
 --- !u!114 &621459356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -824,6 +782,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621459352}
   m_CullTransparentMesh: 1
+--- !u!114 &621459358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621459352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe70fd1356409204d934c9f5f624ffa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1998813465}
+  variable: {fileID: 11400000, guid: 00235baca8dd0f149bae4a4ce31c69da, type: 2}
+--- !u!114 &621459359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621459352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f719eda455f9fb845b0ebd71772f3544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 3be288d131883294fa190275395e3943, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 621459358}
+        m_TargetAssemblyTypeName: UIValueDisplay, Assembly-CSharp
+        m_MethodName: UpdateValue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &670340430
 GameObject:
   m_ObjectHideFlags: 0
