@@ -328,8 +328,7 @@ MonoBehaviour:
   arcMarker: {fileID: 880684450}
   movementMarker: {fileID: 999678777}
   positionMarker: {fileID: 1090774281}
-  gridMovementRange: {fileID: 1874191717}
-  gridRange: {fileID: 1874191717}
+  gridHighlight: {fileID: 1874191717}
 --- !u!4 &111071021 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869555021460592, guid: 5301afbcc2367b5469f618258a227b39, type: 3}
@@ -705,7 +704,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &515870627
 Transform:
   m_ObjectHideFlags: 0
@@ -2586,7 +2585,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1790957982
 Transform:
   m_ObjectHideFlags: 0
@@ -2955,7 +2954,7 @@ MonoBehaviour:
   - {fileID: 1422430520233207103, guid: 91ea78c230507604fb548765c2475f91, type: 3}
   - {fileID: 6882809117363744571, guid: 00541ddff025dcc40a91732230df78dd, type: 3}
   - {fileID: 723161889629026765, guid: ce53276ed79db4f4088d98e784e21ec1, type: 3}
-  <ObstaclesDensity>k__BackingField: 7
+  <ObstaclesDensity>k__BackingField: 4
 --- !u!114 &1882879079
 MonoBehaviour:
   m_ObjectHideFlags: 0
