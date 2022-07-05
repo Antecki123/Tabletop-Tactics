@@ -28,7 +28,6 @@ public class RangeAttack : MonoBehaviour
     private GridCell lastNode;
 
     private bool hitTargetEvent = false;
-    private bool isTargetWounded = false;
 
     private void OnEnable()
     {
@@ -45,7 +44,6 @@ public class RangeAttack : MonoBehaviour
         targetNode = null;
 
         hitTargetEvent = false;
-        isTargetWounded = false;
 
         VisualEfects.Instance.ArcMarker?.TurnOffMarker();
         VisualEfects.Instance.PositionMarker?.TurnOffMarker();
@@ -106,6 +104,8 @@ public class RangeAttack : MonoBehaviour
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = hitResult < hitProbability.value;
 
+        var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
+
         // wait for animation delay in millis
         var animationDelay = 2000;
         await Task.Delay(animationDelay);
@@ -117,7 +117,7 @@ public class RangeAttack : MonoBehaviour
         while (hitTargetEvent)
             await Task.Yield();
 
-        if (isTargetWounded)
+        if (woundTarget)
             targetNode.Unit.GetDamage(1);
 
         unitActions.FinishAction();
