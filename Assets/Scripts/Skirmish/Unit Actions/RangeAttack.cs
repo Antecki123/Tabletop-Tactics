@@ -29,9 +29,6 @@ public class RangeAttack : MonoBehaviour
 
     private void OnEnable()
     {
-        unitActions = GetComponent<UnitActions>();
-        mainCamera = Camera.main;
-
         originNode = gridManager.GridCellsList.Find(n => n.Unit == unitActions.ActiveUnit);
 
         VisualEfects.Instance.GridHighlight.TurnOnHighlightSimpleRange(originNode, (int)unitActions.ActiveUnit.Wargear.rangeWeapon.range);
@@ -85,7 +82,7 @@ public class RangeAttack : MonoBehaviour
         }
 
         // Attack target
-        if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle && 
+        if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle &&
             GetTargetNode() == targetNode && targetNode.BlockValue > 0)
         {
             if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None && !originNode.AdjacentCells.Contains(targetNode) &&
@@ -105,7 +102,7 @@ public class RangeAttack : MonoBehaviour
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = hitResult < hitProbability.value;
 
-        //var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
+        var woundTarget = WoundTest.GetWoundTest(targetNode.Unit.GetDefence(), unitActions.ActiveUnit.Wargear.rangeWeapon.strength);
 
         // wait for animation delay in millis
         var animationDelay = 2000;
@@ -118,15 +115,18 @@ public class RangeAttack : MonoBehaviour
         while (hitTargetEvent)
             await Task.Yield();
 
-        /*if (woundTarget)
+        if (hitTarget)
         {
-            targetNode.Unit.GetDamage(1);
-            Debug.Log($"[{originNode.Unit.name}] Target wounded.");
+            if (woundTarget)
+            {
+                targetNode.Unit.GetDamage(1);
+                Debug.Log($"[{originNode.Unit.name}] Target wounded.");
+            }
+            else
+            {
+                Debug.Log($"[{originNode.Unit.name}] Attack blocked.");
+            }
         }
-        else
-        {
-            Debug.Log($"[{originNode.Unit.name}] Attack blocked.");
-        }*/
 
         unitActions.FinishAction();
         this.enabled = false;
@@ -148,7 +148,7 @@ public class RangeAttack : MonoBehaviour
             obstacles.Remove(targetNode.Unit.gameObject);
         }
 
-        // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 2% per every distance unit
+        // Calculating range attack chance: 100% - 15% per every obstacle on projectile's way, - 1% per every distance unit
         var hitChance = 100 - (15 * obstacles.Count) - (1 * Mathf.Round(Vector3.Distance(unitActions.ActiveUnit.transform.position, targetNode.Unit.transform.position)));
 
         hitProbability.value = hitChance;
