@@ -6,9 +6,7 @@ public class Wargear
     [Header("Weapons")]
     public RangeWeapon rangeWeapon;
     public CombatWeapon combatWeapon;
-    [Space]
-    public bool elvenMadeWeapon;
-    public bool masterForgedWeapon;
+    public CombatWeapon secondaryWeapon;
 
     [Header("Armour")]
     public Armour armour;
@@ -16,8 +14,9 @@ public class Wargear
 
     [Header("Equipment")]
     public bool banner;
-    public bool elvenCloak;
     public bool warDrum;
     public bool warHorn;
+    public bool firstAid;
+
     public bool theOneRing;
 }

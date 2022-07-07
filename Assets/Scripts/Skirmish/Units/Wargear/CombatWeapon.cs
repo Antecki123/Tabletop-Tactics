@@ -8,6 +8,7 @@ public class CombatWeapon : ScriptableObject
     public WeaponType type;
     public int strength;
     public int range;
+    public float weight;
     [Space]
     public GameObject weaponPrefab;
 }

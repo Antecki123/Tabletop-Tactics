@@ -12,6 +12,8 @@ public class RangeWeapon : ScriptableObject
     public WeaponType type;
     public int strength;
     public float range;
+    public float weight;
     [Space]
+    public GameObject weaponPrefab;
     public GameObject arrowPrefab;
 }

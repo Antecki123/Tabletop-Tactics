@@ -7,4 +7,7 @@ public class Armour : ScriptableObject
 
     public ArmourType type;
     public int defence;
+    public float weight;
+    [Space]
+    public GameObject armourPrefab;
 }

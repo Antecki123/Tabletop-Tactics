@@ -30,13 +30,13 @@ public class UnitStats : ScriptableObject
     [Header("Unit Statistics")]
     [Tooltip("Available range of movement.")] public int unitMove;
     [Tooltip("Determines the priority of movement for a given turn")] public int unitSpeed;
+    [Tooltip("Remaining amonut of actions.")] public int unitActions;
 
     [Tooltip("Close range fight skill. Value used in Hit Test.")] public int unitFightSkill;
     [Tooltip("Range attacks skill. Value used in Hit Test.")] public int unitArcherySkill;
     [Tooltip("Strength of the unit. Value used in Wound Test.")] public int unitStrength;
     [Tooltip("Defence of the unit. Value used in Wound Test.")] public int unitDefence;
 
-    [Tooltip("Remaining amonut of actions.")] public int unitActions;
     [Tooltip("Points of health.")] public int unitWounds;
     [Tooltip("Required for Test of Courage.")] public int unitCourage;
     [Space]
