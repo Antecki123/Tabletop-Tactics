@@ -15,16 +15,26 @@ public class UnitActions : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private UIActionButtons UIActionButtons;
+    [Space]
+    [SerializeField] private GameEvent OnUpdateActions;
+    [Space]
+    [SerializeField] private BoolVariable movementButtonAvailable;
+    [SerializeField] private BoolVariable rangeAttackButtonAvailable;
+    [SerializeField] private BoolVariable singleAttackButtonAvailable;
+    [SerializeField] private BoolVariable guardButtonAvailable;
+    //[SerializeField] private BoolVariable healButtonAvailable;
 
     [Header("Actions States")]
     [SerializeField] private Movement movement;
     [SerializeField] private RangeAttack rangeAttack;
-    [SerializeField] private MeleeAttack meleeAttack;
+    [SerializeField] private SingleAttack singleAttack;
+    //[SerializeField] private MultipleAttack multipleAttack;
     [SerializeField] private Guard guard;
-    [SerializeField] private CastSpell castSpell;
+    [SerializeField] private Heal heal;
+    //[SerializeField] private Berserk berserk;
 
     public Unit ActiveUnit { get => unitsQueue.ActiveUnit; }
-    [field: SerializeField] public UnitState State { get; set; }
+    public UnitState State { get; set; }
 
     private void OnEnable()
     {
@@ -57,20 +67,29 @@ public class UnitActions : MonoBehaviour
             OnFinishAction?.Invoke(ActiveUnit);
     }
 
+    [ContextMenu("EnableAvailableActions")]
+    public void EnableAvailableActions()
+    {
+        movementButtonAvailable.value = ActiveUnit.UnitActions > 0;
+        rangeAttackButtonAvailable.value = ActiveUnit.UnitActions > 0 && ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None;
+        
+        OnUpdateActions?.Invoke();
+    }
+
     #region UI Action Buttons
     public void Movement() => movement.enabled = (State == UnitState.Idle);
     public void RangeAttack() => rangeAttack.enabled = (State == UnitState.Idle);
-    public void MeleeAttack() => meleeAttack.enabled = (State == UnitState.Idle);
+    public void MeleeAttack() => singleAttack.enabled = (State == UnitState.Idle);
     public void Guard() => guard.enabled = (State == UnitState.Idle);
-    public void CastSpell() => castSpell.enabled = (State == UnitState.Idle);
+    public void CastSpell() => heal.enabled = (State == UnitState.Idle);
 
     public void ClearActions()
     {
         movement.enabled = false;
         rangeAttack.enabled = false;
-        meleeAttack.enabled = false;
+        singleAttack.enabled = false;
         guard.enabled = false;
-        castSpell.enabled = false;
+        heal.enabled = false;
     }
     #endregion
 }

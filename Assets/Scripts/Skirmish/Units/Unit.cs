@@ -9,62 +9,49 @@ public class Unit : MonoBehaviour
 
     public enum Player { Player1, Player2, AI }
 
-    [Header("Unit Statistics")]
-    private int unitMove;
-    private int unitSpeed;
-
-    private int unitFightSkill;
-    private int unitArcherySkill;
-    private int unitStrength;
-    private int unitDefence;
-
-    private int unitActions;
-    private int unitWounds;
-    private int unitCourage;
-
-    private int unitWill;
-    private int unitMight;
-
     #region PROPERTIES
     [field: SerializeField] public UnitStats UnitBaseStats { get; internal set; }
     [field: SerializeField] public Player UnitOwner { get; internal set; }
     [field: SerializeField] public Wargear Wargear { get; internal set; }
 
-    public int UnitMove { get => unitMove; }
-    public int UnitSpeed { get => unitSpeed; }
+    public int UnitMove { get; private set; }
+    public int UnitSpeed { get; private set; }
+    public int UnitActions { get; private set; }
 
-    public int UnitActions { get => unitActions; }
-    public int UnitWounds { get => unitWounds; }
-    public int UnitCourage { get => unitCourage; }
+    public int UnitFightSkill { get; private set; }
+    public int UnitArcherySkill { get; private set; }
+    public int UnitStrength { get; private set; }
+    public int UnitDefence { get; private set; }
 
-    public int UnitWill { get => unitWill; }
-    public int UnitMight { get => unitMight; }
+    public int UnitWounds { get; private set; }
+    public int UnitCourage { get; private set; }
+
+    public int UnitWill { get; private set; }
+    public int UnitMight { get; private set; }
     #endregion
 
     private void Start()
     {
         this.name = UnitBaseStats.name;
-        unitWounds = UnitBaseStats.unitWounds;
+        UnitWounds = UnitBaseStats.unitWounds;
 
         ResetStats();
     }
 
     public void ResetStats()
     {
-        unitMove = UnitBaseStats.unitMove;
-        unitSpeed = UnitBaseStats.unitSpeed;
-        unitActions = UnitBaseStats.unitActions;
+        UnitMove = UnitBaseStats.unitMove;
+        UnitSpeed = UnitBaseStats.unitSpeed;
+        UnitActions = UnitBaseStats.unitActions;
+        
+        UnitFightSkill = UnitBaseStats.unitFightSkill;
+        UnitArcherySkill = UnitBaseStats.unitArcherySkill;
+        UnitStrength = UnitBaseStats.unitStrength;
+        UnitDefence = UnitBaseStats.unitDefence;
 
-        unitFightSkill = UnitBaseStats.unitFightSkill;
-        unitArcherySkill = UnitBaseStats.unitArcherySkill;
-        unitStrength = UnitBaseStats.unitStrength;
-        unitDefence = UnitBaseStats.unitDefence;
-
-        unitActions = UnitBaseStats.unitActions;
-        unitCourage = UnitBaseStats.unitCourage;
-
-        unitWill = UnitBaseStats.unitWill;
-        unitMight = UnitBaseStats.unitMight;
+        UnitCourage = UnitBaseStats.unitCourage;
+        UnitWill = UnitBaseStats.unitWill;
+        UnitMight = UnitBaseStats.unitMight;
     }
 
 
@@ -74,7 +61,7 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetDefence()
     {
-        var defence = unitDefence + Wargear.armour.defence;
+        var defence = UnitDefence + Wargear.armour.defence;
         return defence;
     }
 
@@ -84,7 +71,7 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetStrenght()
     {
-        var strenght = unitStrength + Wargear.combatWeapon.strength;
+        var strenght = UnitStrength + Wargear.combatWeapon.strength;
         return strenght;
     }
 
@@ -94,7 +81,7 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetMeleeFight()
     {
-        var meleeFight = unitFightSkill;
+        var meleeFight = UnitFightSkill;
         return meleeFight;
     }
 
@@ -104,16 +91,15 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetArcherySkill()
     {
-        var archerySkill = unitArcherySkill;
+        var archerySkill = UnitArcherySkill;
         return archerySkill;
     }
-
 
     /// <summary>
     /// Subtract action points after performing an action.
     /// </summary>
     /// <param name="actionPoints"></param>
-    public void ExecuteAction(int actionPoints) => unitActions -= actionPoints;
+    public void ExecuteAction(int actionPoints) => UnitActions -= actionPoints;
 
     /// <summary>
     /// Updates the health value and checks if the unit has survived
@@ -121,9 +107,9 @@ public class Unit : MonoBehaviour
     /// <param name="damage"></param>
     public void GetDamage(int damage)
     {
-        unitWounds -= damage;
+        UnitWounds -= damage;
 
-        if (unitWounds <= 0)
+        if (UnitWounds <= 0)
             KillUnit();
         else
             OnGetDamage?.Invoke(this);

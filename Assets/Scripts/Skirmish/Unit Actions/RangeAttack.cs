@@ -85,8 +85,7 @@ public class RangeAttack : MonoBehaviour
         if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle &&
             GetTargetNode() == targetNode && targetNode.BlockValue > 0)
         {
-            if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None && !originNode.AdjacentCells.Contains(targetNode) &&
-                unitActions.ActiveUnit.Wargear.rangeWeapon.range >= Vector3.Distance(unitActions.ActiveUnit.transform.position, targetNode.Unit.transform.position))
+            if (unitActions.ActiveUnit.Wargear.rangeWeapon.type != RangeWeapon.WeaponType.None)
             {
                 unitActions.State = UnitActions.UnitState.ExecutingAction;
                 OnShootAnimation?.Invoke(unitActions.ActiveUnit);

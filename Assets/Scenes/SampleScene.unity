@@ -402,12 +402,16 @@ MonoBehaviour:
   unitsQueue: {fileID: 11400000, guid: 7e3d80c027f0d124f8169e0803df6bf3, type: 2}
   pathfinding: {fileID: 11400000, guid: d477ab33726b1be41a8df6400db3e7c9, type: 2}
   UIActionButtons: {fileID: 11400000, guid: b201362262137bb46a60ac0148e78af7, type: 2}
+  OnUpdateActions: {fileID: 11400000, guid: 53683e78d4db59046be02f187d5249c4, type: 2}
+  movementButtonAvailable: {fileID: 11400000, guid: 48a6d157f157ca742a9e43588f0d4a66, type: 2}
+  rangeAttackButtonAvailable: {fileID: 11400000, guid: 19462e053474d3e4095bbe573ecf50e0, type: 2}
+  singleAttackButtonAvailable: {fileID: 11400000, guid: cdeeec42e497e7c4b9859ef602bc9ba6, type: 2}
+  guardButtonAvailable: {fileID: 11400000, guid: 7312c74c4a838e34db3e971a64267cef, type: 2}
   movement: {fileID: 173733282}
   rangeAttack: {fileID: 173733284}
-  meleeAttack: {fileID: 173733285}
+  singleAttack: {fileID: 173733285}
   guard: {fileID: 173733286}
-  castSpell: {fileID: 173733287}
-  <State>k__BackingField: 0
+  heal: {fileID: 173733287}
 --- !u!114 &173733284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1588,8 +1592,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e016ce27050fde64faa4851cc5c34b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  line: {fileID: 999678780}
   pathfinding: {fileID: 11400000, guid: d477ab33726b1be41a8df6400db3e7c9, type: 2}
+  line: {fileID: 999678780}
 --- !u!120 &999678780
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -2742,105 +2746,42 @@ MonoBehaviour:
     player: 0
     wargear:
       rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
+      combatWeapon: {fileID: 11400000, guid: decd17e7aff1ecf4cb049703230cbe46, type: 2}
+      secondaryWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
       armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
       shield: 0
       banner: 0
-      elvenCloak: 0
       warDrum: 0
       warHorn: 0
+      firstAid: 0
       theOneRing: 0
   - unitName: Unit 2
     unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
     player: 0
     wargear:
       rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
+      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
+      secondaryWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
       armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
       shield: 0
       banner: 0
-      elvenCloak: 0
       warDrum: 0
       warHorn: 0
-      theOneRing: 0
-  - unitName: Unit 3
-    unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
-    player: 0
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
-      shield: 0
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Unit 3
-    unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
-    player: 0
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
-      shield: 0
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Unit 3
-    unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
-    player: 0
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
-      shield: 0
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Unit 3
-    unitStats: {fileID: 11400000, guid: 76edd8f136b0acc4989db14bf7b9537f, type: 2}
-    player: 0
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: cf544d231612a7a45af72f816a81cd0b, type: 2}
-      combatWeapon: {fileID: 11400000, guid: bc02d71f9b4a678418e3b3e50d87d788, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: a0603cb275a3745498634206dae7498c, type: 2}
-      shield: 0
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
+      firstAid: 0
       theOneRing: 0
   - unitName: Enemy 1
     unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
     player: 1
     wargear:
       rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
+      combatWeapon: {fileID: 11400000, guid: 6602c6ebafde46b4092f455bd4363249, type: 2}
+      secondaryWeapon: {fileID: 0}
       armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
       shield: 1
       banner: 0
-      elvenCloak: 0
       warDrum: 0
       warHorn: 0
+      firstAid: 0
       theOneRing: 0
   - unitName: Enemy 2
     unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
@@ -2848,89 +2789,13 @@ MonoBehaviour:
     wargear:
       rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
       combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
+      secondaryWeapon: {fileID: 0}
       armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
       shield: 1
       banner: 0
-      elvenCloak: 0
       warDrum: 0
       warHorn: 0
-      theOneRing: 0
-  - unitName: Enemy 2
-    unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-    player: 1
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
-      shield: 1
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Enemy 2
-    unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-    player: 1
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
-      shield: 1
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Enemy 2
-    unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-    player: 1
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
-      shield: 1
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Enemy 2
-    unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-    player: 1
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
-      shield: 1
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
-      theOneRing: 0
-  - unitName: Enemy 2
-    unitStats: {fileID: 11400000, guid: 8b59393c34ead5149b3ec588d48b836c, type: 2}
-    player: 1
-    wargear:
-      rangeWeapon: {fileID: 11400000, guid: c8324cf7df2eef94f982fe3e72aeb120, type: 2}
-      combatWeapon: {fileID: 11400000, guid: adbd2b79eff9bb84898e8839bf87cb23, type: 2}
-      elvenMadeWeapon: 0
-      masterForgedWeapon: 0
-      armour: {fileID: 11400000, guid: 4598dd812b2f0b542a9ef86441bf0d24, type: 2}
-      shield: 1
-      banner: 0
-      elvenCloak: 0
-      warDrum: 0
-      warHorn: 0
+      firstAid: 0
       theOneRing: 0
 --- !u!114 &1882879077
 MonoBehaviour:
@@ -2985,7 +2850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 104090215}
   gridTransform: {fileID: 104090214}
-  mapSize: 1
+  mapSize: 0
 --- !u!1001 &1885226504
 PrefabInstance:
   m_ObjectHideFlags: 0

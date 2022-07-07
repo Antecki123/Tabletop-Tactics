@@ -27,8 +27,8 @@ public class GridHighlight : MonoBehaviour, IGridHighlight
 
         foreach (var node in nodes.Where(n => n.BlockValue > 0))
         {
-            node.GetComponent<LineRenderer>().startColor = Color.yellow;
-            node.GetComponent<LineRenderer>().endColor = Color.yellow;
+            node.GetComponent<LineRenderer>().startColor = Color.green;
+            node.GetComponent<LineRenderer>().endColor = Color.green;
 
             node.transform.position = new Vector3(node.transform.position.x, .05f, node.transform.position.z);
         }

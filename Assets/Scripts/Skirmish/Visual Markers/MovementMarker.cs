@@ -4,10 +4,8 @@ using UnityEngine;
 public class MovementMarker : MonoBehaviour, IVisualMarker
 {
     [Header("Component References")]
-    [SerializeField] private LineRenderer line;
-
-    [Header("Component References")]
     [SerializeField] private AStarPathfinding pathfinding;
+    [SerializeField] private LineRenderer line;
 
     public void TurnOnMarker(GridCell origin, GridCell target)
     {
