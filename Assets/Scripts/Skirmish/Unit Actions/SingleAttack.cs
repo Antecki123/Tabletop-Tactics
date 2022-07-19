@@ -27,7 +27,7 @@ public class SingleAttack : MonoBehaviour
     {
         originNode = gridManager.GridCellsList.Find(n => n.Unit == unitActions.ActiveUnit);
 
-        VisualEfects.Instance.GridHighlight.TurnOnHighlightSimpleRange(originNode, (int)unitActions.ActiveUnit.Wargear.combatWeapon.range);
+        VisualEfects.Instance.GridHighlight.TurnOnHighlightSimpleRange(originNode, (int)originNode.Unit.Wargear.combatWeapon.range);
     }
 
     private void OnDisable()
@@ -52,7 +52,7 @@ public class SingleAttack : MonoBehaviour
 
         // Find target (set pointer)
         if (unitActions.State == UnitActions.UnitState.Idle && (targetNode = GetTargetNode()) && targetNode.Unit &&
-            targetNode.Unit.UnitOwner != unitActions.ActiveUnit.UnitOwner && targetNode.BlockValue > 0)
+            targetNode.Unit.UnitOwner != originNode.Unit.UnitOwner && targetNode.BlockValue > 0)
         {
             if (targetNode != lastNode)
             {
@@ -75,21 +75,16 @@ public class SingleAttack : MonoBehaviour
         if (inputs.LeftMouseButton && unitActions.State == UnitActions.UnitState.Idle &&
             GetTargetNode() == targetNode && targetNode.BlockValue > 0)
         {
-            if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != unitActions.ActiveUnit.UnitOwner)
+            if ((targetUnit = targetNode.Unit) && targetUnit.UnitOwner != originNode.Unit.UnitOwner)
             {
                 unitActions.State = UnitActions.UnitState.ExecutingAction;
 
                 // Turn dueling units on each other's direction
-                unitActions.ActiveUnit.transform.LookAt(targetUnit.transform.position);
-                targetUnit.transform.LookAt(unitActions.ActiveUnit.transform.position);
+                originNode.Unit.transform.LookAt(targetUnit.transform.position);
+                targetUnit.transform.LookAt(originNode.Unit.transform.position);
 
                 ExecuteAction();
-
-                unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
-                unitActions.FinishAction();
-
-                this.enabled = false;
-                return;
+                originNode.Unit.ExecuteAction(originNode.Unit.UnitActions);
             }
         }
     }
@@ -97,13 +92,13 @@ public class SingleAttack : MonoBehaviour
     private async void ExecuteAction()
     {
         // Calculating melee attack chance: 50% + difference between MeleeFight of both unit's values multiplying by 5
-        var hitChance = 50 + (unitActions.ActiveUnit.GetMeleeFight() - targetUnit.GetMeleeFight()) * 5;
+        var hitChance = 50 + (originNode.Unit.GetMeleeFight() - targetUnit.GetMeleeFight()) * 5;
         var hitResult = UnityEngine.Random.Range(1, 101);
         var hitTarget = hitChance >= hitResult;
 
-        Debug.Log($"{unitActions.ActiveUnit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
+        Debug.Log($"{originNode.Unit.name} hit chance: {hitChance}% Hit result: {hitTarget}");
 
-        OnAttackAnimation?.Invoke(unitActions.ActiveUnit);
+        OnAttackAnimation?.Invoke(originNode.Unit);
 
         // wait for animation delay in millis
         var animationDelay = 2000;
@@ -111,15 +106,13 @@ public class SingleAttack : MonoBehaviour
 
         if (hitTarget)
         {
-            var woundTarget = WoundTest.GetWoundTest(targetUnit.GetDefence(), unitActions.ActiveUnit.GetStrenght());
-            if (woundTarget)
-            {
-                // Action when target has been wounded
-                targetUnit.GetDamage(1);
-            }
-            else OnBlockAnimation?.Invoke(targetUnit);
+            var damage = WoundTest.GetWoundTest(targetUnit.GetDefence(), originNode.Unit.GetStrenght());
+            targetUnit.GetDamage(damage);
         }
-        else OnAvoidAnimation?.Invoke(targetUnit);
+        else OnBlockAnimation?.Invoke(targetUnit);
+
+        unitActions.FinishAction();
+        this.enabled = false;
     }
 
     private GridCell GetTargetNode()

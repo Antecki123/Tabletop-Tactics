@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ActiveUnitMarker : MonoBehaviour
@@ -8,9 +9,29 @@ public class ActiveUnitMarker : MonoBehaviour
     [Space]
     [SerializeField] private GameObject unitMarker;
 
-    public void Update()
+    //private void OnEnable() => UnitActions.OnFinishAction += SetMarker;
+    //private void OnDisable() => UnitActions.OnFinishAction -= SetMarker;
+
+    /*private async void SetMarker(Unit unit)
     {
-        if (queue.UnitsList.Count != 0 && actions.State != UnitActions.UnitState.ExecutingAction)
+        while (queue.ActiveUnit == unit)
+            await Task.Yield();
+
+        if (queue.UnitsOrder.Count != 0 && actions.State != UnitActions.UnitState.ExecutingAction)
+        {
+            unitMarker.transform.position = queue.ActiveUnit.transform.position + Vector3.up * .2f;
+            unitMarker.SetActive(true);
+        }
+        else
+        {
+            unitMarker.SetActive(false);
+            unitMarker.transform.position = Vector3.zero;
+        }
+    }*/
+
+    private void Update()
+    {
+        if (queue.UnitsOrder.Count != 0 && actions.State != UnitActions.UnitState.ExecutingAction)
         {
             unitMarker.transform.position = queue.ActiveUnit.transform.position + Vector3.up * .2f;
             unitMarker.SetActive(true);

@@ -6,18 +6,16 @@ using UnityEngine;
 
 public class GridBuilder : MonoBehaviour, IMapBuilder
 {
-    private enum MapSize { XS, S, M, L, XL, XXL }
-
     public Action OnComplete;
 
-    private readonly Dictionary<MapSize, Vector2Int> sizeValues = new()
+    private readonly Dictionary<SkirmishData.MapSize, Vector2Int> sizeValues = new()
     {
-        { MapSize.XS,   new Vector2Int(10, 10) },
-        { MapSize.S,    new Vector2Int(20, 20) },
-        { MapSize.M,    new Vector2Int(40, 40) },
-        { MapSize.L,    new Vector2Int(80, 80) },
-        { MapSize.XL,   new Vector2Int(100, 100) },
-        { MapSize.XXL,  new Vector2Int(150, 150) },
+        { SkirmishData.MapSize.XS,   new Vector2Int(10, 10) },
+        { SkirmishData.MapSize.S,    new Vector2Int(20, 20) },
+        { SkirmishData.MapSize.M,    new Vector2Int(40, 40) },
+        { SkirmishData.MapSize.L,    new Vector2Int(80, 80) },
+        { SkirmishData.MapSize.XL,   new Vector2Int(100, 100) },
+        { SkirmishData.MapSize.XXL,  new Vector2Int(150, 150) },
     };
 
     private readonly Vector3[] hexagonVerticles = new Vector3[7] { new Vector3(  0f,   0f,      0f),
@@ -30,14 +28,17 @@ public class GridBuilder : MonoBehaviour, IMapBuilder
 
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private SkirmishData skirmishData;
 
     [Header("Grid Settings")]
     [SerializeField] private Transform gridTransform;
-    [SerializeField] private MapSize mapSize;
 
-    [ContextMenu("Execute")]
+    private SkirmishData.MapSize mapSize;
+
     public void Execute()
     {
+        mapSize = skirmishData.mapSize;
+
         gridManager.GridDimensions = new Vector2Int(sizeValues[mapSize].x, sizeValues[mapSize].y);
 
         for (int i = 0; i < sizeValues[mapSize].x; i++)

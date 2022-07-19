@@ -8,11 +8,12 @@ public class SceneryBuilder : MonoBehaviour, IMapBuilder
 
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private SkirmishData skirmishData;
 
     [Header("Environment Settings")]
     [SerializeField] private Transform obstaclesTransform;
-    [SerializeField] private List<GameObject> obstaclesList = new();
-    [field: SerializeField, Range(0, 100)] public int ObstaclesDensity { get; private set; }
+    private List<GameObject> obstaclesList;
+    private int obstaclesDensity;
 
     private readonly Vector3[] availableRotations = new Vector3[6] { new Vector3(0.0f,   0.0f, 0.0f),
                                                                      new Vector3(0.0f,  60.0f, 0.0f),
@@ -26,7 +27,10 @@ public class SceneryBuilder : MonoBehaviour, IMapBuilder
     [ContextMenu("Execute")]
     public void Execute()
     {
-        obstaclesToPlaceCount = gridManager.GridCellsList.Count * ObstaclesDensity * .01f;
+        obstaclesDensity = skirmishData.obstaclesDensity;
+        obstaclesList = new List<GameObject>(skirmishData.obstaclesList);
+
+        obstaclesToPlaceCount = gridManager.GridCellsList.Count * obstaclesDensity * .01f;
 
         while (obstaclesToPlaceCount > 0)
             InstantiateObstacle();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(UnitAnimation)), SelectionBase]
@@ -7,11 +8,23 @@ public class Unit : MonoBehaviour
     public static Action<Unit> OnGetDamage;
     public static Action<Unit> OnDeath;
 
+    public static List<Unit> UnitsList = new();
+
     public enum Player { Player1, Player2, AI }
+    public enum Army { Army1, Army2, Army3 }
+    public enum Type { Infantry, Cavalry, SiegeMachine }
+    public enum HeroicTier { Warrior, MinorCommander, GreatGeneral, IndependentHero }
+    public enum Class { None, Commander, Medic, Granadier, SiegeMaster }
 
     #region PROPERTIES
     [field: SerializeField] public UnitStats UnitBaseStats { get; internal set; }
     [field: SerializeField] public Player UnitOwner { get; internal set; }
+
+    [field: SerializeField] public Army UnitArmy { get; internal set; }
+    [field: SerializeField] public Type UnitType { get; internal set; }
+    [field: SerializeField] public HeroicTier UnitHeroicTier { get; internal set; }
+    [field: SerializeField] public Class UnitClass { get; internal set; }
+
     [field: SerializeField] public Wargear Wargear { get; internal set; }
 
     public int UnitMove { get; private set; }
@@ -23,17 +36,22 @@ public class Unit : MonoBehaviour
     public int UnitStrength { get; private set; }
     public int UnitDefence { get; private set; }
 
-    public int UnitWounds { get; private set; }
+    public int UnitHealth { get; private set; }
+    public int UnitMaxHealth { get; private set; }
     public int UnitCourage { get; private set; }
 
     public int UnitWill { get; private set; }
     public int UnitMight { get; private set; }
     #endregion
 
+    private void OnEnable() => UnitsList.Add(this);
+    private void OnDisable() => UnitsList.Remove(this);
+
     private void Start()
     {
         this.name = UnitBaseStats.name;
-        UnitWounds = UnitBaseStats.unitWounds;
+        UnitHealth = UnitBaseStats.unitHealth;
+        UnitMaxHealth = UnitBaseStats.unitHealth;
 
         ResetStats();
     }
@@ -42,8 +60,8 @@ public class Unit : MonoBehaviour
     {
         UnitMove = UnitBaseStats.unitMove;
         UnitSpeed = UnitBaseStats.unitSpeed;
-        UnitActions = UnitBaseStats.unitActions;
-        
+        UnitActions = (UnitActions == 0) ? UnitBaseStats.unitActions : UnitActions;
+
         UnitFightSkill = UnitBaseStats.unitFightSkill;
         UnitArcherySkill = UnitBaseStats.unitArcherySkill;
         UnitStrength = UnitBaseStats.unitStrength;
@@ -53,7 +71,6 @@ public class Unit : MonoBehaviour
         UnitWill = UnitBaseStats.unitWill;
         UnitMight = UnitBaseStats.unitMight;
     }
-
 
     /// <summary>
     /// Returns defence value for unit
@@ -107,13 +124,16 @@ public class Unit : MonoBehaviour
     /// <param name="damage"></param>
     public void GetDamage(int damage)
     {
-        UnitWounds -= damage;
+        UnitHealth -= damage;
 
-        if (UnitWounds <= 0)
+        if (UnitHealth <= 0)
             KillUnit();
         else
             OnGetDamage?.Invoke(this);
     }
+
+    public void GuardAction(int defence) => UnitDefence += defence;
+    public void BerserkAction() => UnitSpeed += 100;
 
     private void KillUnit()
     {

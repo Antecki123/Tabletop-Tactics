@@ -34,7 +34,7 @@ public class BattlefieldCreator : MonoBehaviour
         battlefieldComponents.Enqueue(unitSpawner);
         battlefieldComponents.Enqueue(sceneryBuilder);
 
-        ExecuteCommand();
+        Invoke(nameof(ExecuteCommand), 0.5f);
     }
 
     private void ExecuteCommand()

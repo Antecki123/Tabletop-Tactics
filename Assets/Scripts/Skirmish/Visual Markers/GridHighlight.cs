@@ -6,7 +6,6 @@ public class GridHighlight : MonoBehaviour, IGridHighlight
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
 
-    [ContextMenu("Turn Off Highlight")]
     public void TurnOffHighlight()
     {
         var nodes = gridManager.GridCellsList;
@@ -37,7 +36,6 @@ public class GridHighlight : MonoBehaviour, IGridHighlight
     public void TurnOnHighlightMovement(GridCell startNode, int range, int actions)
     {
         var nodes = gridManager.GridCellsList;
-        gridManager.CalculateMovementRange(startNode, range * actions);
 
         if (actions > 1)
         {

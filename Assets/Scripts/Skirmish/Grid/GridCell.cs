@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,14 +23,12 @@ public class GridCell : MonoBehaviour
     [field: SerializeField] public HashSet<GridCell> AdjacentCells { get; private set; } = new();
     #endregion
 
-    private void Start() => StartCoroutine(GetAdjacentBlocks());
+    private void Start() => Invoke(nameof(FindAdjacentBlocks), 1.0f);
 
-    private IEnumerator GetAdjacentBlocks()
+    private void FindAdjacentBlocks()
     {
         var gridMask = 1024;
         var overlapRange = .75f;
-
-        yield return new WaitForEndOfFrame();
 
         var overlappedBlocks = Physics.OverlapSphere(transform.position, overlapRange, gridMask);
         foreach (var block in overlappedBlocks)

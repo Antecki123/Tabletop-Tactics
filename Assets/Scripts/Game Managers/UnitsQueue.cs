@@ -1,35 +1,54 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Units Queue", menuName = "Scriptable Objects/Utilities/Units Queue")]
-
-public class UnitsQueue : ScriptableObject
+public class UnitsQueue : MonoBehaviour
 {
-    public List<Unit> UnitsList { get; private set; }
-    public Unit ActiveUnit { get => UnitsList.First();}
+    #region Actions
+    public static Action OnTurnEnd;
+    #endregion
+
+    [field: SerializeField] public List<Unit> UnitsOrder { get; private set; }
+    public Unit ActiveUnit { get => UnitsOrder.First(); }
+
+    private List<Unit> secondaryList = new();
 
     private void OnEnable()
     {
-        Unit.OnDeath += RemoveUnitFromQueue;
-        UnitActions.OnFinishAction += RemoveUnitFromQueue;
+        Unit.OnDeath += RemoveKilled;
+        UnitActions.OnFinishAction += FinishedAction;
     }
     private void OnDisable()
     {
-        Unit.OnDeath -= RemoveUnitFromQueue;
-        UnitActions.OnFinishAction -= RemoveUnitFromQueue;
+        Unit.OnDeath -= RemoveKilled;
+        UnitActions.OnFinishAction -= FinishedAction;
     }
 
-    public void CreateNewQueue(Unit[] allUnits)
+    private void Start()
     {
-        UnitsList = allUnits.ToList();
-        UnitsList.Sort((a, b) => a.UnitSpeed.CompareTo(b.UnitSpeed));
-        UnitsList.RemoveAll(unit => unit.UnitWounds <= 0);
-        UnitsList.Reverse();
+        UnitsOrder = new List<Unit>(Unit.UnitsList);
+
+        UnitsOrder.Sort((a, b) => a.UnitSpeed.CompareTo(b.UnitSpeed));
+        UnitsOrder.Reverse();
     }
 
-    private void RemoveUnitFromQueue(Unit removedUnit)
+    private void FinishedAction(Unit unit)
     {
-        UnitsList.Remove(removedUnit);
+        UnitsOrder.Remove(unit);
+        secondaryList.Add(unit);
+
+        if (UnitsOrder.Count == 0)
+        {
+            OnTurnEnd?.Invoke();
+
+            secondaryList.Sort((a, b) => a.UnitSpeed.CompareTo(b.UnitSpeed));
+            secondaryList.Reverse();
+
+            UnitsOrder.AddRange(secondaryList);
+            secondaryList.Clear();
+        }
     }
+
+    private void RemoveKilled(Unit unit) => UnitsOrder.RemoveAll(u => u == unit);
 }

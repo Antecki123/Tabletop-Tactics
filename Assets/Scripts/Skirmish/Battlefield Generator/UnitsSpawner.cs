@@ -6,32 +6,23 @@ using UnityEngine;
 
 public class UnitsSpawner : MonoBehaviour, IMapBuilder
 {
-    [System.Serializable]
-    private struct UnitsToSpawn
-    {
-        public string unitName;
-        public UnitStats unitStats;
-        public Unit.Player player;
-
-        public Wargear wargear;
-    }
-
     public Action OnComplete;
 
     [Header("Component References")]
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private SkirmishData skirmishData;
 
     [Header("Units Spawner Settings")]
     [SerializeField] private Transform player1;
     [SerializeField] private Transform player2;
-    [Space]
-    [SerializeField] private List<UnitsToSpawn> unitsToSpawn = new();
 
+    private List<SkirmishData.UnitsToSpawn> unitsToSpawn;
     private int spawnedUnits = 0;
 
-    [ContextMenu("Execute")]
     public void Execute()
     {
+        unitsToSpawn = new List<SkirmishData.UnitsToSpawn>(skirmishData.unitsToSpawn);
+
         for (int i = 0; i < unitsToSpawn.Count; i++)
         {
             InstantiateUnit(i);
@@ -47,7 +38,7 @@ public class UnitsSpawner : MonoBehaviour, IMapBuilder
         while (spawnedUnits < unitsToSpawn.Count)
             yield return new WaitForEndOfFrame();
 
-        Debug.Log($"UNITS SPAWNED: {spawnedUnits}/{unitsToSpawn.Count} UNITS.");
+        Debug.Log($"UNITS SPAWNED: {spawnedUnits} / {unitsToSpawn.Count} UNITS.");
 
         Response();
     }
@@ -73,6 +64,12 @@ public class UnitsSpawner : MonoBehaviour, IMapBuilder
         var unitComponent = newUnit.GetComponent<Unit>();
         unitComponent.UnitBaseStats = unitsToSpawn[i].unitStats;
         unitComponent.UnitOwner = unitsToSpawn[i].player;
+
+        unitComponent.UnitArmy = unitsToSpawn[i].unitArmy;
+        unitComponent.UnitType = unitsToSpawn[i].unitType;
+        unitComponent.UnitHeroicTier = unitsToSpawn[i].unitHeroicTier;
+        unitComponent.UnitClass = unitsToSpawn[i].unitClass;
+
         unitComponent.Wargear = unitsToSpawn[i].wargear;
 
         slotPosition.Unit = unitComponent;

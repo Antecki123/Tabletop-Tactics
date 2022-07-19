@@ -2,65 +2,44 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    public enum Phase { NewTurn, Actions, End }
-
     [Header("Component References")]
     [SerializeField] private UnitActions unitActions;
     [SerializeField] private UnitsQueue unitsQueue;
-    [Space]
+
+    [Header("UI References")]
     [SerializeField] private GameEvent OnNewTurn;
     [SerializeField] private FloatVariable turnsCounter;
 
-    [Header("Gameplay References")]
-    [SerializeField] private Phase activePhase = Phase.NewTurn;
+    private void OnEnable()
+    {
+        UnitActions.OnFinishAction += OverCondition;
+        UnitsQueue.OnTurnEnd += NextTurn;
+    }
+    private void OnDisable()
+    {
+        UnitActions.OnFinishAction -= OverCondition;
+        UnitsQueue.OnTurnEnd -= NextTurn;
+    }
 
     private void Start()
     {
         turnsCounter.value = 0;
-    }
 
-    private void Update()
-    {
-        if (activePhase == Phase.NewTurn)
-            NewTurn();
-
-        else if (activePhase == Phase.Actions)
-            ActionsPhase();
-
-        else if (activePhase == Phase.End)
-            EndPhase();
-    }
-
-    private void NewTurn()
-    {
-        // UI: turns counter++, new turn popup panel
-        // new units queue, 
-
-        turnsCounter.value++;
-        OnNewTurn.Invoke();
-
-        unitActions.enabled = false;
-
-        unitsQueue.CreateNewQueue(FindObjectsOfType<Unit>());
-
-        activePhase = Phase.Actions;
-    }
-
-    private void ActionsPhase()
-    {
+        unitsQueue.enabled = true;
         unitActions.enabled = true;
 
-        if (unitsQueue.UnitsList.Count == 0)
-            activePhase = Phase.End;
+        NextTurn();
     }
 
-    private void EndPhase()
+    private void NextTurn()
     {
-        unitActions.enabled = false;
+        turnsCounter.value++;
+        OnNewTurn.Invoke();
+    }
 
-        foreach (var unit in FindObjectsOfType<Unit>())
-            unit.ResetStats();
-
-        activePhase = Phase.NewTurn;
+    private void OverCondition(Unit unit)
+    {
+        //unitActions.enabled = false;
+        //unitsQueue.enabled = false;
     }
 }

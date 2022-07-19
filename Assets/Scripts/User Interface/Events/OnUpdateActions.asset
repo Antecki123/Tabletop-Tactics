@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013dee8f22b6df148b7fdf66a3b9bd29, type: 3}
   m_Name: OnUpdateActions
   m_EditorClassIdentifier: 
-  description: 
+  description: 'UI: Unit Actions'

@@ -36,7 +36,7 @@ public class GridManager : MonoBehaviour
         position.IsOccupied = false;
     }
 
-    public void CalculateMovementRange(GridCell startNode, int range)
+    public void CalculateMovementRange(GridCell startNode, int range, int actions)
     {
         var movementList = new List<GridCell>() { startNode };
         var bufforList = new List<GridCell>();
@@ -44,7 +44,7 @@ public class GridManager : MonoBehaviour
         ClearMovementValues();
         startNode.BlockValue = 0;
 
-        for (int i = 1; i <= range; i++)
+        for (int i = 1; i <= range * actions; i++)
         {
             foreach (var node in movementList)
             {
@@ -88,7 +88,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void ClearMovementValues()
+    private void ClearMovementValues()
     {
         foreach (var node in GridCellsList.Where(n => n.BlockValue >= 0))
             node.BlockValue = -1;

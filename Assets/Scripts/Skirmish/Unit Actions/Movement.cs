@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -15,6 +16,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private UnitActions unitActions;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private InputsManager inputs;
+    [SerializeField] private AStarPathfinding pathfinding;
     [Space]
     [SerializeField] private Camera mainCamera;
 
@@ -26,9 +28,10 @@ public class Movement : MonoBehaviour
     {
         originNode = gridManager.GridCellsList.Find(o => o.Unit == unitActions.ActiveUnit);
 
-        VisualEfects.Instance.GridHighlight.TurnOnHighlightMovement(originNode,
-            unitActions.ActiveUnit.UnitMove, unitActions.ActiveUnit.UnitActions);
+        gridManager.CalculateMovementRange(originNode, originNode.Unit.UnitMove, originNode.Unit.UnitActions);
+        VisualEfects.Instance.GridHighlight.TurnOnHighlightMovement(originNode, originNode.Unit.UnitMove, originNode.Unit.UnitActions);
     }
+
     private void OnDisable()
     {
         originNode = null;
@@ -38,8 +41,6 @@ public class Movement : MonoBehaviour
         VisualEfects.Instance.MovementMarker?.TurnOffMarker();
         VisualEfects.Instance.PositionMarker?.TurnOffMarker();
         VisualEfects.Instance.GridHighlight?.TurnOffHighlight();
-
-        gridManager.ClearMovementValues();
     }
 
     private void Update()
@@ -58,7 +59,7 @@ public class Movement : MonoBehaviour
             {
                 lastNode = targetNode;
 
-                unitActions.pathfinding.FindPath(originNode, targetNode);
+                pathfinding.FindPath(originNode, targetNode);
 
                 VisualEfects.Instance.MovementMarker?.TurnOnMarker(originNode, targetNode);
                 VisualEfects.Instance.PositionMarker?.TurnOnMarker(originNode, targetNode);
@@ -76,22 +77,22 @@ public class Movement : MonoBehaviour
 
         // Set destination and start movement
         if (inputs.LeftMouseButton && GetTargetNode() == targetNode && unitActions.State == UnitActions.UnitState.Idle &&
-            targetNode.BlockValue > 0 && unitActions.pathfinding.CurrentPath.Count > 0)
+            targetNode.BlockValue > 0 && pathfinding.CurrentPath.Count > 0)
         {
             unitActions.State = UnitActions.UnitState.ExecutingAction;
+
+            var actionPoints = (targetNode.BlockValue <= originNode.Unit.UnitMove) ? 1 : originNode.Unit.UnitActions;
+            originNode.Unit.ExecuteAction(actionPoints);
+
             ExecuteAction();
-
-            OnUnitChangePosition?.Invoke(unitActions.ActiveUnit, targetNode);
-
-            var actionPoints = (targetNode.BlockValue <= unitActions.ActiveUnit.UnitMove) ? 1 : unitActions.ActiveUnit.UnitActions;
-            unitActions.ActiveUnit.ExecuteAction(actionPoints);
+            OnUnitChangePosition?.Invoke(originNode.Unit, targetNode);
         }
     }
 
     private async void ExecuteAction()
     {
-        var path = unitActions.pathfinding.CurrentPath;
-        var unit = unitActions.ActiveUnit;
+        var path = pathfinding.CurrentPath;
+        var unit = originNode.Unit;
         var velocity = 2f;
 
         for (int i = 1; i < path.Count; i++)
@@ -102,7 +103,7 @@ public class Movement : MonoBehaviour
                 OnMovementAnimation?.Invoke(unit, true);
 
                 unit.transform.position = Vector3.MoveTowards(unit.transform.position, path[i], velocity * Time.deltaTime);
-                await System.Threading.Tasks.Task.Yield();
+                await Task.Yield();
             }
         }
         OnMovementAnimation?.Invoke(unit, false);

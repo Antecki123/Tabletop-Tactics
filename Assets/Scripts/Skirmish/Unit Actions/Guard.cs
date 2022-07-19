@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Guard : MonoBehaviour
@@ -9,12 +10,10 @@ public class Guard : MonoBehaviour
     #endregion
 
     [Header("Component References")]
-    private UnitActions unitActions;
+    [SerializeField] private UnitActions unitActions;
 
     private void OnEnable()
     {
-        unitActions = GetComponent<UnitActions>();
-
         ExecuteAction();
     }
 
@@ -26,12 +25,13 @@ public class Guard : MonoBehaviour
         {
             unitActions.State = UnitActions.UnitState.ExecutingAction;
 
-            //phaseAction.ActiveUnit.GuardAction();
+            unitActions.ActiveUnit.GuardAction(2);
             OnGuardAnimation?.Invoke(unitActions.ActiveUnit);
 
-            await System.Threading.Tasks.Task.Delay(animationTime);
+            await Task.Delay(animationTime);
 
             unitActions.ActiveUnit.ExecuteAction(unitActions.ActiveUnit.UnitActions);
+
             unitActions.FinishAction();
             this.enabled = false;
         }
