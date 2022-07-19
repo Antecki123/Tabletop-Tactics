@@ -78,7 +78,8 @@ public class Unit : MonoBehaviour
     /// <returns></returns>
     public int GetDefence()
     {
-        var defence = UnitDefence + Wargear.armour.defence;
+        var shield = (Wargear.shield) ? 1 : 0;
+        var defence = UnitDefence + Wargear.armour.defence + shield;
         return defence;
     }
 
